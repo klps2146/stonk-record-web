@@ -7,3 +7,7 @@ app=Flask(__name__, static_folder="public", static_url_path="/")
 def index():
     return redirect("main/main.html")
 
+@app.route("/a")
+def index():
+    return redirect("main/main.html")
+
