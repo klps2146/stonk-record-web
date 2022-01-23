@@ -12,47 +12,57 @@ window.onload=function(){
     date=Today.getFullYear()+"/"+(Today.getMonth()+1)+"/"+Today.getDate();
     console.log(date);
     document.getElementById("date").value=date;
-    if (Today.getMonth()+1==1||Today.getMonth()+1==2||Today.getMonth()+1==3){
-        document.getElementById("Q1").setAttribute("selected","");
-    }
-    if (Today.getMonth()+1==4||Today.getMonth()+1==5||Today.getMonth()+1==6){
-        document.getElementById("Q2").setAttribute("selected","");
-    }
-    if (Today.getMonth()+1==7||Today.getMonth()+1==8||Today.getMonth()+1==9){
-        document.getElementById("Q3").setAttribute("selected","");
-    }
-    if (Today.getMonth()+1==10||Today.getMonth()+1==11||Today.getMonth()+1==12){
-        document.getElementById("Q4").setAttribute("selected","");
-    }   
+    // if (Today.getMonth()+1==1||Today.getMonth()+1==2||Today.getMonth()+1==3){
+    //     document.getElementById("Q1").setAttribute("selected","");
+    // }
+    // if (Today.getMonth()+1==4||Today.getMonth()+1==5||Today.getMonth()+1==6){
+    //     document.getElementById("Q2").setAttribute("selected","");
+    // }
+    // if (Today.getMonth()+1==7||Today.getMonth()+1==8||Today.getMonth()+1==9){
+    //     document.getElementById("Q3").setAttribute("selected","");
+    // }
+    // if (Today.getMonth()+1==10||Today.getMonth()+1==11||Today.getMonth()+1==12){
+    //     document.getElementById("Q4").setAttribute("selected","");
+    // }   
 }
 
 </script>
 </head>
 <body>
-<form method="GET" id="" class="" action="#" name="testform" onsubmit="return check();">
+<h1>預計頁面 (若已存在為全部修改)</h1>
+<form method="POST" id="form" class="form" action="/res" name="form" onsubmit="return checkm();">
 股票(公司)名稱<br/>
 <input type="text" id="company" placeholder="股票(公司)名稱" name="company"><br/>
 
-季<br/>
-<select name="season">
-    <option value="1" id="Q1">Q1</option>
-    <option value="2" id="Q2">Q2</option>
-    <option value="3" id="Q3">Q3</option>
-    <option value="4" id="Q4">Q4</option>
-</select><br/>
+EPS <input type="checkbox" onclick="clicke()" name="EPS_check" id="EPS_check">每月EPS<br/>
+<input type="text" id="EPS_1" placeholder="EPS Q1" name="EPS_1" style="display: inline;"><br/>
+<input type="text" id="EPS_2" placeholder="EPS Q2" name="EPS_2" style="display: inline;"><br/>
+<input type="text" id="EPS_3" placeholder="EPS Q3" name="EPS_3" style="display: inline;"><br/>
+<input type="text" id="EPS_4" placeholder="EPS Q4" name="EPS_4" style="display: inline;"><br/>
 
-EPS<br/>
-<input type="text" id="EPS" placeholder="EPS" name="EPS"><br/>
+<input type="text" id="m_1" placeholder="1月" name="m_1" style="display: none;">
+<input type="text" id="m_2" placeholder="2月" name="m_2" style="display: none;">
+<input type="text" id="m_3" placeholder="3月" name="m_3" style="display: none;"><br/>
+<input type="text" id="m_4" placeholder="4月" name="m_4" style="display: none;">
+<input type="text" id="m_5" placeholder="5月" name="m_5" style="display: none;">
+<input type="text" id="m_6" placeholder="6月" name="m_6" style="display: none;"><br/>
+<input type="text" id="m_7" placeholder="7月" name="m_7" style="display: none;">
+<input type="text" id="m_8" placeholder="8月" name="m_8" style="display: none;">
+<input type="text" id="m_9" placeholder="9月" name="m_9" style="display: none;"><br/>
+<input type="text" id="m_10" placeholder="10月" name="m_10" style="display: none;">
+<input type="text" id="m_11" placeholder="11月" name="m_11" style="display: none;">
+<input type="text" id="m_12" placeholder="12月" name="m_12" style="display: none;"><br/>
 配息率<br/>
-<input type="text" id="dividend" placeholder="配息率" name="dividend"><br/>
-配息<br/>
-<input type="text" id="dividend_rate" placeholder="配息" name="dividend_rate"><br/>
-殖利率<br/>
-<input type="text" id="yield" placeholder="殖利率" name="yield"><br/>
-日期<br/>
-<input type="text" id="date" name="date"><br/>
+<input type="text" id="dividend_rate" placeholder="配息率" name="dividend_rate"><br/>
+股價<br/>
+<input type="text" id="share" placeholder="股價" name="share"><br/>
+年分<br/>
+<input type="text" id="year" name="year" placeholder="年分"><br/>
 
-<input type="submit" value="sum">
+
+<input type="text" id="date" name="date" style="display: none;"><br/>
+
+<input type="submit" id="submit" class="form-submit" value="submit" >
 </form>
 </body>
 </html>
