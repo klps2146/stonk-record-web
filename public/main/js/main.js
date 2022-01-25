@@ -1,4 +1,4 @@
-state=0;
+state=1;
 
 function clicke(){
     var checked = document.querySelector('[name=EPS_check]:checked');
@@ -92,30 +92,30 @@ function checkm(){
     //     alert("EPS應為數字而非"+typeof(eps));
     //     eps="";
     // }
-    if (state==1){
-        if (eps_1.length<=0 | eps_2.length<=0 | eps_3.length<=0 | eps_4.length<=0){
-        issue+=1;
-        alert("EPS不可為空");
-    }
-    else{
-        if (m_1.length<=0 |
-            m_2.length<=0 |
-            m_3.length<=0 |
-            m_4.length<=0 |
-            m_5.length<=0 |
-            m_6.length<=0 |
-            m_7.length<=0 |
-            m_8.length<=0 |
-            m_9.length<=0 |
-            m_10.length<=0 |
-            m_11.length<=0 |
-            m_12.length<=0
-            ){
-                issue+=1;
-                alert("EPS不可為空");
-            }
-    }
-    }
+    // if (state==1){
+    //     if (eps_1.length<=0 | eps_2.length<=0 | eps_3.length<=0 | eps_4.length<=0){
+    //     issue+=1;
+    //     alert("EPS不可為空");
+    // }
+    // else{
+    //     if (m_1.length<=0 |
+    //         m_2.length<=0 |
+    //         m_3.length<=0 |
+    //         m_4.length<=0 |
+    //         m_5.length<=0 |
+    //         m_6.length<=0 |
+    //         m_7.length<=0 |
+    //         m_8.length<=0 |
+    //         m_9.length<=0 |
+    //         m_10.length<=0 |
+    //         m_11.length<=0 |
+    //         m_12.length<=0
+    //         ){
+    //             issue+=1;
+    //             alert("EPS不可為空");
+    //         }
+    // }
+    // }
     if (dividend_rate.length<=0){
         issue+=1;
         alert("配息率不可為空");
