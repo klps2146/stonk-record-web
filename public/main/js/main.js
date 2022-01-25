@@ -131,5 +131,4 @@ function checkm(){
     else{
         return false;
     }
-    return false
 }
