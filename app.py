@@ -1,6 +1,3 @@
-from asyncore import compact_traceback
-from pickle import TRUE
-from turtle import st
 from flask import Flask, redirect, session, render_template, request, url_for
 import pymongo
 
