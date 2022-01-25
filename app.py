@@ -308,8 +308,3 @@ def revise():
                 })
                 pass
     return "jx"
-
-
-
-app.debug=True
-app.run()
