@@ -1,6 +1,6 @@
 state=1;
 
-function clicke(){ 
+function clicke(){
     var checked = document.querySelector('[name=EPS_check]:checked');
     if (checked){
         state+=1;
