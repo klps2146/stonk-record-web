@@ -375,7 +375,7 @@ def simplify():
             year_clus[i["company"]]=sorted(list(map(int, year_doc)))
             year_doc=[]
     return "None"
-
+ 
 
 
 app.debug=True
