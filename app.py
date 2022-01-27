@@ -1,5 +1,5 @@
 from flask import Flask, redirect, session, render_template, request, url_for
-import pymongo
+import pymongo, time
 
 client = pymongo.MongoClient("mongodb+srv://root:root123@realmcluster.rbqar.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
 db = client.website
@@ -9,7 +9,7 @@ app=Flask(__name__, static_folder="public", static_url_path="/")
 def value_caculate():
     pass
 
-@app.route("/") # 主頁面
+@app.route("/") # main
 def index():
     return redirect("/main/main.html")
 
@@ -37,7 +37,8 @@ def res():
     last_update=request.form["date"]
     share=request.form["share"]
     share=round(float(share), 2)
-    dividend_rate=float(dividend_rate)
+    dividend_rate=100*(float(dividend_rate))
+    dividend_rate=round(float(dividend_rate), 2)
     if (m_1=="" and m_2==""):
         eps_1=float(eps_1)
         eps_2=float(eps_2)
@@ -60,8 +61,8 @@ def res():
         eps_year=m_1+m_2+m_3+m_4+m_4+m_5+m_6+m_7+m_7+m_8+m_9+m_10+m_11+m_12
     divend=(float(dividend_rate)*float(eps_year))
     divend=round(divend, 2)
-    yield_=round((float(dividend_rate)*float(eps_year))/float(share), 2)
-    yield_=round(yield_, 2)
+    yield_=100*((float(dividend_rate)*float(eps_year))/float(share))
+    yield_=round(float(yield_), 2)
     try:
         datas_get=collection.find()
         data_get=[]
@@ -69,11 +70,11 @@ def res():
         for i in datas_get:
             data_get.append(i)
             company_list.append(i["company"])
-        print(data_get)
-        if data_get[0]==None: # 資料庫沒資料
+        if data_get[0]==None: # none data in DB
             collection.insert_one({
             "company":company,
             "date":last_update,
+            "share":share,
             years:{
                 "EPS_year":eps_year,
                 "EPS_Q1":eps_1,
@@ -92,10 +93,9 @@ def res():
                 "EPS_m_10":m_10,
                 "EPS_m_11":m_11,
                 "EPS_m_12":m_12,
-                "dividend_rate":dividend_rate, # 配息率
-                "dividend":divend, # 配息
-                "yield":yield_, # 殖利率
-                "share":share
+                "dividend_rate":dividend_rate, 
+                "dividend":divend, 
+                "yield":yield_, 
             }
         })
         for i in data_get:
@@ -105,6 +105,7 @@ def res():
                 },{
                     "$set":{
                         "date":last_update,
+                        "share":share,
                         years:{
                             "EPS_year":eps_year,
                             "EPS_Q1":eps_1,
@@ -123,14 +124,13 @@ def res():
                             "EPS_m_10":m_10,
                             "EPS_m_11":m_11,
                             "EPS_m_12":m_12,
-                            "dividend_rate":dividend_rate, # 配息率
-                            "dividend":divend, # 配息
-                            "yield":yield_, # 殖利率
-                            "share":share
+                            "dividend_rate":dividend_rate,
+                            "dividend":divend,
+                            "yield":yield_,
                         }
                     }
                 })
-        else: # 都不存在
+        else: # nothing exist
             non_exi=0
             for i in company_list:
                 if i != company:
@@ -140,7 +140,8 @@ def res():
                     collection.insert_one({
                         "company":company,
                         "date":last_update,
-                        int(years):{
+                        "share":share,
+                        (years):{
                             "EPS_year":eps_year,
                             "EPS_Q1":eps_1,
                             "EPS_Q2":eps_2,
@@ -158,18 +159,18 @@ def res():
                             "EPS_m_10":m_10,
                             "EPS_m_11":m_11,
                             "EPS_m_12":m_12,
-                            "dividend_rate":dividend_rate, # 配息率
-                            "dividend":divend, # 配息
-                            "yield":yield_, # 殖利率
-                            "share":share,
+                            "dividend_rate":dividend_rate, 
+                            "dividend":divend,
+                            "yield":yield_,
                             "guess":1
                         }
                     })
 
-    except: # 資料庫為空少數例外 無法獲得資料庫資料
+    except: # out of thinking
         collection.insert_one({
             "company":company,
             "date":last_update,
+            "share":share,
             years:{
                 "EPS_year":eps_year,
                 "EPS_Q1":eps_1,
@@ -188,18 +189,54 @@ def res():
                 "EPS_m_10":m_10,
                 "EPS_m_11":m_11,
                 "EPS_m_12":m_12,
-                "dividend_rate":dividend_rate, # 配息率
-                "dividend":divend, # 配息
-                "yield":yield_, # 殖利率
-                "share":share
+                "dividend_rate":dividend_rate,
+                "dividend":divend,
+                "yield":yield_,
             }
         })
     return redirect(url_for("display"))
 
 @app.route("/dis")
-def display():
+def display(): # sorting data
     datas=collection.find()
-    return render_template("display.html", data=datas)
+    data_clus=[]
+    year_clus={}
+    year_doc=[]
+    company_clus=[]
+    output_doc={}
+    output_clus=[]
+    for i in datas:
+        data_clus.append(i)
+        for f in i:
+            if f=="company":
+                company_clus.append(i["company"])
+            if f!="_id" and f!="company" and f!="date" and f!="guess" and f!="share" and f!="yield_now" and f!="aim" and f!="l_aim" and f != "l_add" and f!="r_add":
+                year_doc.append(f)
+        else:
+            year_clus[i["company"]]=sorted(list(map(int, year_doc)))
+            year_doc=[]
+    fram=0
+    for company_n in year_clus:
+        output_doc["company"]=company_n
+        output_doc["date"]=data_clus[fram]["date"]
+        output_doc["share"]=data_clus[fram]["share"]
+        output_doc["aim"]=data_clus[fram]["aim"]
+        output_doc["yield_now"]=(data_clus[fram][time.strftime('%Y',time.gmtime())]["yield"])
+        if data_clus[fram]["aim"]!="":
+            eps_aim=round(100*(float(data_clus[fram][time.strftime('%Y',time.gmtime())]["dividend"]))/(float(data_clus[fram]["aim"])),2)
+            output_doc["l_aim"]=eps_aim
+            eps_add=eps_aim-float(data_clus[fram]["share"])
+            output_doc["l_add"]=round(eps_add,2)
+            output_doc["r_add"]=round(100*eps_add/float(data_clus[fram]["share"]),2)
+        for year_ in year_clus[company_n]:
+            output_doc[year_]=data_clus[fram][str(year_)]
+        else:
+            output_clus.append(output_doc)
+            output_doc={}
+        fram+=1
+    return render_template("display.html", data=output_clus)
+
+
 
 @app.route("/rev", methods=["POST"])
 def revise():
@@ -214,7 +251,7 @@ def revise():
         for f in i:
             if f=="company":
                 company_clus.append(i["company"])
-            if f!="_id" and f!="company" and f!="date" and f!="guess":
+            if f!="_id" and f!="company" and f!="date" and f!="guess" and f!="share"  and f!="yield_now" and f!="aim"  and f!="l_aim"  and f != "l_add" and f != "r_add":
                 year_doc.append(f)
         else:
             year_clus[i["company"]]=year_doc
@@ -236,14 +273,20 @@ def revise():
                 eps_q_y=float(eps_q_1)+float(eps_q_2)+float(eps_q_3)+float(eps_q_4)
                 eps_q_y=round(eps_q_y, 3)
                 dividend=round((float(request.form[f"{cp_n}_{years}_dividend"])), 2)
-                share=round((float(request.form[f"{cp_n}_{years}_share"])), 2)
-                dividend_rate=round(float(dividend/eps_q_y), 2)
-                yield_=round(float(dividend/share), 2)
+                share=round((float(request.form[f"{cp_n}_share"])), 2)
+                dividend_rate=round(100*(float(dividend/eps_q_y)), 2)
+                yield_=round(100*(float(dividend/share)), 2)
+                if request.form[f"{cp_n}_aim"]!="":
+                    aim=round((float(request.form[f"{cp_n}_aim"])), 2)
+                else:
+                    aim=""
                 collection.update_one({
                     "company":cp_n
                 },{
                     "$set":{
                         "date":date,
+                        "share":share,
+                        "aim":aim,
                         years:{ 
                             "EPS_year":eps_q_y,
                             "EPS_m_1":"",
@@ -256,7 +299,6 @@ def revise():
                             "dividend_rate":dividend_rate,
                             "dividend":dividend,
                             "yield":yield_,
-                            "share":share
                         }
                     }
                 })
@@ -275,14 +317,20 @@ def revise():
                 eps_m_12=round((float(request.form[f"{cp_n}_{years}_m_12"])), 3)
                 eps_y=eps_m_1+eps_m_2+eps_m_3+eps_m_4+eps_m_5+eps_m_6+eps_m_7+eps_m_8+eps_m_9+eps_m_10+eps_m_11+eps_m_12
                 dividend=round((float(request.form[f"{cp_n}_{years}_dividend"])), 2)
-                share=round((float(request.form[f"{cp_n}_{years}_share"])), 2)
-                dividend_rate=round(float(dividend/eps_y), 2)
-                yield_=round(float(dividend/share), 2)
+                share=round((float(request.form[f"{cp_n}_share"])), 2)
+                dividend_rate=round(100*(float(dividend/eps_y)), 2)
+                yield_=round(100*(float(dividend/share)), 2)
+                if request.form[f"{cp_n}_aim"]!="":
+                    aim=round((float(request.form[f"{cp_n}_aim"])), 2)
+                else:
+                    aim=""
                 collection.update_one({
                     "company":cp_n
                 },{
                     "$set":{
+                        "share":share,
                         "date":date,
+                        "aim":aim,
                         years:{
                             "EPS_year":eps_y,
                             "EPS_m_1":eps_m_1,
@@ -302,9 +350,33 @@ def revise():
                             "dividend_rate":dividend_rate,
                             "dividend":dividend,
                             "yield":yield_,
-                            "share":share
                         }
                     }
                 })
-                pass
-    return "jx"
+    return render_template("redirecting.html")
+
+@app.route("/simp")
+def simplify():
+    datas=collection.find()
+    data_clus=[]
+    year_clus={}
+    year_doc=[]
+    company_clus=[]
+    output_doc={}
+    output_clus=[]
+    for i in datas:
+        data_clus.append(i)
+        for f in i:
+            if f=="company":
+                company_clus.append(i["company"])
+            if f!="_id" and f!="company" and f!="date" and f!="guess" and f!="share" and f!="yield_now" and f!="aim" and f!="l_aim" and f != "l_add" and f!="r_add":
+                year_doc.append(f)
+        else:
+            year_clus[i["company"]]=sorted(list(map(int, year_doc)))
+            year_doc=[]
+    return "None"
+
+
+
+app.debug=True
+app.run()
