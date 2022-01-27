@@ -236,8 +236,6 @@ def display(): # sorting data
         fram+=1
     return render_template("display.html", data=output_clus)
 
-
-
 @app.route("/rev", methods=["POST"])
 def revise():
     datas=collection.find()
@@ -357,21 +355,13 @@ def revise():
 
 @app.route("/simp")
 def simplify():
-    datas=collection.find()
-    data_clus=[]
-    year_clus={}
-    year_doc=[]
-    company_clus=[]
-    output_doc={}
-    output_clus=[]
-    for i in datas:
-        data_clus.append(i)
-        for f in i:
-            if f=="company":
-                company_clus.append(i["company"])
-            if f!="_id" and f!="company" and f!="date" and f!="guess" and f!="share" and f!="yield_now" and f!="aim" and f!="l_aim" and f != "l_add" and f!="r_add":
-                year_doc.append(f)
-        else:
-            year_clus[i["company"]]=sorted(list(map(int, year_doc)))
-            year_doc=[]
+    
     return "None"
+ 
+
+@app.route("/buying")
+def buying():
+    
+    return "buy"
+
+

@@ -5,15 +5,12 @@
 <link rel="icon" type="image/png" href="images/favicon.ico"/>
 <link rel="stylesheet" href="css/style.css">
 <style>
-.up_box{
-    width: 100%;
-    height: 50px;
-    display: flex;
-    align-items: center;
+html{
+    font-family: Microsoft JhengHei;
 }
 
 table, th, td {
-  border:1px solid black; 
+    border:1px solid black; 
 }
 
 .eps_m{
@@ -56,8 +53,49 @@ table, th, td {
     background-color: rgb(250, 187, 164);
 }
 
+.top_bar{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 10%;
+    background-color: #305f9c;
+    display: flex; 
+    align-items: center;
+}
 
+.top_bar_btn{
+    border: 0cm;
+    font-family: Microsoft JhengHei;
+    background-color: rgba(255, 255, 255, 0);
+    color: #FFFFFF;
+    font-size: 13px;
+    border-radius: 3px 3px 3px 3px;
+}
 
+.top_place_eat{
+    width: 100%;
+    height: 10%;
+}
+
+.logo{
+    left: 3%;
+    width: 12%;
+    float: left;
+    margin-top: 10px;
+}
+
+.login_btn{
+    background-color: rgb(214, 143, 10);
+    height: 60%;
+    width: 5%;
+    border-radius: 8px 8px 8px 8px;
+    border: 0px;
+    color: #FFFFFF;
+    font-size: 16px;
+    left: 89%;
+
+}
 
 </style>
 <script>
@@ -67,6 +105,20 @@ window.onload=function(){
     document.getElementById("date").value=date;
 }
 $(document).ready(function(){
+  //{%for i in range(5)%}
+  $(".onmouse_c{{i}}").mouseover(function(){
+    $(".onmouse_c{{i}}").css("color", "rgb(214, 143, 10)")
+  })
+  $(".onmouse_c{{i}}").mouseout(function(){
+    $(".onmouse_c{{i}}").css("color", "white")
+  })
+  //{%endfor%}
+  $(".onmouse_c5").mouseover(function(){
+    $(".onmouse_c5").css("color", "gray")
+  })
+  $(".onmouse_c5").mouseout(function(){
+    $(".onmouse_c5").css("color", "white")
+  })
   //{%for i in data%}
   $(".{{i['company']}}").hide();
   $(".{{i['company']}}_click").click(function(){
@@ -77,14 +129,28 @@ $(document).ready(function(){
 </script>
 </head>
 <body>
-<div class="up_box">
-    <span style="width: 90px; font-size: 40px;">輸出</span>
-    <button onclick="window.location.href='/main/main.html';">預計及增加資料</button>
-    <form action="/rev" method="POST">
-    <input type="submit">
-    <input type="text" id="date" style="display: none;" name="up_dt">
-</div>
-<div style="width: 100%;">
+
+  <div class="top_bar">
+    <button class="top_bar_btn" onclick="window.location.href=''"><h1 class="tit">AFN<span style="color: #c6610f;">CO</span></h1></button>
+    <span style="width: 1%;"></span>
+    <button class="top_bar_btn onmouse_c1" onclick="window.location.href=''" style="background-color: #002d68;">股票一覽</button>
+    <span style="width: 1%;"></span>
+    <button class="top_bar_btn onmouse_c2" onclick="window.location.href='/main/main.html'">預計及增加資料</button>
+    <span style="width: 1%;"></span>
+    <button class="top_bar_btn onmouse_c3" onclick="window.location.href=''">預計及增加資料</button>
+    <span style="width: 1%;"></span>
+    <button class="top_bar_btn onmouse_c4" onclick="window.location.href=''">預計及增加資料</button>
+    <span style="width: 51%;"></span>
+    <button class="login_btn onmouse_c5" onclick="window.location.href='';">登入</button>
+  </div>
+    
+
+<div class="top_place_eat"></div>
+<form action="/rev" method="POST" style="width: 100%;">
+
+  <input type="submit" value="更新(enter)"> <!--?????????????????????-->
+  <input type="text" id="date" style="display: none;" name="up_dt">
+    <div style="width: 100%;">
 {%for i in data%}
     <table style="width:49%">
         <tr class="{{i['company']}}_click">
