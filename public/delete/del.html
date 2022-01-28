@@ -124,49 +124,29 @@ $(document).ready(function(){
         <span style="width: 1%;"></span>
         <button class="top_bar_btn onmouse_c1" onclick="window.location.href='/dis'">股票一覽</button>
         <span style="width: 1%;"></span>
-        <button class="top_bar_btn onmouse_c2" onclick="window.location.href='/main/main.html'" style="background-color: #002d68;">預計及增加資料</button>
+        <button class="top_bar_btn onmouse_c2" onclick="window.location.href='/main/main.html'">預計及增加資料</button>
         <span style="width: 1%;"></span>
-        <button class="top_bar_btn onmouse_c3" onclick="window.location.href='/delete/del.html'">刪除資料</button>
+        <button class="top_bar_btn onmouse_c3" onclick="window.location.href='/delete/del.html'" style="background-color: #002d68;">刪除資料</button>
         <span style="width: 1%;"></span>
         <button class="top_bar_btn onmouse_c4" onclick="window.location.href=''">預計及增加資料</button>
         <span style="width: 51%;"></span>
         <button class="login_btn onmouse_c5" onclick="window.location.href='';">登入</button>
       </div>
       <div class="top_place_eat"></div>
+<form action="/del" method="POST" onsubmit="return sub()">
+<h4>刪除公司中的某年分</h4>
+刪除公司之名稱<br>
+<input name="company" placeholder="公司名稱" id="a"><br/>
+刪除資料年分<br/>
+<input name="year" placeholder="年分" id="b"><br/>
 
-<form method="POST" id="form" class="form" action="/res" name="form" onsubmit="return checkm();">
-股票(公司)名稱<br/>
-<input type="text" id="company" placeholder="股票(公司)名稱" name="company"><br/>
-
-EPS <input type="checkbox" onclick="clicke()" name="EPS_check" id="EPS_check">每月EPS<br/>
-<input type="text" id="EPS_1" placeholder="EPS Q1" name="EPS_1" style="display: inline;"><br/>
-<input type="text" id="EPS_2" placeholder="EPS Q2" name="EPS_2" style="display: inline;"><br/>
-<input type="text" id="EPS_3" placeholder="EPS Q3" name="EPS_3" style="display: inline;"><br/>
-<input type="text" id="EPS_4" placeholder="EPS Q4" name="EPS_4" style="display: inline;"><br/>
-
-<input type="text" id="m_1" placeholder="1月" name="m_1" style="display: none;">
-<input type="text" id="m_2" placeholder="2月" name="m_2" style="display: none;">
-<input type="text" id="m_3" placeholder="3月" name="m_3" style="display: none;"><br/>
-<input type="text" id="m_4" placeholder="4月" name="m_4" style="display: none;">
-<input type="text" id="m_5" placeholder="5月" name="m_5" style="display: none;">
-<input type="text" id="m_6" placeholder="6月" name="m_6" style="display: none;"><br/>
-<input type="text" id="m_7" placeholder="7月" name="m_7" style="display: none;">
-<input type="text" id="m_8" placeholder="8月" name="m_8" style="display: none;">
-<input type="text" id="m_9" placeholder="9月" name="m_9" style="display: none;"><br/>
-<input type="text" id="m_10" placeholder="10月" name="m_10" style="display: none;">
-<input type="text" id="m_11" placeholder="11月" name="m_11" style="display: none;">
-<input type="text" id="m_12" placeholder="12月" name="m_12" style="display: none;"><br/>
-配息率<br/>
-<input type="text" id="dividend_rate" placeholder="配息率" name="dividend_rate"><br/>
-股價<br/>
-<input type="text" id="share" placeholder="股價" name="share"><br/>
-年分<br/>
-<input type="text" id="year" name="year" placeholder="年分"><br/>
-
-
-<input type="text" id="date" name="date" style="display: none;"><br/>
-
-<input type="submit" id="submit" class="form-submit" value="submit" >
+<input type="submit">
+</form>
+<form action="/del" method="POST" onsubmit="return checkr();">
+<h4>刪除整個公司的資料</h4>
+刪除公司之名稱<br/>
+<input type="text" name="company_del" placeholder="公司名稱" id="getc"><br/>
+<input type="submit">
 </form>
 </body>
 </html>

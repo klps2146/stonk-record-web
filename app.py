@@ -5,13 +5,13 @@ client = pymongo.MongoClient("mongodb+srv://root:root123@realmcluster.rbqar.mong
 db = client.website
 collection=db.users
 app=Flask(__name__, static_folder="public", static_url_path="/")
-
+app.config["SECRET_KEY"]="jsisc3re"
 def value_caculate():
     pass
 
 @app.route("/") # main
 def index():
-    return redirect("/main/main.html")
+    return redirect("/dis")
 
 @app.route("/res", methods=["POST"])
 def res():
@@ -220,14 +220,20 @@ def display(): # sorting data
         output_doc["company"]=company_n
         output_doc["date"]=data_clus[fram]["date"]
         output_doc["share"]=data_clus[fram]["share"]
-        output_doc["aim"]=data_clus[fram]["aim"]
+        try:
+            output_doc["aim"]=data_clus[fram]["aim"]
+        except:
+            output_doc["aim"]=""
         output_doc["yield_now"]=(data_clus[fram][time.strftime('%Y',time.gmtime())]["yield"])
-        if data_clus[fram]["aim"]!="":
-            eps_aim=round(100*(float(data_clus[fram][time.strftime('%Y',time.gmtime())]["dividend"]))/(float(data_clus[fram]["aim"])),2)
-            output_doc["l_aim"]=eps_aim
-            eps_add=eps_aim-float(data_clus[fram]["share"])
-            output_doc["l_add"]=round(eps_add,2)
-            output_doc["r_add"]=round(100*eps_add/float(data_clus[fram]["share"]),2)
+        try:
+            if data_clus[fram]["aim"]!="":
+                eps_aim=round(100*(float(data_clus[fram][time.strftime('%Y',time.gmtime())]["dividend"]))/(float(data_clus[fram]["aim"])),2)
+                output_doc["l_aim"]=eps_aim
+                eps_add=eps_aim-float(data_clus[fram]["share"])
+                output_doc["l_add"]=round(eps_add,2)
+                output_doc["r_add"]=round(100*eps_add/float(data_clus[fram]["share"]),2)
+        except:
+            pass
         for year_ in year_clus[company_n]:
             output_doc[year_]=data_clus[fram][str(year_)]
         else:
@@ -364,4 +370,30 @@ def buying():
     
     return "buy"
 
+@app.route("/del", methods=["POST"])
+def delete():
+    try:
+        company=request.form["company"]
+        year=request.form["year"]
+    except:
+        pass
+    try:
+        company_del=request.form["company_del"]
+    except:
+        pass
+    if company_del=="":
+        try:
+            collection.update_one({
+                "company":company
+            },{"$unset":{
+                year:1,
+            }})
+        except:
+            return redirect("/delete/error.html")
+    elif company_del!="":
+        try:
+            collection.delete_one({"company":company_del})
+        except:
+            return redirect("/delete/error.html")
+    return redirect("/dis")
 
