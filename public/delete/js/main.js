@@ -13,7 +13,7 @@ function checkr(){
         }
     }
     return false;
-}
+} 
 
 function sub(){
     if (document.getElementById("a").value==""||document.getElementById("b").value==""  ){

@@ -413,6 +413,3 @@ def delete():
     return redirect("/dis")
 
 
-
-app.debug=True
-app.run()
