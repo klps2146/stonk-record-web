@@ -37,7 +37,6 @@ def res():
     last_update=request.form["date"]
     share=request.form["share"]
     share=round(float(share), 2)
-    dividend_rate=100*(float(dividend_rate))
     dividend_rate=round(float(dividend_rate), 2)
     if (m_1=="" and m_2==""):
         eps_1=float(eps_1)
@@ -59,7 +58,7 @@ def res():
         m_11=float(m_11)
         m_12=float(m_12)
         eps_year=m_1+m_2+m_3+m_4+m_4+m_5+m_6+m_7+m_7+m_8+m_9+m_10+m_11+m_12
-    divend=(float(dividend_rate)*float(eps_year))
+    divend=(float(dividend_rate)*float(eps_year)*0.01)
     divend=round(divend, 2)
     yield_=100*((float(dividend_rate)*float(eps_year))/float(share))
     yield_=round(float(yield_), 2)
@@ -361,14 +360,30 @@ def revise():
 
 @app.route("/simp")
 def simplify():
-    
-    return "None"
- 
-
-@app.route("/buying")
-def buying():
-    
-    return "buy"
+    datas=collection.find()
+    year_now=int(time.strftime('%Y',time.gmtime()))
+    data_clus=[]
+    company_clus=[]
+    for i in datas:
+        data_clus.append(i)
+        for f in i:
+            if f=="company":
+                company_clus.append(i["company"])
+            if f!="_id" and f!="company" and f!="date" and f!="guess" and f!="share" and f!="yield_now" and f!="aim" and f!="l_aim" and f != "l_add" and f!="r_add":
+                if int(f) < year_now-1:
+                    collection.update_one({
+                        "company":i["company"]
+                    },{"$set":{
+                        f:{
+                            "EPS_year":i[f]["EPS_year"],
+                            "dividend_rate":i[f]["dividend_rate"],
+                            "dividend":i[f]["dividend"],
+                            "yield":i[f]["yield"],
+                            "simp":1
+                        }
+                    }})
+                    
+    return redirect("/dis")
 
 @app.route("/del", methods=["POST"])
 def delete():
@@ -397,3 +412,7 @@ def delete():
             return redirect("/delete/error.html")
     return redirect("/dis")
 
+
+
+app.debug=True
+app.run()

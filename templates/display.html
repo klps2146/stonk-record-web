@@ -106,6 +106,8 @@ window.onload=function(){
     document.getElementById("date").value=date;
 }
 $(document).ready(function(){
+  var Today=new Date();
+  date=Today.getFullYear()
   //{%for i in range(5)%}
   $(".onmouse_c{{i}}").mouseover(function(){
     $(".onmouse_c{{i}}").css("color", "rgb(214, 143, 10)")
@@ -114,6 +116,10 @@ $(document).ready(function(){
     $(".onmouse_c{{i}}").css("color", "white")
   })
   //{%endfor%}
+
+
+
+
   $(".onmouse_c5").mouseover(function(){
     $(".onmouse_c5").css("color", "gray")
   })
@@ -123,7 +129,18 @@ $(document).ready(function(){
   //{%for i in data%}
   $(".{{i['company']}}").hide();
   $(".{{i['company']}}_click").click(function(){
-    $(".{{i['company']}}").toggle(160);
+    if ($(".{{i['company']}}_cfm").is(":hidden")){
+      $(".{{i['company']}}").show(160);
+      // alert($(".{{i['company']}}_fa").value)
+      // if (parseInt($("#{{i['company']}}_fa").value) < parseInt(date)-1){
+        //  $(".{{i['company']}}_{{f}}_s").hide();
+      //   alert("dj")
+      // }
+    }
+    else{
+      $(".{{i['company']}}").hide(160);
+    }
+    
   })
   //{%endfor%}
 })
@@ -140,7 +157,7 @@ $(document).ready(function(){
     <span style="width: 1%;"></span>
     <button class="top_bar_btn onmouse_c3" onclick="window.location.href='/delete/del.html'">刪除資料</button>
     <span style="width: 1%;"></span>
-    <button class="top_bar_btn onmouse_c4" onclick="window.location.href=''">預計及增加資料</button>
+    <button class="top_bar_btn onmouse_c4" onclick="window.location.href=''">更正及增加資料</button>
     <span style="width: 51%;"></span>
     <button class="login_btn onmouse_c5" onclick="window.location.href='';">登入</button>
   </div>
@@ -166,37 +183,56 @@ $(document).ready(function(){
         </tr>
         
     {%for f in i%}
-        {%if f != "_id" and f != "company" and f != "date" and f != "guess" and f != "share" and f != "yield_now" and f != "aim"  and f != "l_aim" and f != "l_add" and f != "r_add"%}
+        {%if f != "_id" and f != "company" and f != "date" and f != "guess" and f != "share" and f != "yield_now" and f != "aim"  and f != "l_aim" and f != "l_add" and f != "r_add" and f != "simp"%}
+            {%if i[f]["simp"]==1%}
+            <tr class="{{i['company']}}" style="background-color: rgb(195, 236, 154);">
+              <td class="col_u_d {{i['company']}}_fa"  style="font-weight: bold;">{{f}}</td>
+              <td>{{i[f]['EPS_year']}}</td>
+              <td><input type="text" class="form_inside_text" name="{{i['company']}}_{{f}}_dividend" value="{{i[f]['dividend']}}"></td>
+              <td>{{i[f]["dividend_rate"]}}%</td>
+              <td>{{i[f]["yield"]}}%</td>
+            </tr>
+            {%else%}
+            <script>
+              $(document).ready(function(){
+                $(".{{i['company']}}_click").click(function(){
+                  $(".{{i['company']}}_{{f}}_s").hide(160);
+                });
+                $(".{{i['company']}}_{{f}}_n").click(function(){
+                  $(".{{i['company']}}_{{f}}_s").toggle(160);
+                })
+              })
+            </script>
         <tr class="{{i['company']}}" style="background-color: rgb(195, 236, 154);">
-          <td class="col_u_d" style="font-weight: bold;">{{f}}</td>
+          <td class="col_u_d {{i['company']}}_{{f}}_n {{i['company']}}_fa" style="font-weight: bold;">{{f}}</td>
           <td>{{i[f]['EPS_year']}}</td>
           <td><input type="text" class="form_inside_text" name="{{i['company']}}_{{f}}_dividend" value="{{i[f]['dividend']}}"></td>
           <td>{{i[f]["dividend_rate"]}}%</td>
           <td>{{i[f]["yield"]}}%</td>
         </tr>
             {%if i[f]["EPS_Q1"] != ""%}
-              <tr class="{{i['company']}}">
+              <tr class="{{i['company']}} {{i['company']}}_{{f}}_s">
                 <td class="col_u" style="font-weight: bold;">Q1</td>
                 <td class="eps_season"><input type="text" class="form_inside_text_eps_Q" name="{{i['company']}}_{{f}}_Q_1" value="{{i[f]['EPS_Q1']}}"></td>
                 <td></td>
                 <td></td>
                 <td></td>
               </tr>
-              <tr class="{{i['company']}}">
+              <tr class="{{i['company']}} {{i['company']}}_{{f}}_s">
                 <td class="col_u" style="font-weight: bold;">Q2</td>
                 <td class="eps_season"><input type="text" class="form_inside_text_eps_Q" name="{{i['company']}}_{{f}}_Q_2" value="{{i[f]['EPS_Q2']}}"></td>
                 <td></td>
                 <td></td>
                 <td></td>
               </tr>
-              <tr class="{{i['company']}}">
+              <tr class="{{i['company']}} {{i['company']}}_{{f}}_s">
                 <td class="col_u" style="font-weight: bold;">Q3</td>
                 <td class="eps_season"><input type="text" class="form_inside_text_eps_Q" name="{{i['company']}}_{{f}}_Q_3" value="{{i[f]['EPS_Q3']}}"></td>
                 <td></td>
                 <td></td>
                 <td></td>
               </tr>
-              <tr class="{{i['company']}}">
+              <tr class="{{i['company']}} {{i['company']}}_{{f}}_s">
                 <td class="col_u" style="font-weight: bold;">Q4</td>
                 <td class="eps_season"><input type="text" class="form_inside_text_eps_Q" name="{{i['company']}}_{{f}}_Q_4" value="{{i[f]['EPS_Q4']}}"></td>
                 <td></td>
@@ -204,28 +240,28 @@ $(document).ready(function(){
                 <td></td>
               </tr>
             {%else%}
-              <tr class="{{i['company']}}"> 
+              <tr class="{{i['company']}} {{i['company']}}_{{f}}_s"> 
                 <td class="col_u" style="font-weight: bold;">Q1(1,2,3月)</td>
                 <td class="eps_season">{{i[f]["EPS_Q1"]}}</td>
                 <td class="eps_m"><input type="text" class="form_inside_text_eps_m" name="{{i['company']}}_{{f}}_m_1" value="{{i[f]['EPS_m_1']}}"></td>
                 <td class="eps_m"><input type="text" class="form_inside_text_eps_m" name="{{i['company']}}_{{f}}_m_2" value="{{i[f]['EPS_m_2']}}"></td>
                 <td class="eps_m"><input type="text" class="form_inside_text_eps_m" name="{{i['company']}}_{{f}}_m_3" value="{{i[f]['EPS_m_3']}}"></td>
               </tr>
-              <tr class="{{i['company']}}">
+              <tr class="{{i['company']}} {{i['company']}}_{{f}}_s">
                 <td class="col_u" style="font-weight: bold;">Q2(4,5,6月)</td>
                 <td class="eps_season">{{i[f]["EPS_Q2"]}}</td>
                 <td class="eps_m"><input type="text" class="form_inside_text_eps_m" name="{{i['company']}}_{{f}}_m_4" value="{{i[f]['EPS_m_4']}}"></td>
                 <td class="eps_m"><input type="text" class="form_inside_text_eps_m" name="{{i['company']}}_{{f}}_m_5" value="{{i[f]['EPS_m_5']}}"></td>
                 <td class="eps_m"><input type="text" class="form_inside_text_eps_m" name="{{i['company']}}_{{f}}_m_6" value="{{i[f]['EPS_m_6']}}"></td>
               </tr>
-              <tr class="{{i['company']}}">
+              <tr class="{{i['company']}} {{i['company']}}_{{f}}_s">
                 <td class="col_u" style="font-weight: bold;">Q3(7,8,9月)</td>
                 <td class="eps_season">{{i[f]["EPS_Q3"]}}</td>
                 <td class="eps_m"><input type="text" class="form_inside_text_eps_m" name="{{i['company']}}_{{f}}_m_7" value="{{i[f]['EPS_m_7']}}"></td>
                 <td class="eps_m"><input type="text" class="form_inside_text_eps_m" name="{{i['company']}}_{{f}}_m_8" value="{{i[f]['EPS_m_8']}}"></td>
                 <td class="eps_m"><input type="text" class="form_inside_text_eps_m" name="{{i['company']}}_{{f}}_m_9" value="{{i[f]['EPS_m_9']}}"></td>
               </tr>
-              <tr class="{{i['company']}}">
+              <tr class="{{i['company']}} {{i['company']}}_{{f}}_s">
                 <td class="col_u" style="font-weight: bold;">Q4(10,11,12月)</td>
                 <td class="eps_season">{{i[f]["EPS_Q4"]}}</td>
                 <td class="eps_m"><input type="text" class="form_inside_text_eps_m" name="{{i['company']}}_{{f}}_m_10" value="{{i[f]['EPS_m_10']}}"></td>
@@ -233,9 +269,10 @@ $(document).ready(function(){
                 <td class="eps_m"><input type="text" class="form_inside_text_eps_m" name="{{i['company']}}_{{f}}_m_12" value="{{i[f]['EPS_m_12']}}"></td>
               </tr>
             {%endif%}
+          {%endif%}
         {%endif%}
     {%endfor%}
-    <tr class="{{i['company']}}">
+    <tr class="{{i['company']}} {{i['company']}}_cfm">
         <td>目標價</td>
         <td>{{i["l_aim"]}}</td>
         <td></td>

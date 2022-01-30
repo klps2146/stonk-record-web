@@ -124,7 +124,7 @@ $(document).ready(function(){
         <span style="width: 1%;"></span>
         <button class="top_bar_btn onmouse_c1" onclick="window.location.href='/dis'">股票一覽</button>
         <span style="width: 1%;"></span>
-        <button class="top_bar_btn onmouse_c2" onclick="window.location.href='/main/main.html'">預計及增加資料</button>
+        <button class="top_bar_btn onmouse_c2" onclick="window.location.href='/main/main.html'">更正及增加資料</button>
         <span style="width: 1%;"></span>
         <button class="top_bar_btn onmouse_c3" onclick="window.location.href='/delete/del.html'" style="background-color: #002d68;">刪除資料</button>
         <span style="width: 1%;"></span>
@@ -140,7 +140,7 @@ $(document).ready(function(){
 刪除資料年分<br/>
 <input name="year" placeholder="年分" id="b"><br/>
 
-<input type="submit">
+<input type="submit"><input name="company_del" style="display: none;" type="text">
 </form>
 <form action="/del" method="POST" onsubmit="return checkr();">
 <h4>刪除整個公司的資料</h4>
