@@ -6,7 +6,11 @@ db = client.website
 collection=db.users
 app=Flask(__name__, static_folder="public", static_url_path="/")
 app.config["SECRET_KEY"]="jsisc3re"
+
 def value_caculate():
+    pass
+
+def session_setting():
     pass
 
 @app.route("/") # main
@@ -241,7 +245,7 @@ def display(): # sorting data
         fram+=1
     return render_template("display.html", data=output_clus)
 
-@app.route("/rev", methods=["POST"])
+@app.route("/rev", methods=["POST"]) # 更新
 def revise():
     datas=collection.find()
     data_clus=[]
@@ -358,7 +362,7 @@ def revise():
                 })
     return render_template("redirecting.html")
 
-@app.route("/simp")
+@app.route("/simp") # 簡化
 def simplify():
     datas=collection.find()
     year_now=int(time.strftime('%Y',time.gmtime()))
@@ -412,4 +416,15 @@ def delete():
             return redirect("/delete/error.html")
     return redirect("/dis")
 
+@app.route("/signin")
+def signin():
+    pass
+
+@app.route("/signup")
+def signup():
+    pass
+
+@app.route("/term")
+def term():
+    pass
 
