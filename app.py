@@ -15,7 +15,7 @@ def session_setting():
 
 @app.route("/") # main
 def index():
-    return redirect("/dis")
+    return redirect("/index/index.html")
 
 @app.route("/res", methods=["POST"])
 def res():
@@ -416,15 +416,16 @@ def delete():
             return redirect("/delete/error.html")
     return redirect("/dis")
 
-@app.route("/signin")
+@app.route("/signin", methods=["POST"])
 def signin():
     pass
 
-@app.route("/signup")
+@app.route("/signup", methods=["POST"])
 def signup():
     pass
 
 @app.route("/term")
 def term():
-    pass
+    return redirect("/term/term.html")
+
 
