@@ -1,4 +1,4 @@
 flask
 gunicorn
 pymongo[srv]
-flask_bcrypt
+flaskext.bcrypt
