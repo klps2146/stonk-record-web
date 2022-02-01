@@ -19,7 +19,7 @@ def session_setting():
 def index():
     return redirect("/index/index.html")
 
-@app.route("/res", methods=["POST"])
+@app.route("/res", methods=["POST"]) 
 def res():
     company=request.form["company"]
     years=request.form["year"]
@@ -427,7 +427,7 @@ def signin():
         if i["account"]==account:
             if Bcrypt().check_password_hash(i["password"], pwd):
                 return i["account"]+" signin scuessful"
-                
+
             else:
                 return "wrong password"
     return "no account"
