@@ -1,6 +1,6 @@
 from flask import Flask, redirect, session, render_template, request, url_for
 import pymongo, time
-from flask_bcrypt import Bcrypt
+import flask_bcrypt
 
 client = pymongo.MongoClient("mongodb+srv://root:root123@realmcluster.rbqar.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
 db = client.website
