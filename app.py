@@ -17,7 +17,7 @@ def session_setting():
 
 @app.route("/") # main
 def index():
-    return redirect("/index/index.html")
+    return redirect("/index/index.html") 
 
 @app.route("/res", methods=["POST"])
 def res():
