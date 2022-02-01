@@ -1,9 +1,11 @@
 from flask import Flask, redirect, session, render_template, request, url_for
 import pymongo, time
+from flask_bcrypt import Bcrypt
 
 client = pymongo.MongoClient("mongodb+srv://root:root123@realmcluster.rbqar.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
 db = client.website
 collection=db.users
+collection_pwd=db.user
 app=Flask(__name__, static_folder="public", static_url_path="/")
 app.config["SECRET_KEY"]="jsisc3re"
 
@@ -418,14 +420,52 @@ def delete():
 
 @app.route("/signin", methods=["POST"])
 def signin():
-    pass
+    account=request.form["account"]
+    pwd=request.form["pwd"]
+    data=collection_pwd.find()
+    for i in data:
+        if i["account"]==account:
+            if Bcrypt().check_password_hash(i["password"], pwd):
+                return i["account"]+" signin scuessful"
+                
+            else:
+                return "wrong password"
+    return "no account"
 
 @app.route("/signup", methods=["POST"])
 def signup():
-    pass
+    user_name=request.form["usn"]
+    account=request.form["acc"]
+    pwd=request.form["pwd"]
+    pwd=Bcrypt().generate_password_hash(pwd).decode("utf-8")
+    data=collection_pwd.find()
+    repeat=0
+    for i in data:
+        if i["account"]==account:
+            repeat+=1
+        else:
+            repeat+=0
+    if repeat==0:
+        collection_pwd.insert_one({
+            "name":user_name,
+            "account":account,
+            "password":pwd
+        })
+        return "update scf"
+    else:
+        return """
+        <h1>重複使用的帳號</h1>
+        <script>
+            function a(){
+                window.location.href='/signup/signup.html';
+            }
+            window.onload=setTimeout(a, 1800);
+        </script>
+        """
 
 @app.route("/term")
 def term():
     return redirect("/term/term.html")
 
-
+app.debug=True
+app.run()
