@@ -616,6 +616,3 @@ def signup():
         """
 
 
-
-app.debug=True
-app.run()
