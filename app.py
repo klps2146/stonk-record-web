@@ -546,5 +546,3 @@ def term():
 def deletf():
     return render_template("del.html")
 
-app.debug=True
-app.run()
