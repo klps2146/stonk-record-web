@@ -2,7 +2,7 @@
 <head>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="js/main.js"></script>
-<link rel="icon" type="image/png" href="images/favicon.ico"/>
+<link rel="icon" type="image/png" href="{{url_for('static', filename='favicon.ico')}}"/>
 <link rel="stylesheet" href="css/style.css">
 <title>AFNCO-登入</title>
 <script> 
@@ -168,25 +168,25 @@ $(document).ready(function(){
     </style> 
 </head>
 <body>
-    <div class="top_bar">
-        <button class="top_bar_btn" onclick="window.location.href='/index/index.html'"><h1 class="tit">AFN<span style="color: #c6610f;">CO</span></h1></button>
-				<span style="width: 1%;"></span>
-        <button class="top_bar_btn onmouse_c4" onclick="window.location.href='/index/index.html'">首頁</button>
-        <span style="width: 1%;"></span>
-        <button class="top_bar_btn onmouse_c1" onclick="window.location.href='/dis'">股票一覽</button>
-        <span style="width: 1%;"></span>
-        <button class="top_bar_btn onmouse_c2" onclick="window.location.href='/main/main.html'">更正及增加資料</button>
-        <span style="width: 1%;"></span>
-        <button class="top_bar_btn onmouse_c3" onclick="window.location.href='/delete/del.html'">刪除資料</button>
-        <span style="width: 60%;"></span>
-        <button class="login_btn onmouse_c5" onclick="window.location.href='/signin/signin.html';">登入</button>
-      </div>
+  <div class="top_bar">
+    <button class="top_bar_btn" onclick="window.location.href='/'"><h1 class="tit">AFN<span style="color: #c6610f;">CO</span></h1></button>
+    <span style="width: 1%;"></span>
+    <button class="top_bar_btn onmouse_c4" onclick="window.location.href='/'">首頁</button>
+    <span style="width: 1%;"></span>
+    <button class="top_bar_btn onmouse_c1" onclick="window.location.href='/dis'">股票一覽</button>
+    <span style="width: 1%;"></span>
+    <button class="top_bar_btn onmouse_c2" onclick="window.location.href='/main'">更正及增加資料</button>
+    <span style="width: 1%;"></span>
+    <button class="top_bar_btn onmouse_c3" onclick="window.location.href='/delet'">刪除資料</button>
+    <span style="width: 60%;"></span>
+    <button class="login_btn onmouse_c5" onclick="window.location.href='/login'">登入</button>
+  </div>
       <div class="top_place_eat"></div>
 <div class="inner_box">
     <div class="login_p">
 			<form action="/signin" method="POST" onsubmit="return ncp()">
         <div style="height: 5%;"></div>
-        <img src="images/favicon.ico" class="icon_i" onclick="window.location.href='/index/index.html'"><br/>
+        <img src="{{url_for('static', filename='favicon.ico')}}" class="icon_i" onclick="window.location.href='/index/index.html'"><br/>
         <div><h2>登入</h2></div>
 				<div style="height: 3%;"></div>
         <input type="text" placeholder="帳號" class="ins" id="account" name="account" autocomplete="off"><br/>
@@ -195,7 +195,7 @@ $(document).ready(function(){
 				<div style="height: 6%;"></div>
 				<input type="submit" class="send" value="登入">
 				<div style="height: 12%;"></div>
-				<div><span style="color: rgb(122, 122, 122);">沒有帳號?<span style="color: #3885e9;" onclick="window.location.href='/signup/signup.html'"><u>註冊</u></span></div>
+				<div><span style="color: rgb(122, 122, 122);">沒有帳號?<span style="color: #3885e9;" onclick="window.location.href='/assign'"><u>註冊</u></span></div>
 			</form>
     </div>
 </div>

@@ -2,7 +2,7 @@
 <head>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="js/main.js"></script>
-<link rel="icon" type="image/png" href="images/favicon.ico"/>
+<link rel="icon" type="image/png" href="{{url_for('static', filename='favicon.ico')}}"/>
 <link rel="stylesheet" href="css/style.css">
 <title>預計及增加資料</title>
 <style>
@@ -71,6 +71,142 @@ window.onload=function(){
     // }   
     
 
+    state=1;
+
+function clicke(){
+    var checked = document.querySelector('[name=EPS_check]:checked');
+    if (checked){
+        state+=1;
+        document.getElementById("EPS_1").style.display="none";
+        document.getElementById("EPS_2").style.display="none";
+        document.getElementById("EPS_3").style.display="none";
+        document.getElementById("EPS_4").style.display="none";
+        document.getElementById("EPS_1").value="";
+        document.getElementById("EPS_2").value="";
+        document.getElementById("EPS_3").value="";
+        document.getElementById("EPS_4").value="";
+        document.getElementById("m_1").style.display="inline";
+        document.getElementById("m_2").style.display="inline";
+        document.getElementById("m_3").style.display="inline";
+        document.getElementById("m_4").style.display="inline";
+        document.getElementById("m_5").style.display="inline";
+        document.getElementById("m_6").style.display="inline";
+        document.getElementById("m_7").style.display="inline";
+        document.getElementById("m_8").style.display="inline";
+        document.getElementById("m_9").style.display="inline";
+        document.getElementById("m_10").style.display="inline";
+        document.getElementById("m_11").style.display="inline";
+        document.getElementById("m_12").style.display="inline";
+    }
+    else{
+        state-=1;
+        document.getElementById("EPS_1").style.display="inline";
+        document.getElementById("EPS_2").style.display="inline";
+        document.getElementById("EPS_3").style.display="inline";
+        document.getElementById("EPS_4").style.display="inline";
+        document.getElementById("m_1").value="";
+        document.getElementById("m_2").value="";
+        document.getElementById("m_3").value="";
+        document.getElementById("m_4").value="";
+        document.getElementById("m_5").value="";
+        document.getElementById("m_6").value="";
+        document.getElementById("m_7").value="";
+        document.getElementById("m_8").value="";
+        document.getElementById("m_9").value="";
+        document.getElementById("m_10").value="";
+        document.getElementById("m_11").value="";
+        document.getElementById("m_12").value="";
+        document.getElementById("m_1").style.display="none";
+        document.getElementById("m_2").style.display="none";
+        document.getElementById("m_3").style.display="none";
+        document.getElementById("m_4").style.display="none";
+        document.getElementById("m_5").style.display="none";
+        document.getElementById("m_6").style.display="none";
+        document.getElementById("m_7").style.display="none";
+        document.getElementById("m_8").style.display="none";
+        document.getElementById("m_9").style.display="none";
+        document.getElementById("m_10").style.display="none";
+        document.getElementById("m_11").style.display="none";
+        document.getElementById("m_12").style.display="none";
+    }
+}
+
+
+function checkm(){
+    let issue=0;
+    let eps_1=document.form.EPS_1.value;
+    let eps_2=document.form.EPS_2.value;
+    let eps_3=document.form.EPS_3.value;
+    let eps_4=document.form.EPS_4.value;
+
+    let m_1=document.form.m_1.value;
+    let m_2=document.form.m_2.value;
+    let m_3=document.form.m_3.value;
+    let m_4=document.form.m_4.value;
+    let m_5=document.form.m_5.value;
+    let m_6=document.form.m_6.value;
+    let m_7=document.form.m_7.value;
+    let m_8=document.form.m_8.value;
+    let m_9=document.form.m_9.value;
+    let m_10=document.form.m_10.value;
+    let m_11=document.form.m_11.value;
+    let m_12=document.form.m_12.value;
+
+    let dividend_rate=document.form.dividend_rate.value;
+    let share=document.form.share.value;
+    // try{
+    //     eps_unit=parseInt(eps);
+    //     if (eps_unit>1000){
+    //         alert("EPS數字過大");
+    //         issue+=1;
+    //     }
+    // }
+    // catch{
+    //     alert("EPS應為數字而非"+typeof(eps));
+    //     eps="";
+    // }
+    // if (state==1){
+    //     if (eps_1.length<=0 | eps_2.length<=0 | eps_3.length<=0 | eps_4.length<=0){
+    //     issue+=1;
+    //     alert("EPS不可為空");
+    // }
+    // else{
+    //     if (m_1.length<=0 |
+    //         m_2.length<=0 |
+    //         m_3.length<=0 |
+    //         m_4.length<=0 |
+    //         m_5.length<=0 |
+    //         m_6.length<=0 |
+    //         m_7.length<=0 |
+    //         m_8.length<=0 |
+    //         m_9.length<=0 |
+    //         m_10.length<=0 |
+    //         m_11.length<=0 |
+    //         m_12.length<=0
+    //         ){
+    //             issue+=1;
+    //             alert("EPS不可為空");
+    //         }
+    // }
+    // }
+    if (dividend_rate.length<=0){
+        issue+=1;
+        alert("配息率不可為空");
+    }
+    if (share.length<=0){
+        issue+=1;
+        alert("股價不可為空");
+    }
+    console.log(share.length);
+    if (issue==0){
+        return true;
+    }
+    else{
+        return false;
+    }
+}
+ 
+
 }
 $(document).ready(function(){
   $(".onmouse_c0").mouseover(function(){
@@ -120,17 +256,17 @@ $(document).ready(function(){
 </head>
 <body>
   <div class="top_bar">
-    <button class="top_bar_btn" onclick="window.location.href='/index/index.html'"><h1 class="tit">AFN<span style="color: #c6610f;">CO</span></h1></button>
+    <button class="top_bar_btn" onclick="window.location.href='/'"><h1 class="tit">AFN<span style="color: #c6610f;">CO</span></h1></button>
     <span style="width: 1%;"></span>
-    <button class="top_bar_btn onmouse_c4" onclick="window.location.href='/index/index.html'">首頁</button>
+    <button class="top_bar_btn onmouse_c4" onclick="window.location.href='/'">首頁</button>
     <span style="width: 1%;"></span>
     <button class="top_bar_btn onmouse_c1" onclick="window.location.href='/dis'">股票一覽</button>
     <span style="width: 1%;"></span>
-    <button class="top_bar_btn onmouse_c2" onclick="window.location.href='/main/main.html'" style="background-color: #1d3a61;">更正及增加資料</button>
+    <button class="top_bar_btn onmouse_c2" onclick="window.location.href='/main'" style="background-color: #1d3a61;">更正及增加資料</button>
     <span style="width: 1%;"></span>
-    <button class="top_bar_btn onmouse_c3" onclick="window.location.href='/delete/del.html'">刪除資料</button>
+    <button class="top_bar_btn onmouse_c3" onclick="window.location.href='/delet'">刪除資料</button>
     <span style="width: 60%;"></span>
-    <button class="login_btn onmouse_c5" onclick="window.location.href='/signin/signin.html';">登入</button>
+    <button class="login_btn onmouse_c5" onclick="window.location.href='/login'">登入</button>
   </div>
       <div class="top_place_eat"></div>
 

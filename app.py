@@ -1,13 +1,18 @@
-from flask import Flask, redirect, session, render_template, request, url_for
+from flask import Flask, redirect, session, render_template, request, url_for, abort, make_response
 import pymongo, time
-from flask_bcrypt import Bcrypt
+# from flask_bcrypt import Bcrypt
 
 client = pymongo.MongoClient("mongodb+srv://root:root123@realmcluster.rbqar.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
 db = client.website
 collection=db.users
 collection_pwd=db.user
-app=Flask(__name__, static_folder="public", static_url_path="/")
-app.config["SECRET_KEY"]="jsisc3re"
+app=Flask(__name__, static_folder="static", static_url_path="/")
+app.config['SECRET_KEY'] = b'>\x89k\xff.t{\xed\xc0\x8c^E\x81A\xe7\xb6'
+app.config["SESSION_COOKIE_NAME"]="dnjnfe2y%24"
+
+# app.permanent_session_lifetime=datetime.timedelta(seconds=1*60)
+# session.permanent=True
+
 
 def value_caculate():
     pass
@@ -15,9 +20,46 @@ def value_caculate():
 def session_setting():
     pass
 
+@app.errorhandler(404)
+def err_handler(e):
+    return """
+    <h3>查無此頁面</h3>
+    <a href="/">回首頁</a></br>
+    <title>404查無頁面</title>
+    """
+
+
+
+@app.route("/test")
+def test():
+    try:
+        user=request.cookies.get('user')
+        if session["account"]==user:
+            return "True"
+        else:
+            return "False"
+    except:
+        return "Non cookie"
+
 @app.route("/") # main
-def index():
-    return redirect("/index/index.html") 
+def indexdd():
+    return render_template("index.html")
+
+@app.route("/assign")
+def ass():
+    return render_template("signup.html")
+
+@app.route("/login")
+def login():
+    return render_template("signin.html")
+
+@app.route("/assign")
+def asdss():
+    return render_template("signup.html")
+
+@app.route("/main")
+def assas():
+    return render_template("main.html")
 
 @app.route("/res", methods=["POST"])
 def res():
@@ -388,7 +430,6 @@ def simplify():
                             "simp":1
                         }
                     }})
-                    
     return redirect("/dis")
 
 @app.route("/del", methods=["POST"])
@@ -410,13 +451,14 @@ def delete():
                 year:1,
             }})
         except:
-            return redirect("/delete/error.html")
+            return render_template("error.html")
     elif company_del!="":
         try:
             collection.delete_one({"company":company_del})
         except:
-            return redirect("/delete/error.html")
+            return render_template("error.html")
     return redirect("/dis")
+
 
 @app.route("/signin", methods=["POST"])
 def signin():
@@ -425,19 +467,42 @@ def signin():
     data=collection_pwd.find()
     for i in data:
         if i["account"]==account:
-            if Bcrypt().check_password_hash(i["password"], pwd):
-                return i["account"]+" signin scuessful"
-
+            # if Bcrypt().check_password_hash(i["password"], pwd):
+            if i["password"]==pwd:
+                session["account"]=account
+                res=redirect("/")
+                res.set_cookie("user",account)
+                return res
             else:
-                return "wrong password"
-    return "no account"
+                return """ 
+                <title>密碼錯誤</title>
+                <h3>密碼錯誤</h3>
+                <p style="color: #0000FF;"> redirecting...</p>
+                <script>
+                    function a(){
+                        window.location.href="/login";
+                    }
+                    window.onload=setTimeout(a, 1600);
+                </script>
+                """
+    return """ 
+    <title>無此帳號</title>
+    <h3>無此帳號</h3>
+    <p style="color: #0000FF;"> redirecting...</p>
+    <script>
+        function a(){
+            window.location.href="/login";
+        }
+        window.onload=setTimeout(a, 600);
+    </script>
+    """
 
 @app.route("/signup", methods=["POST"])
 def signup():
     user_name=request.form["usn"]
     account=request.form["acc"]
     pwd=request.form["pwd"]
-    pwd=Bcrypt().generate_password_hash(pwd).decode("utf-8")
+    # pwd=Bcrypt().generate_password_hash(pwd).decode("utf-8")
     data=collection_pwd.find()
     repeat=0
     for i in data:
@@ -451,13 +516,23 @@ def signup():
             "account":account,
             "password":pwd
         })
-        return "update scf"
-    else:
         return """
-        <h1>重複使用的帳號</h1>
+        <title>註冊成功</title>
+        <h1>帳號註冊成功</h1>
         <script>
             function a(){
-                window.location.href='/signup/signup.html';
+                window.location.href='/login';
+            }
+            window.onload=setTimeout(a, 600);
+        </script>
+        """
+    else:
+        return """
+        <title>帳號名稱已被使用</title>
+        <h1>帳號名稱已被使用</h1>
+        <script>
+            function a(){
+                window.location.href='/assign';
             }
             window.onload=setTimeout(a, 1800);
         </script>
@@ -465,7 +540,11 @@ def signup():
 
 @app.route("/term")
 def term():
-    return redirect("/term/term.html")
+    return render_template("term.html")
+
+@app.route("/delet")
+def deletf():
+    return render_template("del.html")
 
 app.debug=True
 app.run()
