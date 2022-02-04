@@ -15,7 +15,7 @@ app.config["SESSION_COOKIE_NAME"]="dnjnf2y%24"
 
 # app.permanent_session_lifetime=datetime.timedelta(seconds=1*60)
 # session.permanent=True
-
+ 
 
 def value_caculate():
     pass
