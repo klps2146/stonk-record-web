@@ -85,6 +85,14 @@ def err_handler(e):
     <title>404查無頁面</title>
     """
 
+@app.errorhandler(500)
+def err_handler(e):
+    return """
+    <h3>有些地方出錯了</h3>
+    <a href="/">回首頁</a></br>
+    <title>500 error</title>
+    """
+
 @app.errorhandler(405)
 def err_handler(e):
     return redirect("/")
@@ -174,7 +182,7 @@ def res():
             eps_year=m_1+m_2+m_3+m_4+m_4+m_5+m_6+m_7+m_7+m_8+m_9+m_10+m_11+m_12
         divend=(float(dividend_rate)*float(eps_year)*0.01)
         divend=round(divend, 2)
-        yield_=100*((float(dividend_rate)*float(eps_year))/float(share))
+        yield_=((float(dividend_rate)*float(eps_year))/float(share))
         yield_=round(float(yield_), 2)
         try:
             datas_get=collection.find()
@@ -538,8 +546,9 @@ def delete():
         for f in i:
             if f!="_id" and f!="company" and f!="date" and f!="guess" and f!="share" and f!="yield_now" and f!="aim" and f!="l_aim" and f != "l_add" and f!="r_add":
                 have+=1
-    if have ==0:
-        collection.delete_one({"company":company_del})
+        print(have)
+        if have ==0:
+            collection.delete_one({"company":company_del}) 
     return redirect("/dis")
 
 
@@ -625,5 +634,3 @@ def signup():
 def signout():
     collection=None
     return logout()
-
-app.run()
