@@ -112,25 +112,62 @@ def test():
 
 @app.route("/") # main
 def indexdd():
-    return render_template("index.html", userdata=state_output())
+    datas={}
+    if state_check_bool():
+        datas["user"]=(session["account"])
+        datas["click"]="logout()"
+    else:
+        datas["user"]="登入"
+        datas["click"]="window.location.href='/login'"
+        time.sleep(0.2)
+    return render_template("index.html", userdata=datas)
 
 @app.route("/assign")
 def ass():
     # if state_check_bool:
     #     return redirect("/")
     # else:
-        return render_template("signup.html",  userdata=state_output())
+
+    return render_template("signup.html",  userdata=state_output())
 
 @app.route("/login")
 def login():
     # if state_check_bool:
     #     return redirect("/")
     # else:
-        return render_template("signin.html",  userdata=state_output())
+    datas={}
+    if state_check_bool():
+        datas["user"]=(session["account"])
+        datas["click"]="logout()"
+    else:
+        datas["user"]="登入"
+        datas["click"]="window.location.href='/login'"
+        time.sleep(0.2)
+    return render_template("signin.html",  userdata=datas)
 
 @app.route("/main")
 def assas():
-    return user_access("main.html")
+    try:
+        user=request.cookies.get('user')
+        if session["account"]==user:
+            return render_template("main.html", userdata=state_output())
+        else:
+            try:
+                session.pop("account")
+            except:
+                pass
+            res=redirect("/login")
+            res.delete_cookie("user")
+            return res
+    except:
+        try:
+            session.pop("account")
+        except:
+            pass
+        res=redirect("/login")
+        res.delete_cookie("user")
+        return res
+    # return user_access("main.html")
 
 
 @app.route("/res", methods=["POST"])
