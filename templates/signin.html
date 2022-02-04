@@ -7,6 +7,12 @@
 <title>AFNCO-登入</title>
 <script>  
 window.onload=function(){
+  //{%if userdata.user!="登入"%}
+    alert("請先登出")
+      window.location.href='/';
+  //{%endif%}
+
+
     var Today=new Date();
     date=Today.getFullYear()+"/"+(Today.getMonth()+1)+"/"+Today.getDate();
     console.log(date);

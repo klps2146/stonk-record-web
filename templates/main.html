@@ -69,8 +69,9 @@ window.onload=function(){
     // if (Today.getMonth()+1==10||Today.getMonth()+1==11||Today.getMonth()+1==12){
     //     document.getElementById("Q4").setAttribute("selected","");
     // }   
-   
-    state=1;
+}
+ 
+state=1;
 
 function clicke(){
     var checked = document.querySelector('[name=EPS_check]:checked');
@@ -204,9 +205,7 @@ function checkm(){
         return false;
     }
 }
- 
 
-}
 $(document).ready(function(){
   $(".onmouse_c0").mouseover(function(){
     $(".onmouse_c0").css("color", "rgb(214, 143, 10)")
@@ -251,6 +250,11 @@ $(document).ready(function(){
     $(".onmouse_c5").css("color", "white")
   })
 })
+function logout(){
+    if (window.confirm("確定登出？")){
+        window.location.href='/signout';
+    }
+}
 </script> 
 </head>
 <body>
@@ -265,7 +269,7 @@ $(document).ready(function(){
     <span style="width: 1%;"></span>
     <button class="top_bar_btn onmouse_c3" onclick="window.location.href='/delet'">刪除資料</button>
     <span style="width: 60%;"></span>
-    <button class="login_btn onmouse_c5" onclick="window.location.href='/login'">登入</button>
+    <button class="login_btn onmouse_c5" onclick="{{userdata.click}}">{{userdata.user}}</button>
   </div>
       <div class="top_place_eat"></div>
 
@@ -274,29 +278,29 @@ $(document).ready(function(){
 <input type="text" id="company" placeholder="股票(公司)名稱" name="company"><br/>
 
 EPS <input type="checkbox" onclick="clicke()" name="EPS_check" id="EPS_check">每月EPS<br/>
-<input type="text" id="EPS_1" placeholder="EPS Q1" name="EPS_1" style="display: inline;"><br/>
-<input type="text" id="EPS_2" placeholder="EPS Q2" name="EPS_2" style="display: inline;"><br/>
-<input type="text" id="EPS_3" placeholder="EPS Q3" name="EPS_3" style="display: inline;"><br/>
-<input type="text" id="EPS_4" placeholder="EPS Q4" name="EPS_4" style="display: inline;"><br/>
+<input type="text" id="EPS_1" placeholder="EPS Q1" name="EPS_1" style="display: inline;" autocomplete="off"><br/>
+<input type="text" id="EPS_2" placeholder="EPS Q2" name="EPS_2" style="display: inline;" autocomplete="off"><br/>
+<input type="text" id="EPS_3" placeholder="EPS Q3" name="EPS_3" style="display: inline;" autocomplete="off"><br/>
+<input type="text" id="EPS_4" placeholder="EPS Q4" name="EPS_4" style="display: inline;" autocomplete="off"><br/>
 
-<input type="text" id="m_1" placeholder="1月" name="m_1" style="display: none;">
-<input type="text" id="m_2" placeholder="2月" name="m_2" style="display: none;">
-<input type="text" id="m_3" placeholder="3月" name="m_3" style="display: none;"><br/>
-<input type="text" id="m_4" placeholder="4月" name="m_4" style="display: none;">
-<input type="text" id="m_5" placeholder="5月" name="m_5" style="display: none;">
-<input type="text" id="m_6" placeholder="6月" name="m_6" style="display: none;"><br/>
-<input type="text" id="m_7" placeholder="7月" name="m_7" style="display: none;">
-<input type="text" id="m_8" placeholder="8月" name="m_8" style="display: none;">
-<input type="text" id="m_9" placeholder="9月" name="m_9" style="display: none;"><br/>
-<input type="text" id="m_10" placeholder="10月" name="m_10" style="display: none;">
-<input type="text" id="m_11" placeholder="11月" name="m_11" style="display: none;">
-<input type="text" id="m_12" placeholder="12月" name="m_12" style="display: none;"><br/>
+<input type="text" id="m_1" placeholder="1月" name="m_1" style="display: none;" autocomplete="off">
+<input type="text" id="m_2" placeholder="2月" name="m_2" style="display: none;" autocomplete="off">
+<input type="text" id="m_3" placeholder="3月" name="m_3" style="display: none;" autocomplete="off"><br/>
+<input type="text" id="m_4" placeholder="4月" name="m_4" style="display: none;" autocomplete="off">
+<input type="text" id="m_5" placeholder="5月" name="m_5" style="display: none;" autocomplete="off">
+<input type="text" id="m_6" placeholder="6月" name="m_6" style="display: none;" autocomplete="off"><br/>
+<input type="text" id="m_7" placeholder="7月" name="m_7" style="display: none;" autocomplete="off">
+<input type="text" id="m_8" placeholder="8月" name="m_8" style="display: none;" autocomplete="off">
+<input type="text" id="m_9" placeholder="9月" name="m_9" style="display: none;" autocomplete="off"><br/>
+<input type="text" id="m_10" placeholder="10月" name="m_10" style="display: none;" autocomplete="off">
+<input type="text" id="m_11" placeholder="11月" name="m_11" style="display: none;" autocomplete="off">
+<input type="text" id="m_12" placeholder="12月" name="m_12" style="display: none;" autocomplete="off"><br/>
 配息率<br/>
-<input type="text" id="dividend_rate" placeholder="配息率" name="dividend_rate">%<br/>
+<input type="text" id="dividend_rate" placeholder="配息率" name="dividend_rate" autocomplete="off">%<br/>
 股價<br/>
-<input type="text" id="share" placeholder="股價" name="share"><br/>
+<input type="text" id="share" placeholder="股價" name="share" autocomplete="off"><br/>
 年分<br/>
-<input type="text" id="year" name="year" placeholder="年分"><br/>
+<input type="text" id="year" name="year" placeholder="年分" autocomplete="off"><br/>
 
 
 <input type="text" id="date" name="date" style="display: none;"><br/>

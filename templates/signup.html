@@ -6,6 +6,12 @@
 <link rel="stylesheet" href="css/style.css">
 <title>AFNCO-註冊</title>
 <script> 
+
+  //{%if userdata.user!="登入"%}
+  alert("請先登出")
+  window.location.href='/';
+  //{%endif%}
+
 window.onload=function(){
     var Today=new Date();
     date=Today.getFullYear()+"/"+(Today.getMonth()+1)+"/"+Today.getDate();

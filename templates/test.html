@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{%block title%}test page lin{%endblock%}
+
+{%block style%}
+<style>
+.nav{
+    background-color: rgb(233, 233, 233);
+    height: 90%;
+    width: 8%;
+    left: 0;
+    top: 10%;
+    position: fixed;
+    text-align: center;
+}
+
+.indc_outer_box{
+    width: 90%;
+    left: 9%;
+    background-color: rgb(207, 247, 238);
+    background-image: none;
+    height: 80%;
+    position: absolute;
+}
+
+.pot{
+    position: absolute;
+    left: 5%;
+
+}
+
+.inner_word_al{
+    position: absolute;
+    left: 3%;
+    text-align: justify;
+}
+
+.nav_in{
+    width: 8%;
+    height: 10%;
+}
+</style>
+{%endblock%}
+
+
+{%block login%}<button class="login_btn onmouse_c5"  onclick="{{userdata.click}}">{{userdata.user}}</button>{%endblock%}
+
+
+
+{%block main%}
+<div class="nav">
+    <div class="pot">
+      <h3><strong>導覽</strong></h3>
+        <a class="nav_in">功能</a><br/>
+    </div>
+</div>
+<div class="indc_outer_box" style="top: 11%;">
+    <div class="inner_word_al">
+        <h2>功能</h2>
+    </div>
+</div>
+{%endblock%}}

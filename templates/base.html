@@ -4,7 +4,7 @@
 <script src="js/main.js"></script>
 <link rel="icon" type="image/png" href="{{url_for('static', filename='favicon.ico')}}"/>
 <link rel="stylesheet" href="css/style.css">
-<title>預計及增加資料</title>
+<title>{%block title%}{%endblock%}</title>
 <script>  
 window.onload=function(){ 
     var Today=new Date();
@@ -71,12 +71,10 @@ $(document).ready(function(){
     $(".onmouse_c5").css("color", "white")
   })
 }) 
-function logout(){
-    if (window.confirm("確定登出？")){
-        window.location.href='/signout';
-    }
-}
+
+
 </script>
+{%block script%}{%endblock%}
 <style>
     .top_bar{
         position: fixed;
@@ -122,46 +120,11 @@ function logout(){
         left: 89%;
     }
     
-    .nav{
-        background-color: rgb(233, 233, 233);
-        height: 90%;
-        width: 8%;
-        left: 0;
-        top: 10%;
-        position: fixed;
-        text-align: center;
-    }
     
-    .indc_outer_box{
-        width: 90%;
-        left: 9%;
-        background-color: rgb(207, 247, 238);
-        background-image: none;
-        height: 80%;
-        position: absolute;
-    }
-    
-    .pot{
-        position: absolute;
-        left: 5%;
-    
-    }
-    
-    .inner_word_al{
-        position: absolute;
-        left: 3%;
-        text-align: justify;
-    }
-
-    .nav_in{
-        width: 8%;
-        height: 10%;
-    }
     </style> 
+    {%block style%}{%endblock%}
 </head>
 <body>
-
-
   <div class="top_bar">
     <button class="top_bar_btn" onclick="window.location.href='/'"><h1 class="tit">AFN<span style="color: #c6610f;">CO</span></h1></button>
     <span style="width: 1%;"></span>
@@ -173,25 +136,13 @@ function logout(){
     <span style="width: 1%;"></span>
     <button class="top_bar_btn onmouse_c3" onclick="window.location.href='/delet'">刪除資料</button>
     <span style="width: 60%;"></span>
-    <button class="login_btn onmouse_c5" onclick="{{userdata.click}}">{{userdata.user}}</button>
+    {%block login%}{%endblock%}
   </div>
       <div class="top_place_eat"></div>
 
-  <div class="nav">
-    <div class="pot">
-      <h3><strong>導覽</strong></h3>
-        <a class="nav_in">功能</a><br/>
-    </div>
-  </div>
-<div class="indc_outer_box" style="top: 11%;">
-    <div class="inner_word_al">
-        <h2>供測試帳號密碼</h2>
-        <li>帳號1：afnco</li>
-        密碼：aaaaaaaa<br><br>
-        <li>帳號2：aa</li>
-        密碼：aaaaaaaa<br>
-    </div>
-</div>
+{%block main%}{%endblock%}
+
+
 
 </body>
 </html>

@@ -1,14 +1,17 @@
 from flask import Flask, redirect, session, render_template, request, url_for, abort, make_response
 import pymongo, time, random
+
 # from flask_bcrypt import Bcrypt
 
 client = pymongo.MongoClient("mongodb+srv://root:root123@realmcluster.rbqar.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
+
 db = client.website
-collection=db.users
+global collection
+collection=None
 collection_pwd=db.user
 app=Flask(__name__, static_folder="static", static_url_path="/")
 app.config['SECRET_KEY']="bjkkjbdft"+str(random.uniform(123319.093332, 23921392.493285))+"djknsa"
-app.config["SESSION_COOKIE_NAME"]="dnjnfe2y%24"
+app.config["SESSION_COOKIE_NAME"]="dnjnf2y%24"
 
 # app.permanent_session_lifetime=datetime.timedelta(seconds=1*60)
 # session.permanent=True
@@ -17,14 +20,20 @@ app.config["SESSION_COOKIE_NAME"]="dnjnfe2y%24"
 def value_caculate():
     pass
 
+def logout():
+    try:
+        session.pop("account")
+    except:
+        return redirect("/login")
+    res=redirect("/")
+    res.delete_cookie("user")
+    return res
+
 def clearfnc():
     session.pop("account")
     res=redirect("/login")
     res.delete_cookie("user")
     return res
-
-def logout():
-    pass
 
 def state_check_bool():
     try:
@@ -36,11 +45,21 @@ def state_check_bool():
     except:
         return False
 
+def state_output():
+    datas={}
+    if state_check_bool():
+        datas["user"]=(session["account"])
+        datas["click"]="logout()"
+    else:
+        datas["user"]="登入"
+        datas["click"]="window.location.href='/login'"
+    return datas
+
 def user_access(place):
     try:
         user=request.cookies.get('user')
         if session["account"]==user:
-            return render_template(place)
+            return render_template(place, userdata=state_output())
         else:
             try:
                 session.pop("account")
@@ -57,8 +76,6 @@ def user_access(place):
         res=redirect("/login")
         res.delete_cookie("user")
         return res
-
-    
 
 @app.errorhandler(404)
 def err_handler(e):
@@ -83,32 +100,25 @@ def deletf():
 
 @app.route("/test")
 def test():
-    try:
-        user=request.cookies.get('user')
-        if session["account"]==user:
-            return "True"
-        else:
-            return "False"
-    except:
-        return "Non cookie"
+    pass
 
 @app.route("/") # main
 def indexdd():
-    return render_template("index.html")
+    return render_template("index.html", userdata=state_output())
 
 @app.route("/assign")
 def ass():
-    if state_check_bool:
-        return redirect("/")
-    else:
-        return render_template("signup.html")
+    # if state_check_bool:
+    #     return redirect("/")
+    # else:
+        return render_template("signup.html",  userdata=state_output())
 
 @app.route("/login")
 def login():
-    if state_check_bool:
-        return redirect("/")
-    else:
-        return render_template("signin.html")
+    # if state_check_bool:
+    #     return redirect("/")
+    # else:
+        return render_template("signin.html",  userdata=state_output())
 
 @app.route("/main")
 def assas():
@@ -118,6 +128,7 @@ def assas():
 @app.route("/res", methods=["POST"])
 def res():
     if state_check_bool():
+        collection=db[f"users_{session['account']}"]
         company=request.form["company"]
         years=request.form["year"]
         eps_1=request.form["EPS_1"]
@@ -302,71 +313,57 @@ def res():
 
 @app.route("/dis")
 def display(): # sorting data
-    try:
-        user=request.cookies.get('user')
-        if session["account"]==user:
-            datas=collection.find()
-            data_clus=[]
-            year_clus={}
-            year_doc=[]
-            company_clus=[]
-            output_doc={}
-            output_clus=[]
-            for i in datas:
-                data_clus.append(i)
-                for f in i:
-                    if f=="company":
-                        company_clus.append(i["company"])
-                    if f!="_id" and f!="company" and f!="date" and f!="guess" and f!="share" and f!="yield_now" and f!="aim" and f!="l_aim" and f != "l_add" and f!="r_add":
-                        year_doc.append(f)
-                else:
-                    year_clus[i["company"]]=sorted(list(map(int, year_doc)))
-                    year_doc=[]
-            fram=0
-            for company_n in year_clus:
-                output_doc["company"]=company_n
-                output_doc["date"]=data_clus[fram]["date"]
-                output_doc["share"]=data_clus[fram]["share"]
-                try:
-                    output_doc["aim"]=data_clus[fram]["aim"]
-                except:
-                    output_doc["aim"]=""
-                output_doc["yield_now"]=(data_clus[fram][time.strftime('%Y',time.gmtime())]["yield"])
-                try:
-                    if data_clus[fram]["aim"]!="":
-                        eps_aim=round(100*(float(data_clus[fram][time.strftime('%Y',time.gmtime())]["dividend"]))/(float(data_clus[fram]["aim"])),2)
-                        output_doc["l_aim"]=eps_aim
-                        eps_add=eps_aim-float(data_clus[fram]["share"])
-                        output_doc["l_add"]=round(eps_add,2)
-                        output_doc["r_add"]=round(100*eps_add/float(data_clus[fram]["share"]),2)
-                except:
-                    pass
-                for year_ in year_clus[company_n]:
-                    output_doc[year_]=data_clus[fram][str(year_)]
-                else:
-                    output_clus.append(output_doc)
-                    output_doc={}
-                fram+=1
-            return render_template("display.html", data=output_clus)
-        else:
+    if state_check_bool():
+        collection=db[f"users_{session['account']}"]
+        datas=collection.find()
+        data_clus=[]
+        year_clus={}
+        year_doc=[]
+        company_clus=[]
+        output_doc={}
+        output_clus=[]
+        for i in datas:
+            data_clus.append(i)
+            for f in i:
+                if f=="company":
+                    company_clus.append(i["company"])
+                if f!="_id" and f!="company" and f!="date" and f!="guess" and f!="share" and f!="yield_now" and f!="aim" and f!="l_aim" and f != "l_add" and f!="r_add":
+                    year_doc.append(f)
+            else:
+                year_clus[i["company"]]=sorted(list(map(int, year_doc)))
+                year_doc=[]
+        fram=0
+        for company_n in year_clus:
+            output_doc["company"]=company_n
+            output_doc["date"]=data_clus[fram]["date"]
+            output_doc["share"]=data_clus[fram]["share"]
             try:
-                session.pop("account")
+                output_doc["aim"]=data_clus[fram]["aim"]
+            except:
+                output_doc["aim"]=""
+            output_doc["yield_now"]=(data_clus[fram][time.strftime('%Y',time.gmtime())]["yield"])
+            try:
+                if data_clus[fram]["aim"]!="":
+                    eps_aim=round(100*(float(data_clus[fram][time.strftime('%Y',time.gmtime())]["dividend"]))/(float(data_clus[fram]["aim"])),2)
+                    output_doc["l_aim"]=eps_aim
+                    eps_add=eps_aim-float(data_clus[fram]["share"])
+                    output_doc["l_add"]=round(eps_add,2)
+                    output_doc["r_add"]=round(100*eps_add/float(data_clus[fram]["share"]),2)
             except:
                 pass
-            res=redirect("/login")
-            res.delete_cookie("user")
-            return res
-    except:
-        try:
-            session.pop("account")
-        except:
-            pass
-        res=redirect("/login")
-        res.delete_cookie("user")
-        return res
+            for year_ in year_clus[company_n]:
+                output_doc[year_]=data_clus[fram][str(year_)]
+            else:
+                output_clus.append(output_doc)
+                output_doc={}
+            fram+=1
+        return render_template("display.html", data=output_clus)
+    else:
+        return redirect("/login")
 
 @app.route("/rev", methods=["POST"]) # 更新
 def revise():
+    collection=db[f"users_{session['account']}"]
     datas=collection.find()
     data_clus=[]
     year_clus={}
@@ -484,6 +481,7 @@ def revise():
 
 @app.route("/simp") # 簡化
 def simplify():
+    collection=db[f"users_{session['account']}"]
     datas=collection.find()
     year_now=int(time.strftime('%Y',time.gmtime()))
     data_clus=[]
@@ -510,6 +508,7 @@ def simplify():
 
 @app.route("/del", methods=["POST"])
 def delete():
+    collection=db[f"users_{session['account']}"]
     try:
         company=request.form["company"]
         year=request.form["year"]
@@ -533,6 +532,14 @@ def delete():
             collection.delete_one({"company":company_del})
         except:
             return render_template("error.html")
+    datas=collection.find()
+    have=0
+    for i in datas:
+        for f in i:
+            if f!="_id" and f!="company" and f!="date" and f!="guess" and f!="share" and f!="yield_now" and f!="aim" and f!="l_aim" and f != "l_add" and f!="r_add":
+                have+=1
+    if have ==0:
+        collection.delete_one({"company":company_del})
     return redirect("/dis")
 
 
@@ -547,7 +554,7 @@ def signin():
             if i["password"]==pwd:
                 session["account"]=account
                 res=redirect("/")
-                res.set_cookie("user", account, max_age=518400)
+                res.set_cookie("user", account, max_age=9000)
                 return res
             else:
                 return """ 
@@ -614,4 +621,9 @@ def signup():
         </script>
         """
 
+@app.route("/signout")
+def signout():
+    collection=None
+    return logout()
 
+app.run()

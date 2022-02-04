@@ -156,6 +156,11 @@ $(document).ready(function(){
     $(".onmouse_c5").css("color", "white")
   })
 }) 
+function logout(){
+    if (window.confirm("確定登出？")){
+        window.location.href='/signout';
+    }
+}
 </script>
 </head>
 <body>
@@ -170,7 +175,7 @@ $(document).ready(function(){
     <span style="width: 1%;"></span>
     <button class="top_bar_btn onmouse_c3" onclick="window.location.href='/delet'"  style="background-color: #1d3a61;">刪除資料</button>
     <span style="width: 60%;"></span>
-    <button class="login_btn onmouse_c5" onclick="window.location.href='/login'">登入</button>
+    <button class="login_btn onmouse_c5" onclick="{{userdata.click}}">{{userdata.user}}</button>
   </div>
       <div class="top_place_eat"></div>
 <form action="/del" method="POST" onsubmit="return sub()">
