@@ -147,6 +147,7 @@ def login():
 
 @app.route("/main")
 def assas():
+    time.sleep(2)
     try:
         user=request.cookies.get('user')
         if session["account"]==user:
