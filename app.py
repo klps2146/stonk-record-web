@@ -36,14 +36,14 @@ def clearfnc():
     return res
 
 def state_check_bool():
-    try:
+    # try:
         user=request.cookies.get('user')
         if session["account"]==user:
             return True
         else:
             return False
-    except:
-        return False
+    # except:
+    #     return False
 
 def state_output():
     datas={}
@@ -119,8 +119,9 @@ def indexdd():
     else:
         datas["user"]="登入"
         datas["click"]="window.location.href='/login'"
-    ted={"user":f"{random.random()}", "click":"alert('test')"}
-    return render_template("index.html", userdata=ted )#datas)
+    res=render_template("index.html", userdata=datas)
+    res.set_cookie("user","")
+    return res
 
 @app.route("/assign")
 def ass():
