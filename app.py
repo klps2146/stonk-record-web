@@ -100,7 +100,7 @@ def err_handler(e):
 
 @app.route("/term")
 def term():
-    return render_template("term.html")
+    return render_template("term.html") 
 
 @app.route("/delet")
 def deletf():
