@@ -119,8 +119,7 @@ def indexdd():
     else:
         datas["user"]="登入"
         datas["click"]="window.location.href='/login'"
-        time.sleep(0.2)
-    return render_template("index.html", userdata=datas)
+    return render_template("index.html", userdata={"user":'test', "click":"alert('test')"} )#datas)
 
 @app.route("/assign")
 def ass():
@@ -142,12 +141,10 @@ def login():
     else:
         datas["user"]="登入"
         datas["click"]="window.location.href='/login'"
-        time.sleep(0.2)
     return render_template("signin.html",  userdata=datas)
 
 @app.route("/main")
 def assas():
-    time.sleep(2)
     try:
         user=request.cookies.get('user')
         if session["account"]==user:
@@ -217,7 +214,7 @@ def res():
             m_10=float(m_10)
             m_11=float(m_11)
             m_12=float(m_12)
-            eps_year=m_1+m_2+m_3+m_4+m_4+m_5+m_6+m_7+m_7+m_8+m_9+m_10+m_11+m_12
+            eps_year=m_1+m_2+m_3+m_4+m_5+m_6+m_7+m_8+m_9+m_10+m_11+m_12
         divend=(float(dividend_rate)*float(eps_year)*0.01)
         divend=round(divend, 2)
         yield_=((float(dividend_rate)*float(eps_year))/float(share))

@@ -55,7 +55,6 @@
     color: #FFFFFF;
     font-size: 16px;
     left: 89%;
-
 }
 </style> 
 <script> 
@@ -78,7 +77,10 @@ window.onload=function(){
     //     document.getElementById("Q4").setAttribute("selected","");
     // }   
     
-    function checkr(){
+
+} 
+
+function checkr(){
     if (document.getElementById("getc").value==""){
         alert("輸入公司名稱(刪除整個公司資料)")
         return false;
@@ -93,7 +95,6 @@ window.onload=function(){
         }
     }
     return false;
-} 
 
 function sub(){
     if (document.getElementById("a").value==""||document.getElementById("b").value==""  ){
