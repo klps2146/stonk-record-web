@@ -27,7 +27,7 @@ def state_check_bool():
     #     return False
     # else:
     #     return True
-    if request.cookies.get("user")=="":
+    if request.cookies.get("user")=="" or request.cookies.get("user")==None:
         return False
     else:
         return True
@@ -45,12 +45,13 @@ def state_output():
 def acce_required():
     datas={}
     # if session["account"]!=None:
-    if request.cookies.get("user")!="":
-        datas["user"]=request.cookies.get("user")
-        datas["click"]="logout()"
-    else:
+    if request.cookies.get("user")=="" or request.cookies.get("user")==None:
         datas["user"]="登入"
         datas["click"]="window.location.href='/login'"
+    else:
+        datas["user"]=request.cookies.get("user")
+        datas["click"]="logout()"
+    print(datas)
     return datas
 
 @app.before_request
@@ -64,7 +65,10 @@ def login_required():
     try:
         if request.cookies.get("user")=="":
             return None
+        else:
+            return None
     except:
+        print("None cookie")
         res=redirect("/")
         res.set_cookie("user", "")
         return res
