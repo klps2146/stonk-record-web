@@ -546,7 +546,6 @@ def delete():
             collection.delete_one({"company":company_del}) 
     return redirect("/dis")
 
-
 @app.route("/signin", methods=["POST"])
 def signin():
     account=request.form["account"]
@@ -631,7 +630,6 @@ def signup():
 
 @app.route("/signout")
 def signout():
-    session["account"]=None
     res=redirect("/")
     res.set_cookie("user","")
     return res
