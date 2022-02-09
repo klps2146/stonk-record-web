@@ -126,7 +126,8 @@ def assas():
 @app.route("/res", methods=["POST"])
 def res():
     if state_check_bool():
-        collection=db[f"users_{session['account']}"]
+        # collection=db[f"users_{session['account']}"]
+        collection=db[f"users_{request.cookies.get('user')}"]
         company=request.form["company"]
         years=request.form["year"]
         eps_1=request.form["EPS_1"]
