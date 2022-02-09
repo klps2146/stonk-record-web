@@ -10,7 +10,7 @@ global collection
 collection=None
 collection_pwd=db.user
 app=Flask(__name__, static_folder="static", static_url_path="/")
-app.config['SECRET_KEY']="bjkkjbdft"+str(random.uniform(123319.093332, 23921392.493285))+"djknsa"
+app.config['SECRET_KEY']="vc"
 app.config["SESSION_COOKIE_NAME"]="dnjnf2y%24"
 
 # app.permanent_session_lifetime=datetime.timedelta(seconds=1*60)
@@ -23,11 +23,14 @@ def clearfnc():
     return res
 
 def state_check_bool():
-    if session["account"]==None:
+    # if session["account"]==None:
+    #     return False
+    # else:
+    #     return True
+    if request.cookies.get("user")=="":
         return False
     else:
         return True
-
 
 def state_output():
     datas={}
@@ -41,8 +44,9 @@ def state_output():
 
 def acce_required():
     datas={}
-    if session["account"]!=None:
-        datas["user"]=(session["account"])
+    # if session["account"]!=None:
+    if request.cookies.get("user")!="":
+        datas["user"]=request.cookies.get("user")
         datas["click"]="logout()"
     else:
         datas["user"]="登入"
@@ -51,12 +55,19 @@ def acce_required():
 
 @app.before_request
 def login_required():
+    # try:
+    #     if session["account"]==None:
+    #         return None
+    # except:
+    #     session["account"]=None
+    #     return None
     try:
-        if session["account"]==None:
+        if request.cookies.get("user")=="":
             return None
     except:
-        session["account"]=None
-        return None
+        res=redirect("/")
+        res.set_cookie("user", "")
+        return res
 
 @app.errorhandler(404)
 def err_handler(e):
@@ -301,7 +312,8 @@ def res():
 @app.route("/dis")
 def display(): # sorting data
     if state_check_bool():
-        collection=db[f"users_{session['account']}"]
+        # collection=db[f"users_{session['account']}"]
+        collection=db[f"users_{request.cookies.get('user')}"]
         datas=collection.find()
         data_clus=[]
         year_clus={}
@@ -350,7 +362,8 @@ def display(): # sorting data
 
 @app.route("/rev", methods=["POST"]) # 更新
 def revise():
-    collection=db[f"users_{session['account']}"]
+    # collection=db[f"users_{session['account']}"]
+    collection=db[f"users_{request.cookies.get('user')}"]
     datas=collection.find()
     data_clus=[]
     year_clus={}
@@ -468,7 +481,8 @@ def revise():
 
 @app.route("/simp") # 簡化
 def simplify():
-    collection=db[f"users_{session['account']}"]
+    # collection=db[f"users_{session['account']}"]
+    collection=db[f"users_{request.cookies.get('user')}"]
     datas=collection.find()
     year_now=int(time.strftime('%Y',time.gmtime()))
     data_clus=[]
@@ -495,7 +509,8 @@ def simplify():
 
 @app.route("/del", methods=["POST"])
 def delete():
-    collection=db[f"users_{session['account']}"]
+    # collection=db[f"users_{session['account']}"]
+    collection=db[f"users_{request.cookies.get('user')}"]
     try:
         company=request.form["company"]
         year=request.form["year"]
@@ -540,12 +555,14 @@ def signin():
         if i["account"]==account:
             # if Bcrypt().check_password_hash(i["password"], pwd):
             if i["password"]==pwd:
-                session["account"]=account
+                # session["account"]=account
+
                 res=redirect("/")
+                res.set_cookie("user", account)
                 # res.set_cookie("user", account, max_age=9000)
                 return res
             else:
-                session["account"]=None
+                # session["account"]=None
                 return """ 
                 <title>密碼錯誤</title>
                 <h3>密碼錯誤</h3>
@@ -557,7 +574,7 @@ def signin():
                     window.onload=setTimeout(a, 1600);
                 </script>
                 """
-    session["account"]=None
+    # session["account"]=None
     return """ 
     <title>無此帳號</title>
     <h3>無此帳號</h3>
@@ -613,6 +630,7 @@ def signup():
 
 @app.route("/signout")
 def signout():
-    app.config['SECRET_KEY']="bjkkjbdft"+str(random.uniform(123319.093332, 23921392.493285))+"djknsa"
     session["account"]=None
-    return redirect("/")
+    res=redirect("/")
+    res.set_cookie("user","")
+    return res
