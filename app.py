@@ -559,7 +559,7 @@ def signin():
                 # session["account"]=account
 
                 res=redirect("/")
-                res.set_cookie("user", account)
+                res.set_cookie("user", account, max_age=8000)
                 # res.set_cookie("user", account, max_age=9000)
                 return res
             else:
