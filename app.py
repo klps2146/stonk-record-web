@@ -15,19 +15,6 @@ app.config["SESSION_COOKIE_NAME"]="dnjnf2y%24"
 
 # app.permanent_session_lifetime=datetime.timedelta(seconds=1*60)
 # session.permanent=True
- 
-
-def value_caculate():
-    pass
-
-def logout():
-    try:
-        session.pop("account")
-    except:
-        return redirect("/login")
-    res=redirect("/")
-    res.delete_cookie("user")
-    return res
 
 def clearfnc():
     session.pop("account")
@@ -36,14 +23,11 @@ def clearfnc():
     return res
 
 def state_check_bool():
-    # try:
-        user=request.cookies.get('user')
-        if session["account"]==user:
-            return True
-        else:
-            return False
-    # except:
-    #     return False
+    if session["account"]==None:
+        return False
+    else:
+        return True
+
 
 def state_output():
     datas={}
@@ -53,29 +37,26 @@ def state_output():
     else:
         datas["user"]="登入"
         datas["click"]="window.location.href='/login'"
+    return datas    
+
+def acce_required():
+    datas={}
+    if session["account"]!=None:
+        datas["user"]=(session["account"])
+        datas["click"]="logout()"
+    else:
+        datas["user"]="登入"
+        datas["click"]="window.location.href='/login'"
     return datas
 
-def user_access(place):
+@app.before_request
+def login_required():
     try:
-        user=request.cookies.get('user')
-        if session["account"]==user:
-            return render_template(place, userdata=state_output())
-        else:
-            try:
-                session.pop("account")
-            except:
-                pass
-            res=redirect("/login")
-            res.delete_cookie("user")
-            return res
+        if session["account"]==None:
+            return None
     except:
-        try:
-            session.pop("account")
-        except:
-            pass
-        res=redirect("/login")
-        res.delete_cookie("user")
-        return res
+        session["account"]=None
+        return None
 
 @app.errorhandler(404)
 def err_handler(e):
@@ -97,31 +78,20 @@ def err_handler(e):
 def err_handler(e):
     return redirect("/")
 
-
 @app.route("/term")
 def term():
     return render_template("term.html") 
 
 @app.route("/delet")
 def deletf():
-    return user_access("del.html")
-
-@app.route("/test")
-def test():
-    pass
+    if state_check_bool():
+        return render_template("del.html", userdata=acce_required())
+    else:
+        return redirect("/login")
 
 @app.route("/") # main
 def indexdd():
-    datas={}
-    if state_check_bool():
-        datas["user"]=(session["account"])
-        datas["click"]="logout()"
-    else:
-        datas["user"]="登入"
-        datas["click"]="window.location.href='/login'"
-    res=render_template("index.html", userdata=datas)
-    res.set_cookie("user","")
-    return res
+    return render_template("index.html", userdata=acce_required())
 
 @app.route("/assign")
 def ass():
@@ -129,46 +99,18 @@ def ass():
     #     return redirect("/")
     # else:
 
-    return render_template("signup.html",  userdata=state_output())
+    return render_template("signup.html",  userdata=acce_required())
 
 @app.route("/login")
 def login():
-    # if state_check_bool:
-    #     return redirect("/")
-    # else:
-    datas={}
-    if state_check_bool():
-        datas["user"]=(session["account"])
-        datas["click"]="logout()"
-    else:
-        datas["user"]="登入"
-        datas["click"]="window.location.href='/login'"
-    return render_template("signin.html",  userdata=datas)
+    return render_template("signin.html",  userdata=acce_required())
 
 @app.route("/main")
 def assas():
-    try:
-        user=request.cookies.get('user')
-        if session["account"]==user:
-            return render_template("main.html", userdata=state_output())
-        else:
-            try:
-                session.pop("account")
-            except:
-                pass
-            res=redirect("/login")
-            res.delete_cookie("user")
-            return res
-    except:
-        try:
-            session.pop("account")
-        except:
-            pass
-        res=redirect("/login")
-        res.delete_cookie("user")
-        return res
-    # return user_access("main.html")
-
+    if state_check_bool():
+        return render_template("main.html", userdata=acce_required())
+    else:
+        return redirect("/login")
 
 @app.route("/res", methods=["POST"])
 def res():
@@ -600,9 +542,10 @@ def signin():
             if i["password"]==pwd:
                 session["account"]=account
                 res=redirect("/")
-                res.set_cookie("user", account, max_age=9000)
+                # res.set_cookie("user", account, max_age=9000)
                 return res
             else:
+                session["account"]=None
                 return """ 
                 <title>密碼錯誤</title>
                 <h3>密碼錯誤</h3>
@@ -614,6 +557,7 @@ def signin():
                     window.onload=setTimeout(a, 1600);
                 </script>
                 """
+    session["account"]=None
     return """ 
     <title>無此帳號</title>
     <h3>無此帳號</h3>
@@ -669,5 +613,6 @@ def signup():
 
 @app.route("/signout")
 def signout():
-    collection=None
-    return logout()
+    app.config['SECRET_KEY']="bjkkjbdft"+str(random.uniform(123319.093332, 23921392.493285))+"djknsa"
+    session["account"]=None
+    return redirect("/")
