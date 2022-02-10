@@ -1,17 +1,18 @@
 from flask import Flask, redirect, session, render_template, request, url_for, abort, make_response
-import pymongo, time, random
+import pymongo, time, os
+import cryptocode
 
 # from flask_bcrypt import Bcrypt
 
 client = pymongo.MongoClient("mongodb+srv://root:root123@realmcluster.rbqar.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
 
-db = client.website
-global collection
+db=client.website
 collection=None
 collection_pwd=db.user
 app=Flask(__name__, static_folder="static", static_url_path="/")
-app.config['SECRET_KEY']="vc"
+app.config['SECRET_KEY']=os.urandom(120)
 app.config["SESSION_COOKIE_NAME"]="dnjnf2y%24"
+sect=f"{os.urandom(513)}"
 
 # app.permanent_session_lifetime=datetime.timedelta(seconds=1*60)
 # session.permanent=True
@@ -49,7 +50,7 @@ def acce_required():
         datas["user"]="登入"
         datas["click"]="window.location.href='/login'"
     else:
-        datas["user"]=request.cookies.get("user")
+        datas["user"]=cryptocode.decrypt(request.cookies.get("user"), sect) 
         datas["click"]="logout()"
     print(datas)
     return datas
@@ -63,12 +64,11 @@ def login_required():
     #     session["account"]=None
     #     return None
     try:
-        if request.cookies.get("user")=="":
+        if request.cookies.get("users")=="":
             return None
         else:
             return None
     except:
-        print("None cookie")
         res=redirect("/")
         res.set_cookie("user", "")
         return res
@@ -562,7 +562,7 @@ def signin():
                 # session["account"]=account
 
                 res=redirect("/")
-                res.set_cookie("user", account, max_age=8000, httponly=True)
+                res.set_cookie("user", cryptocode.encrypt(account, sect), max_age=8000, httponly=True)
                 # res.set_cookie("user", account, max_age=9000)
                 return res
             else:
@@ -637,3 +637,5 @@ def signout():
     res=redirect("/")
     res.set_cookie("user","")
     return res
+
+
