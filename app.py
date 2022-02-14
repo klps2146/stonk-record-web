@@ -368,7 +368,8 @@ def display(): # sorting data
 @app.route("/rev", methods=["POST"]) # 更新
 def revise():
     # collection=db[f"users_{session['account']}"]
-    collection=db[f"users_{request.cookies.get('user')}"]
+    sp=cryptocode.decrypt(request.cookies.get("user"), sect) 
+    collection=db[f"users_{sp}"]
     datas=collection.find()
     data_clus=[]
     year_clus={}
@@ -487,7 +488,8 @@ def revise():
 @app.route("/simp") # 簡化
 def simplify():
     # collection=db[f"users_{session['account']}"]
-    collection=db[f"users_{request.cookies.get('user')}"]
+    sp=cryptocode.decrypt(request.cookies.get("user"), sect) 
+    collection=db[f"users_{sp}"]
     datas=collection.find()
     year_now=int(time.strftime('%Y',time.gmtime()))
     data_clus=[]
@@ -515,7 +517,8 @@ def simplify():
 @app.route("/del", methods=["POST"])
 def delete():
     # collection=db[f"users_{session['account']}"]
-    collection=db[f"users_{request.cookies.get('user')}"]
+    sp=cryptocode.decrypt(request.cookies.get("user"), sect) 
+    collection=db[f"users_{sp}"]
     try:
         company=request.form["company"]
         year=request.form["year"]
