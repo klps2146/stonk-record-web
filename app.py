@@ -131,7 +131,8 @@ def assas():
 def res():
     if state_check_bool():
         # collection=db[f"users_{session['account']}"]
-        collection=db[f"users_{request.cookies.get('user')}"]
+        sp=cryptocode.decrypt(request.cookies.get("user"), sect) 
+        collection=db[f"users_{sp}"]
         company=request.form["company"]
         years=request.form["year"]
         eps_1=request.form["EPS_1"]
@@ -370,6 +371,7 @@ def display(): # sorting data
 def revise():
     # collection=db[f"users_{session['account']}"]
     sp=cryptocode.decrypt(request.cookies.get("user"), sect) 
+    print(sp)
     collection=db[f"users_{sp}"]
     datas=collection.find()
     data_clus=[]
