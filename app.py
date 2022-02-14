@@ -12,8 +12,8 @@ collection_pwd=db.user
 app=Flask(__name__, static_folder="static", static_url_path="/")
 app.config['SECRET_KEY']=os.urandom(120)
 app.config["SESSION_COOKIE_NAME"]="dnjnf2y%24"
-sect=f"{os.urandom(513)}"
-
+# sect=f"{os.urandom(513)}"
+sect="hujhnjvsk76879679oyHUKJBDGUYVH786876%R^$#%$#$^&YTGHDt78%D^(&Tygvukj"
 # app.permanent_session_lifetime=datetime.timedelta(seconds=1*60)
 # session.permanent=True
 
