@@ -318,7 +318,8 @@ def res():
 def display(): # sorting data
     if state_check_bool():
         # collection=db[f"users_{session['account']}"]
-        collection=db[f"users_{request.cookies.get('user')}"]
+        sp=cryptocode.decrypt(request.cookies.get("user"), sect) 
+        collection=db[f"users_{sp}"]
         datas=collection.find()
         data_clus=[]
         year_clus={}
