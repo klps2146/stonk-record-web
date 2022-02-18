@@ -644,5 +644,3 @@ def signout():
     res.set_cookie("user","")
     return res
 
-app.debug=True
-app.run()
