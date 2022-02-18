@@ -1,5 +1,6 @@
 .inner_box{
     width: 100%;
+    height: 100%;
     display:flex;
     align-items: center;
     justify-content:center;
@@ -15,6 +16,7 @@
 }
 
 .icon_i{
+    margin-top: 5px;
     width: 110px;
     height: 110px;
     
