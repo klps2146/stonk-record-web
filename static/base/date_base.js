@@ -1,7 +1,6 @@
 window.onload=function(){ 
     var Today=new Date();
     date=Today.getFullYear()+"/"+(Today.getMonth()+1)+"/"+Today.getDate();
-    console.log(date);
     document.getElementById("date").value=date;
     document.getElementById("year").value=Today.getFullYear();
     // if (Today.getMonth()+1==1||Today.getMonth()+1==2||Today.getMonth()+1==3){
