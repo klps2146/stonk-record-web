@@ -1,250 +1,27 @@
-<html>
-<head>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="js/main.js"></script>
-<link rel="icon" type="image/png" href="{{url_for('static', filename='favicon.ico')}}"/>
-<link rel="stylesheet" href="css/style.css">
-<meta name="viewport" content="width-device-width, initial-scale=1.0"/>
-<title>AFNCO-註冊</title>
-<script> 
+{%extends "base.html"%}
 
-  //{%if userdata.user!="登入"%}
-  alert("請先登出")
-  window.location.href='/';
-  //{%endif%}
+{%block login%}
+<button class="login_btn onmouse_c5" onclick="window.location.href='/login'">登入</button>
+{%endblock%}
 
-window.onload=function(){
-    var Today=new Date();
-    date=Today.getFullYear()+"/"+(Today.getMonth()+1)+"/"+Today.getDate();
-    console.log(date);
-    document.getElementById("date").value=date;
-    document.getElementById("year").value=Today.getFullYear();
-}
-$(document).ready(function(){
-  $(".onmouse_c0").mouseover(function(){
-    $(".onmouse_c0").css("color", "rgb(214, 143, 10)")
-  })
-  $(".onmouse_c0").mouseout(function(){
-    $(".onmouse_c0").css("color", "white")
-  })
-  $(".onmouse_c1").mouseover(function(){
-    $(".onmouse_c1").css("color", "rgb(214, 143, 10)")
-  })
-  $(".onmouse_c1").mouseout(function(){
-    $(".onmouse_c1").css("color", "white")
-  })
-  $(".onmouse_c2").mouseover(function(){
-    $(".onmouse_c2").css("color", "rgb(214, 143, 10)")
-  })
-  $(".onmouse_c2").mouseout(function(){
-    $(".onmouse_c2").css("color", "white")
-  })
-  $(".onmouse_c3").mouseover(function(){
-    $(".onmouse_c3").css("color", "rgb(214, 143, 10)")
-  })
-  $(".onmouse_c3").mouseout(function(){
-    $(".onmouse_c3").css("color", "white")
-  })
-  $(".onmouse_c4").mouseover(function(){
-    $(".onmouse_c4").css("color", "rgb(214, 143, 10)")
-  })
-  $(".onmouse_c4").mouseout(function(){
-    $(".onmouse_c4").css("color", "white")
-  })
-  $(".onmouse_c5").mouseover(function(){
-    $(".onmouse_c5").css("color", "gray")
-  })
-  $(".onmouse_c5").mouseout(function(){
-    $(".onmouse_c5").css("color", "white")
-  })
-  $(".onmouse_c5").mouseover(function(){
-    $(".onmouse_c5").css("color", "gray")
-  })
-  $(".onmouse_c5").mouseout(function(){
-    $(".onmouse_c5").css("color", "white")
-  })
-}) 
-
-
-function chec(){
-    let issue=0;
-    let user=document.getElementById("usn").value;
-    let account=document.getElementById("account").value;
-    let pwd=document.getElementById("pwd").value;
-    let checkbox=document.querySelector("[name=term]:checked");
-
-    if (checkbox){
-        document.getElementById("tfc").style.color="#6E6E6E";
-    }
-    else{
-        issue+=1;
-        document.getElementById("tfc").style.color="#FF0000";
-    }
-
-    if (user==""){
-        document.getElementById("user_cau").style.display="flex";
-        issue+=1;
-    }
-    else{
-        document.getElementById("user_cau").style.display="none";
-    }
-    
-    if (account==""){
-        document.getElementById("acc_cau").style.display="flex";
-        issue+=1;
-    }
-    else{
-        document.getElementById("acc_cau").style.display="none";
-    }
-
-    if (pwd=="" || pwd.length<8){
-        document.getElementById("pwd_m").style.color="#FF0000";
-        issue+=1;
-    }
-    else{
-        document.getElementById("pwd_m").style.color="#6E6E6E";
-    }
-    if (issue!=0){
-        return false;
-    }
-    else{
-        return true;
-    }
-}
-</script>
-<style>
-.top_bar{
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 10%;
-    background-color: #305f9c;
-    display: flex; 
-    align-items: center;
-}
-
-.top_bar_btn{
-    border: 0cm;
-    font-family: Microsoft JhengHei;
-    background-color: rgba(255, 255, 255, 0);
-    color: #FFFFFF;
-    font-size: 13px;
-    border-radius: 3px 3px 3px 3px;
-}
-
-.top_place_eat{
-    width: 100%;
-    height: 10%;
-}
-
-.logo{
-    left: 3%;
-    width: 12%;
-    float: left;
-    margin-top: 10px;
-}
-
-.login_btn{
-    background-color: rgb(214, 143, 10);
-    height: 60%;
-    width: 5%;
-    border-radius: 8px 8px 8px 8px;
-    border: 0px;
-    color: #FFFFFF;
-    font-size: 16px;
-    left: 89%;
-}
-
-.inner_box{
-    width: 100%;
-    height: 90%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    text-align: center;
-    background-color: #FFFFFF;
-}
-
-.login_p{
-    border-radius: 10px 10px 10px 10px;
-    width: 33%;
-    height: 99%;
-    border: 1px rgb(199, 199, 199) solid;
-}
-
-.icon_i{
-    width: 12%;
-    height: 12%;
-}
-
-.ins{
-    border: 0px;
-    border-bottom: 2px rgb(170, 170, 170) solid;
-    width: 70%;
-    height: 10%;
-    outline: none;
-    font-size: 15px;
-}
-
-.caution{
-    color: #6e6e6e;
-    font-family: Microsoft JhengHei;
-    font-size: 12px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-}
-
-.submit{
-    width: 17%;
-		height: 8%;
-		border-radius: 8px 8px 8px 8px;
-		border: none;
-		background-color: #477abd;
-		color: #FFFFFF;
-		font-size: bold;
-		font-size: 14px;
-}
-
-    </style> 
-</head>
-<body>
-  <div class="top_bar">
-    <button class="top_bar_btn" onclick="window.location.href='/'"><h1 class="tit">AFN<span style="color: #c6610f;">CO</span></h1></button>
-    <span style="width: 1%;"></span>
-    <button class="top_bar_btn onmouse_c4" onclick="window.location.href='/'">首頁</button>
-    <span style="width: 1%;"></span>
-    <button class="top_bar_btn onmouse_c1" onclick="window.location.href='/dis'">股票一覽</button>
-    <span style="width: 1%;"></span>
-    <button class="top_bar_btn onmouse_c2" onclick="window.location.href='/main'">更正及增加資料</button>
-    <span style="width: 1%;"></span>
-    <button class="top_bar_btn onmouse_c3" onclick="window.location.href='/delet'">刪除資料</button>
-    <span style="width: 60%;"></span>
-    <button class="login_btn onmouse_c5" onclick="window.location.href='/login'">登入</button>
-  </div>
-      <div class="top_place_eat"></div>
+{%block main%}
+<script src="{{url_for('static', filename='signup/main.js')}}"></script>
+<link rel="stylesheet" href="{{url_for('static', filename='signup/style.css')}}">
+<link rel="stylesheet" href="{{url_for('static', filename='signup/move.css')}}">
 <div class="inner_box"> 
     <div class="login_p">
       <form action="/signup" method="POST" onsubmit="return chec()">
-        <div style="height: 5%;"></div>
-        <img src="{{url_for('static', filename='favicon.ico')}}" class="icon_i" onclick="window.location.href='/index/index.html'"><br/>
-        <div><h2>註冊</h2></div>
-				<div style="height: 2%;"></div>
-        <input type="text" placeholder="使用者名稱" class="ins" id="usn" name="usn" autocomplete="off"><br/>
-				<div style="height: 4%;" id="user_m" class="caution"> <span id="user_cau" style="display: none; color: red;">請輸入使用者名稱</span> </div>
-        <input type="text" placeholder="帳號名稱" class="ins" id="account" name="acc" autocomplete="off"><br/>
-				<div style="height: 4%;" id="account_m" class="caution"> <span id="acc_cau" style="display: none; color: red;">請輸入帳號名稱</span> </div>
-				<input type="password" placeholder="設定密碼" class="ins" id="pwd" name="pwd" autocomplete="off"><br/>
-        <div style="height: 4%;" id="pwd_m" class="caution">請使用8個字元以上的密碼</div>
-				<div style="height: 4%;" class="caution" id="tfc"><input type="checkbox" name="term" id="term">我以詳閱並同意<a href="/term" target="_blank">服務條款</a></div>
-        <div style="height: 4%;"></div>
-        <input class="submit" id="submit" type="submit" value="註冊">
-        <div style="height: 4%;"></div>
-				<div><span style="color: rgb(122, 122, 122); font-size: 14px;">已有帳號?<span style="color: #3885e9;" onclick="window.location.href='/login'"><u>登入</u></span></div>
+            <img src="{{url_for('static', filename='favicon.ico')}}" class="icon_i" onclick="window.location.href='/'"><br/>
+            <div><h2 style="margin: 10px;">註冊</h2></div>
+            <input type="text" placeholder="使用者名稱" class="ins" id="usn" name="usn" autocomplete="off" required><br/>
+            <input type="text" style="margin-bottom: 2px; margin-top: 4px;" placeholder="帳號名稱" class="ins" id="account" name="acc" autocomplete="off" required pattern="[0-9a-zA-Z]{4,40}"><br/>
+	        <div id="pwd_ms" class="caution">請使用4~40個字元的帳號(不含特殊符號)</div>
+            <input type="password" style="margin-bottom: 2px; margin-top: 2px;" placeholder="設定密碼" class="ins" id="pwd" name="pwd" autocomplete="off" required pattern="[0-9a-zA-Z]{8,80}"><br/>
+            <div id="pwd_m" class="caution">請使用8~80個字元的密碼(不含特殊符號)</div>
+            <div style="margin: 6px;"><input type="checkbox" name="term" id="term">我以詳閱並同意<a href="/term" target="_blank">服務條款</a></div>
+            <input class="submit" id="submit" type="submit" value="註冊">
+            <div><span style="color: rgb(122, 122, 122); font-size: 14px;">已有帳號?<span style="color: #3885e9;" onclick="window.location.href='/login'"><u>登入</u></span></div>
       </form>
     </div> 
 </div>
-</div>
-</body>
-</html>
+{%endblock%}

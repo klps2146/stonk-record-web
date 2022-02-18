@@ -1,0 +1,52 @@
+.inner_box{
+    width: 100%;
+    height: 90%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align: center;
+    background-color: #FFFFFF;
+}
+
+.login_p{
+    border-radius: 10px 10px 10px 10px;
+    width: 448px;
+    height: 500px;
+    border: 1px rgb(199, 199, 199) solid;
+}
+
+.icon_i{
+    width: 110px;
+    height: 110px;
+}
+
+.ins{
+    border: 0px;
+    border-bottom: 2px rgb(170, 170, 170) solid;
+    width: 70%;
+    height: 10%;
+    outline: none;
+    font-size: 15px;
+    margin: 15px;
+}
+
+.caution{
+    color: #6e6e6e;
+    font-family: Microsoft JhengHei;
+    font-size: 12px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.submit{
+    width: 17%;
+    height: 8%;
+    border-radius: 8px 8px 8px 8px;
+    border: none;
+    background-color: #477abd;
+    color: #FFFFFF;
+    font-size: bold;
+    font-size: 14px;
+    margin-bottom: 7px;
+}

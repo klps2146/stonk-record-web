@@ -2,33 +2,14 @@
 <head>
 <meta name="viewport" content="width-device-width, initial-scale=1.0"/>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="js/main.js"></script>
+<script src="{{url_for('static', filename='base/data_base.js')}}"></script>
 <link rel="icon" type="image/png" href="{{url_for('static', filename='favicon.ico')}}"/>
-<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="{{url_for('static', filename='base/base_style.css')}}">
+<link rel="stylesheet" href="{{url_for('static', filename='base/mode_check.css')}}">
 <title>{%block title%}{%endblock%}</title>
 <script>  
-window.onload=function(){ 
-    var Today=new Date();
-    date=Today.getFullYear()+"/"+(Today.getMonth()+1)+"/"+Today.getDate();
-    console.log(date);
-    document.getElementById("date").value=date;
-    document.getElementById("year").value=Today.getFullYear();
-    // if (Today.getMonth()+1==1||Today.getMonth()+1==2||Today.getMonth()+1==3){
-    //     document.getElementById("Q1").setAttribute("selected","");
-    // }
-    // if (Today.getMonth()+1==4||Today.getMonth()+1==5||Today.getMonth()+1==6){
-    //     document.getElementById("Q2").setAttribute("selected","");
-    // }
-    // if (Today.getMonth()+1==7||Today.getMonth()+1==8||Today.getMonth()+1==9){
-    //     document.getElementById("Q3").setAttribute("selected","");
-    // }
-    // if (Today.getMonth()+1==10||Today.getMonth()+1==11||Today.getMonth()+1==12){
-    //     document.getElementById("Q4").setAttribute("selected","");
-    // }   
-    
-
-}
 $(document).ready(function(){
+  // $("#cli").hide();
   $(".onmouse_c0").mouseover(function(){
     $(".onmouse_c0").css("color", "rgb(214, 143, 10)")
   })
@@ -71,79 +52,60 @@ $(document).ready(function(){
   $(".onmouse_c5").mouseout(function(){
     $(".onmouse_c5").css("color", "white")
   })
+  $("#more_info").click(function(){
+    $("#cli").fadeToggle(150);
+  })
+
 }) 
-
-
+function logout(){
+    if (window.confirm("確定登出？")){
+        window.location.href='/signout';
+    }
+}
 </script>
-{%block script%}{%endblock%}
-<style>
-    .top_bar{
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 10%;
-        background-color: #305f9c;
-        display: flex; 
-        align-items: center;
-    }
-    
-    .top_bar_btn{
-        border: 0cm;
-        font-family: Microsoft JhengHei;
-        background-color: rgba(255, 255, 255, 0);
-        color: #FFFFFF;
-        font-size: 13px;
-        border-radius: 3px 3px 3px 3px;
-    }
-    
-    .top_place_eat{
-        width: 100%;
-        height: 10%;
-    }
-    
-    .logo{
-        left: 3%;
-        width: 12%;
-        float: left;
-        margin-top: 10px;
-    }
-
-   
-    .login_btn{
-        background-color: rgb(214, 143, 10);
-        height: 60%;
-        width: 5%;
-        border-radius: 8px 8px 8px 8px;
-        border: 0px;
-        color: #FFFFFF;
-        font-size: 16px;
-        left: 89%;
-    }
-    
-    
-    </style> 
-    {%block style%}{%endblock%}
+<div class="top_bar">
+  <div class="tf">
+     <h1 onclick="window.location.href='/'" class="tit"><span style="color: #FFFFFF;">AFN</span><span style="color: #c6610f;">CO</span></h1>
+  </div>
+  <div class="close" id="more_info">
+    <svg height="25" width="25" role="img" aria-label="Ellipsis Icon" viewBox="0 0 16 16">
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M2.75 6C3.7165 6 4.5 6.7835 4.5 7.75C4.5 8.7165 3.7165 9.5 2.75 9.5C1.7835 9.5 1 8.7165 1 7.75C1 6.7835 1.7835 6 2.75 6ZM7.75 6C8.7165 6 9.5 6.7835 9.5 7.75C9.5 8.7165 8.7165 9.5 7.75 9.5C6.7835 9.5 6 8.7165 6 7.75C6 6.7835 6.7835 6 7.75 6ZM14.5 7.75C14.5 6.7835 13.7165 6 12.75 6C11.7835 6 11 6.7835 11 7.75C11 8.7165 11.7835 9.5 12.75 9.5C13.7165 9.5 14.5 8.7165 14.5 7.75Z" fill="white"></path>
+    </svg>
+  </div>
+  <div class="top_href">
+      <button class="top_bar_btn onmouse_c4" onclick="window.location.href='/'">首頁</button>
+  </div>
+  <div class="top_href">
+      <button class="top_bar_btn onmouse_c1" onclick="window.location.href='/dis'">股票一覽</button>
+  </div>
+  <div class="top_href">
+      <button class="top_bar_btn onmouse_c2" onclick="window.location.href='/main'">更正及增加資料</button>
+  </div>
+  <div  class="top_href">
+      <button class="top_bar_btn onmouse_c3" onclick="window.location.href='/delet'">刪除資料</button>
+  </div>
+  <div class="select">
+    {%block spr%}{%endblock%}
+  </div>
+  <div class="login_div"> 
+    <div class="login_ins">
+      {%block login%}{%endblock%}
+    </div>
+  </div>
+</div>
+{%block head%}{%endblock%}
 </head>
 <body>
-  <div class="top_bar">
-    <button class="top_bar_btn" onclick="window.location.href='/'"><h1 class="tit">AFN<span style="color: #c6610f;">CO</span></h1></button>
-    <span style="width: 1%;"></span>
-    <button class="top_bar_btn onmouse_c4" onclick="window.location.href='/'"  style="background-color: #1d3a61;">首頁</button>
-    <span style="width: 1%;"></span>
-    <button class="top_bar_btn onmouse_c1" onclick="window.location.href='/dis'">股票一覽</button>
-    <span style="width: 1%;"></span>
-    <button class="top_bar_btn onmouse_c2" onclick="window.location.href='/main'">更正及增加資料</button>
-    <span style="width: 1%;"></span>
-    <button class="top_bar_btn onmouse_c3" onclick="window.location.href='/delet'">刪除資料</button>
-    <span style="width: 60%;"></span>
-    {%block login%}{%endblock%}
+
+<div class="top_place_eat">
+  <div class="click_pop" id="cli">
+    <div class="pop_title onmouse_c4" onclick="window.location.href='/'">首頁</div>
+    <div class="pop_title onmouse_c1" onclick="window.location.href='/dis'">股票一覽</div>
+    <div class="pop_title onmouse_c2" onclick="window.location.href='/main'">更正增加</div>
+    <div class="pop_title onmouse_c3" onclick="window.location.href='/delet'" style="border: 0px;">刪除資料</div>
   </div>
-      <div class="top_place_eat"></div>
-
+</div>
+<!--including scricp and style tag inside-->
 {%block main%}{%endblock%}
-
-
-
 </body>
 </html>

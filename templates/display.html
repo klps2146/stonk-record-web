@@ -1,113 +1,13 @@
-<html>
-<head>
-<meta name="viewport" content="width-device-width, initial-scale=1.0"/>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="js/main.js"></script>
-<link rel="icon" type="image/png" href="{{url_for('static', filename='favicon.ico')}}"/>
-<link rel="stylesheet" href="css/style.css">
-<title>股票一覽</title>
-<style> 
-html{ 
-    font-family: Microsoft JhengHei;
-}
+{%extends "base.html"%}
 
-table, th, td {
-    border:1px solid black; 
-}
+{%block login%}
+<button class="login_btn onmouse_c5" onclick="{{data.click}}">{{data.user}}</button>
+{%endblock%}
 
-.eps_m{
-    background-color: rgb(250, 187, 164);
-}
-
-.col_u{
-    background-color: rgb(218, 185, 233);
-}
- 
-.col_u_d{
-    background-color: rgb(193, 130, 223);
-}
-
-.title{
-    font-weight: bold;
-}
-
-.eps_season{
-    background-color: rgb(255, 255, 0);
-}
-
-.form_inside_text_eps_Q{
-    width: 100%;
-    height: 100%;
-    background-color: rgb(255, 255, 0);
-    border: 0px;
-}
-.form_inside_text{
-    background-color: rgb(195, 236, 154);
-    border: 0px;
-    width: 100%;
-    height: 100%;
-}
-
-.form_inside_text_eps_m{
-    border: 0px;
-    width: 100%;
-    height: 100%;
-    background-color: rgb(250, 187, 164);
-}
-
-.top_bar{
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 10%;
-    background-color: #305f9c;
-    display: flex; 
-    align-items: center;
-}
-
-.top_bar_btn{
-    border: 0cm;
-    font-family: Microsoft JhengHei;
-    background-color: rgba(255, 255, 255, 0);
-    color: #FFFFFF;
-    font-size: 13px;
-    border-radius: 3px 3px 3px 3px;
-}
-
-.top_place_eat{
-    width: 100%;
-    height: 10%;
-}
-
-.logo{
-    left: 3%;
-    width: 12%;
-    float: left;
-    margin-top: 10px;
-}
-
-.login_btn{
-    background-color: rgb(214, 143, 10);
-    height: 60%;
-    width: 5%;
-    border-radius: 8px 8px 8px 8px;
-    border: 0px;
-    color: #FFFFFF;
-    font-size: 16px;
-    left: 89%;
-
-}
-
-</style>
+{%block main%}
 <script>
-window.onload=function(){
-    var Today=new Date();
-    date=Today.getFullYear()+"/"+(Today.getMonth()+1)+"/"+Today.getDate();
-    document.getElementById("date").value=date;
-}
 $(document).ready(function(){
-  var Today=new Date();
+    var Today=new Date();
   date=Today.getFullYear()
   //{%for i in range(5)%}
   $(".onmouse_c{{i}}").mouseover(function(){
@@ -117,10 +17,6 @@ $(document).ready(function(){
     $(".onmouse_c{{i}}").css("color", "white")
   })
   //{%endfor%}
-
-
-
-
   $(".onmouse_c5").mouseover(function(){
     $(".onmouse_c5").css("color", "gray")
   })
@@ -141,183 +37,162 @@ $(document).ready(function(){
     else{
       $(".{{i['company']}}").hide(160);
     }
-    
   })
   //{%endfor%}
 })
-function logout(){
-    if (window.confirm("確定登出？")){
-        window.location.href='/signout';
-    }
-}
 </script>
-</head>
-<body>
+<script src="{{url_for('static', filename='display/main.js')}}"></script>
+<link rel="stylesheet" href="{{url_for('static', filename='display/style.css')}}">
+<link rel="stylesheet" href="{{url_for('static', filename='display/move.css')}}">
 
-  <div class="top_bar">
-    <button class="top_bar_btn" onclick="window.location.href='/'"><h1 class="tit">AFN<span style="color: #c6610f;">CO</span></h1></button>
-    <span style="width: 1%;"></span>
-    <button class="top_bar_btn onmouse_c4" onclick="window.location.href='/'">首頁</button>
-    <span style="width: 1%;"></span>
-    <button class="top_bar_btn onmouse_c1" onclick="window.location.href='/dis'"  style="background-color: #1d3a61;">股票一覽</button>
-    <span style="width: 1%;"></span>
-    <button class="top_bar_btn onmouse_c2" onclick="window.location.href='/main'">更正及增加資料</button>
-    <span style="width: 1%;"></span>
-    <button class="top_bar_btn onmouse_c3" onclick="window.location.href='/delet'">刪除資料</button>
-    <span style="width: 60%;"></span>
-    <button class="login_btn onmouse_c5" onclick="{{data.click}}">{{data.user}}</button>
-  </div>
-    
- 
-<div class="top_place_eat"></div>
-<form action="/rev" method="POST" style="width: 100%;">
-
-  <input type="submit" value="更新(enter)"> <!--?????????????????????-->
-  <input type="text" id="date" style="display: none;" name="up_dt">
-    <div style="width: 100%;">
-{%for i in data%}
-    <table style="width:49%">
-        <tr class="{{i['company']}}_click">
-          <th colspan="6" style="background-color: darkkhaki;">{{i["company"]}} ({{i["date"]}})</th>
-        </tr>
-        <tr class="{{i['company']}}" style="background-color: aquamarine;">
-          <td class="title" style="width: 20%;">season/year</td>
-          <td class="title" style="width: 16%;">EPS(元/股)</td>
-          <td class="title" style="width: 16%;">配息(元/股)</td>
-          <td class="title" style="width: 16%;">配息率(%)</td>
-          <td class="title" style="width: 16%;">殖利率(%)</td>
-        </tr>
-        
-    {%for f in i%}
-        {%if f != "_id" and f != "company" and f != "date" and f != "guess" and f != "share" and f != "yield_now" and f != "aim"  and f != "l_aim" and f != "l_add" and f != "r_add" and f != "simp"%}
-            {%if i[f]["simp"]==1%}
-            <tr class="{{i['company']}}" style="background-color: rgb(195, 236, 154);">
-              <td class="col_u_d {{i['company']}}_fa"  style="font-weight: bold;">{{f}}</td>
-              <td>{{i[f]['EPS_year']}}</td>
-              <td><input type="text" class="form_inside_text" name="{{i['company']}}_{{f}}_dividend" value="{{i[f]['dividend']}}"></td>
-              <td>{{i[f]["dividend_rate"]}}%</td>
-              <td>{{i[f]["yield"]}}%</td>
-            </tr>
-            {%else%}
-            <script>
-              $(document).ready(function(){
-                $(".{{i['company']}}_click").click(function(){
-                  $(".{{i['company']}}_{{f}}_s").hide(160);
-                });
-                $(".{{i['company']}}_{{f}}_n").click(function(){
-                  $(".{{i['company']}}_{{f}}_s").toggle(160);
+<div class="one_box">
+<form action="/rev" method="POST">
+    <input type="submit" value="更新(enter)"> <!--?????????????????????-->
+    <input type="text" id="date" style="display: none;" name="up_dt">
+  <div class="bbcws">
+  {%for i in data%}
+  <div class="svf">
+      <table>
+          <tr class="{{i['company']}}_click">
+            <th colspan="6" style="background-color: darkkhaki;">{{i["company"]}} ({{i["date"]}})</th>
+          </tr>
+          <tr class="{{i['company']}}" style="background-color: aquamarine;">
+            <td class="title" style="width: 120px;">season/year</td>
+            <td class="title" style="width: 120px;">EPS(元/股)</td>
+            <td class="title" style="width: 120px;">配息(元/股)</td>
+            <td class="title" style="width: 120px;">配息率(%)</td>
+            <td class="title" style="width: 120px;">殖利率(%)</td>
+          </tr>
+          
+      {%for f in i%}
+          {%if f != "_id" and f != "company" and f != "date" and f != "guess" and f != "share" and f != "yield_now" and f != "aim"  and f != "l_aim" and f != "l_add" and f != "r_add" and f != "simp"%}
+              {%if i[f]["simp"]==1%}
+              <tr class="{{i['company']}}" style="background-color: rgb(195, 236, 154);">
+                <td class="col_u_d {{i['company']}}_fa"  style="font-weight: bold;">{{f}}</td>
+                <td>{{i[f]['EPS_year']}}</td>
+                <td><input type="text" class="form_inside_text" name="{{i['company']}}_{{f}}_dividend" value="{{i[f]['dividend']}}"></td>
+                <td>{{i[f]["dividend_rate"]}}%</td>
+                <td>{{i[f]["yield"]}}%</td>
+              </tr>
+              {%else%}
+              <script>
+                $(document).ready(function(){
+                  $(".{{i['company']}}_click").click(function(){
+                    $(".{{i['company']}}_{{f}}_s").hide(160);
+                  });
+                  $(".{{i['company']}}_{{f}}_n").click(function(){
+                    $(".{{i['company']}}_{{f}}_s").toggle(160);
+                  })
                 })
-              })
-            </script>
-        <tr class="{{i['company']}}" style="background-color: rgb(195, 236, 154);">
-          <td class="col_u_d {{i['company']}}_{{f}}_n {{i['company']}}_fa" style="font-weight: bold;">{{f}}</td>
-          <td>{{i[f]['EPS_year']}}</td>
-          <td><input type="text" class="form_inside_text" name="{{i['company']}}_{{f}}_dividend" value="{{i[f]['dividend']}}"></td>
-          <td>{{i[f]["dividend_rate"]}}%</td>
-          <td>{{i[f]["yield"]}}%</td>
-        </tr>
-            {%if i[f]["EPS_Q1"] != ""%}
-              <tr class="{{i['company']}} {{i['company']}}_{{f}}_s">
-                <td class="col_u" style="font-weight: bold;">Q1</td>
-                <td class="eps_season"><input type="text" class="form_inside_text_eps_Q" name="{{i['company']}}_{{f}}_Q_1" value="{{i[f]['EPS_Q1']}}"></td>
-                <td></td>
-                <td></td>
-                <td></td>
-              </tr>
-              <tr class="{{i['company']}} {{i['company']}}_{{f}}_s">
-                <td class="col_u" style="font-weight: bold;">Q2</td>
-                <td class="eps_season"><input type="text" class="form_inside_text_eps_Q" name="{{i['company']}}_{{f}}_Q_2" value="{{i[f]['EPS_Q2']}}"></td>
-                <td></td>
-                <td></td>
-                <td></td>
-              </tr>
-              <tr class="{{i['company']}} {{i['company']}}_{{f}}_s">
-                <td class="col_u" style="font-weight: bold;">Q3</td>
-                <td class="eps_season"><input type="text" class="form_inside_text_eps_Q" name="{{i['company']}}_{{f}}_Q_3" value="{{i[f]['EPS_Q3']}}"></td>
-                <td></td>
-                <td></td>
-                <td></td>
-              </tr>
-              <tr class="{{i['company']}} {{i['company']}}_{{f}}_s">
-                <td class="col_u" style="font-weight: bold;">Q4</td>
-                <td class="eps_season"><input type="text" class="form_inside_text_eps_Q" name="{{i['company']}}_{{f}}_Q_4" value="{{i[f]['EPS_Q4']}}"></td>
-                <td></td>
-                <td></td>
-                <td></td>
-              </tr>
-            {%else%}
-              <tr class="{{i['company']}} {{i['company']}}_{{f}}_s"> 
-                <td class="col_u" style="font-weight: bold;">Q1(1,2,3月)</td>
-                <td class="eps_season">{{i[f]["EPS_Q1"]}}</td>
-                <td class="eps_m"><input type="text" class="form_inside_text_eps_m" name="{{i['company']}}_{{f}}_m_1" value="{{i[f]['EPS_m_1']}}"></td>
-                <td class="eps_m"><input type="text" class="form_inside_text_eps_m" name="{{i['company']}}_{{f}}_m_2" value="{{i[f]['EPS_m_2']}}"></td>
-                <td class="eps_m"><input type="text" class="form_inside_text_eps_m" name="{{i['company']}}_{{f}}_m_3" value="{{i[f]['EPS_m_3']}}"></td>
-              </tr>
-              <tr class="{{i['company']}} {{i['company']}}_{{f}}_s">
-                <td class="col_u" style="font-weight: bold;">Q2(4,5,6月)</td>
-                <td class="eps_season">{{i[f]["EPS_Q2"]}}</td>
-                <td class="eps_m"><input type="text" class="form_inside_text_eps_m" name="{{i['company']}}_{{f}}_m_4" value="{{i[f]['EPS_m_4']}}"></td>
-                <td class="eps_m"><input type="text" class="form_inside_text_eps_m" name="{{i['company']}}_{{f}}_m_5" value="{{i[f]['EPS_m_5']}}"></td>
-                <td class="eps_m"><input type="text" class="form_inside_text_eps_m" name="{{i['company']}}_{{f}}_m_6" value="{{i[f]['EPS_m_6']}}"></td>
-              </tr>
-              <tr class="{{i['company']}} {{i['company']}}_{{f}}_s">
-                <td class="col_u" style="font-weight: bold;">Q3(7,8,9月)</td>
-                <td class="eps_season">{{i[f]["EPS_Q3"]}}</td>
-                <td class="eps_m"><input type="text" class="form_inside_text_eps_m" name="{{i['company']}}_{{f}}_m_7" value="{{i[f]['EPS_m_7']}}"></td>
-                <td class="eps_m"><input type="text" class="form_inside_text_eps_m" name="{{i['company']}}_{{f}}_m_8" value="{{i[f]['EPS_m_8']}}"></td>
-                <td class="eps_m"><input type="text" class="form_inside_text_eps_m" name="{{i['company']}}_{{f}}_m_9" value="{{i[f]['EPS_m_9']}}"></td>
-              </tr>
-              <tr class="{{i['company']}} {{i['company']}}_{{f}}_s">
-                <td class="col_u" style="font-weight: bold;">Q4(10,11,12月)</td>
-                <td class="eps_season">{{i[f]["EPS_Q4"]}}</td>
-                <td class="eps_m"><input type="text" class="form_inside_text_eps_m" name="{{i['company']}}_{{f}}_m_10" value="{{i[f]['EPS_m_10']}}"></td>
-                <td class="eps_m"><input type="text" class="form_inside_text_eps_m" name="{{i['company']}}_{{f}}_m_11" value="{{i[f]['EPS_m_11']}}"></td>
-                <td class="eps_m"><input type="text" class="form_inside_text_eps_m" name="{{i['company']}}_{{f}}_m_12" value="{{i[f]['EPS_m_12']}}"></td>
-              </tr>
+              </script>
+          <tr class="{{i['company']}}" style="background-color: rgb(195, 236, 154);">
+            <td class="col_u_d {{i['company']}}_{{f}}_n {{i['company']}}_fa" style="font-weight: bold;">{{f}}</td>
+            <td>{{i[f]['EPS_year']}}</td>
+            <td><input type="text" class="form_inside_text" name="{{i['company']}}_{{f}}_dividend" value="{{i[f]['dividend']}}"></td>
+            <td>{{i[f]["dividend_rate"]}}%</td>
+            <td>{{i[f]["yield"]}}%</td>
+          </tr>
+              {%if i[f]["EPS_Q1"] != ""%}
+                <tr class="{{i['company']}} {{i['company']}}_{{f}}_s">
+                  <td class="col_u" style="font-weight: bold;">Q1</td>
+                  <td class="eps_season"><input type="text" class="form_inside_text_eps_Q" name="{{i['company']}}_{{f}}_Q_1" value="{{i[f]['EPS_Q1']}}"></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr class="{{i['company']}} {{i['company']}}_{{f}}_s">
+                  <td class="col_u" style="font-weight: bold;">Q2</td>
+                  <td class="eps_season"><input type="text" class="form_inside_text_eps_Q" name="{{i['company']}}_{{f}}_Q_2" value="{{i[f]['EPS_Q2']}}"></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr class="{{i['company']}} {{i['company']}}_{{f}}_s">
+                  <td class="col_u" style="font-weight: bold;">Q3</td>
+                  <td class="eps_season"><input type="text" class="form_inside_text_eps_Q" name="{{i['company']}}_{{f}}_Q_3" value="{{i[f]['EPS_Q3']}}"></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr class="{{i['company']}} {{i['company']}}_{{f}}_s">
+                  <td class="col_u" style="font-weight: bold;">Q4</td>
+                  <td class="eps_season"><input type="text" class="form_inside_text_eps_Q" name="{{i['company']}}_{{f}}_Q_4" value="{{i[f]['EPS_Q4']}}"></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+              {%else%}
+                <tr class="{{i['company']}} {{i['company']}}_{{f}}_s"> 
+                  <td class="col_u" style="font-weight: bold;">Q1(1,2,3月)</td>
+                  <td class="eps_season">{{i[f]["EPS_Q1"]}}</td>
+                  <td class="eps_m"><input type="text" class="form_inside_text_eps_m" name="{{i['company']}}_{{f}}_m_1" value="{{i[f]['EPS_m_1']}}"></td>
+                  <td class="eps_m"><input type="text" class="form_inside_text_eps_m" name="{{i['company']}}_{{f}}_m_2" value="{{i[f]['EPS_m_2']}}"></td>
+                  <td class="eps_m"><input type="text" class="form_inside_text_eps_m" name="{{i['company']}}_{{f}}_m_3" value="{{i[f]['EPS_m_3']}}"></td>
+                </tr>
+                <tr class="{{i['company']}} {{i['company']}}_{{f}}_s">
+                  <td class="col_u" style="font-weight: bold;">Q2(4,5,6月)</td>
+                  <td class="eps_season">{{i[f]["EPS_Q2"]}}</td>
+                  <td class="eps_m"><input type="text" class="form_inside_text_eps_m" name="{{i['company']}}_{{f}}_m_4" value="{{i[f]['EPS_m_4']}}"></td>
+                  <td class="eps_m"><input type="text" class="form_inside_text_eps_m" name="{{i['company']}}_{{f}}_m_5" value="{{i[f]['EPS_m_5']}}"></td>
+                  <td class="eps_m"><input type="text" class="form_inside_text_eps_m" name="{{i['company']}}_{{f}}_m_6" value="{{i[f]['EPS_m_6']}}"></td>
+                </tr>
+                <tr class="{{i['company']}} {{i['company']}}_{{f}}_s">
+                  <td class="col_u" style="font-weight: bold;">Q3(7,8,9月)</td>
+                  <td class="eps_season">{{i[f]["EPS_Q3"]}}</td>
+                  <td class="eps_m"><input type="text" class="form_inside_text_eps_m" name="{{i['company']}}_{{f}}_m_7" value="{{i[f]['EPS_m_7']}}"></td>
+                  <td class="eps_m"><input type="text" class="form_inside_text_eps_m" name="{{i['company']}}_{{f}}_m_8" value="{{i[f]['EPS_m_8']}}"></td>
+                  <td class="eps_m"><input type="text" class="form_inside_text_eps_m" name="{{i['company']}}_{{f}}_m_9" value="{{i[f]['EPS_m_9']}}"></td>
+                </tr>
+                <tr class="{{i['company']}} {{i['company']}}_{{f}}_s">
+                  <td class="col_u" style="font-weight: bold;">Q4(10,11,12月)</td>
+                  <td class="eps_season">{{i[f]["EPS_Q4"]}}</td>
+                  <td class="eps_m"><input type="text" class="form_inside_text_eps_m" name="{{i['company']}}_{{f}}_m_10" value="{{i[f]['EPS_m_10']}}"></td>
+                  <td class="eps_m"><input type="text" class="form_inside_text_eps_m" name="{{i['company']}}_{{f}}_m_11" value="{{i[f]['EPS_m_11']}}"></td>
+                  <td class="eps_m"><input type="text" class="form_inside_text_eps_m" name="{{i['company']}}_{{f}}_m_12" value="{{i[f]['EPS_m_12']}}"></td>
+                </tr>
+              {%endif%}
             {%endif%}
           {%endif%}
-        {%endif%}
-    {%endfor%}
-    <tr class="{{i['company']}} {{i['company']}}_cfm">
-        <td>目標價</td>
-        <td>{{i["l_aim"]}}</td>
-        <td></td>
-        <td></td>
-        <td><input type="text" style="width: 40%" name="{{i['company']}}_aim" value="{{i['aim']}}">%</td>
-    </tr>
-    <tr class="{{i['company']}}">
-        <td>利差(%)</td>
-        <td>{{i["l_add"]}}</td>
-        <td></td>
-        <td></td>
-        <td>{{i["r_add"]}}%</td>
-    </tr>
-    <tr class="{{i['company']}}">
-        <td>買進價</td>
-        <td><input type="text" class="form_inside_text"></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td style="width: 20%;">目前價位</td>
-        <td style="width: 16%;"><input type="text" class="form_inside_text" name="{{i['company']}}_share" value="{{i['share']}}"></td>
-        <td style="width: 16%;"></td>
-        <td style="width: 16%;">目前殖利率</td>
-        <td style="width: 16%;">{{i["yield_now"]}}%</td>
-    </tr>
-    <tr class="{{i['company']}}">
-        <td>便宜價(明年,8%)</td>
-        <td colspan="4">暫留位</td>
-        <!-- <td></td>
-        <td></td>
-        <td></td> -->
-    </tr>
-</table>
-
-{%endfor%}
-
-</form>
+      {%endfor%}
+      <tr class="{{i['company']}} {{i['company']}}_cfm">
+          <td>目標價</td>
+          <td>{{i["l_aim"]}}</td>
+          <td></td>
+          <td></td>
+          <td><input type="text" style="width: 85%;" name="{{i['company']}}_aim" value="{{i['aim']}}">%</td>
+      </tr>
+      <tr class="{{i['company']}}">
+          <td>利差(%)</td>
+          <td>{{i["l_add"]}}</td>
+          <td></td>
+          <td></td>
+          <td>{{i["r_add"]}}%</td>
+      </tr>
+      <tr class="{{i['company']}}">
+          <td>買進價</td>
+          <td><input type="text" class="form_inside_text"></td>
+          <td></td>
+          <td></td>
+          <td></td>
+      </tr>
+      <tr>
+          <td style="width: 120px;">目前價位</td>
+          <td style="width: 120px;"><input type="text" class="form_inside_text" name="{{i['company']}}_share" value="{{i['share']}}"></td>
+          <td style="width: 120px;"></td>
+          <td style="width: 120px;">目前殖利率</td>
+          <td style="width: 120px;">{{i["yield_now"]}}%</td>
+      </tr>
+      <tr class="{{i['company']}}">
+          <td>便宜價</td>
+          <td colspan="4">暫留位</td>
+          <!-- <td></td>
+          <td></td>
+          <td></td> -->
+      </tr>
+  </table>
 </div>
-</body>
-</html>
+  {%endfor%}
+  </form>
+</div>
+</div>
+{%endblock%}

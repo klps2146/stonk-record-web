@@ -1,198 +1,43 @@
-<html>
-<head>
-<meta name="viewport" content="width-device-width, initial-scale=1.0"/>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="js/main.js"></script>
-<link rel="icon" type="image/png" href="{{url_for('static', filename='favicon.ico')}}"/>
-<link rel="stylesheet" href="css/style.css">
-<title>預計及增加資料</title>
-<script>  
-window.onload=function(){ 
-    var Today=new Date();
-    date=Today.getFullYear()+"/"+(Today.getMonth()+1)+"/"+Today.getDate();
-    console.log(date);
-    document.getElementById("date").value=date;
-    document.getElementById("year").value=Today.getFullYear();
-    // if (Today.getMonth()+1==1||Today.getMonth()+1==2||Today.getMonth()+1==3){
-    //     document.getElementById("Q1").setAttribute("selected","");
-    // }
-    // if (Today.getMonth()+1==4||Today.getMonth()+1==5||Today.getMonth()+1==6){
-    //     document.getElementById("Q2").setAttribute("selected","");
-    // }
-    // if (Today.getMonth()+1==7||Today.getMonth()+1==8||Today.getMonth()+1==9){
-    //     document.getElementById("Q3").setAttribute("selected","");
-    // }
-    // if (Today.getMonth()+1==10||Today.getMonth()+1==11||Today.getMonth()+1==12){
-    //     document.getElementById("Q4").setAttribute("selected","");
-    // }   
-    
+{%extends "base.html"%}
 
-}
-$(document).ready(function(){
-  $(".onmouse_c0").mouseover(function(){
-    $(".onmouse_c0").css("color", "rgb(214, 143, 10)")
-  })
-  $(".onmouse_c0").mouseout(function(){
-    $(".onmouse_c0").css("color", "white")
-  })
-  $(".onmouse_c1").mouseover(function(){
-    $(".onmouse_c1").css("color", "rgb(214, 143, 10)")
-  })
-  $(".onmouse_c1").mouseout(function(){
-    $(".onmouse_c1").css("color", "white")
-  })
-  $(".onmouse_c2").mouseover(function(){
-    $(".onmouse_c2").css("color", "rgb(214, 143, 10)")
-  })
-  $(".onmouse_c2").mouseout(function(){
-    $(".onmouse_c2").css("color", "white")
-  })
-  $(".onmouse_c3").mouseover(function(){
-    $(".onmouse_c3").css("color", "rgb(214, 143, 10)")
-  })
-  $(".onmouse_c3").mouseout(function(){
-    $(".onmouse_c3").css("color", "white")
-  })
-  $(".onmouse_c4").mouseover(function(){
-    $(".onmouse_c4").css("color", "rgb(214, 143, 10)")
-  })
-  $(".onmouse_c4").mouseout(function(){
-    $(".onmouse_c4").css("color", "white")
-  })
-  $(".onmouse_c5").mouseover(function(){
-    $(".onmouse_c5").css("color", "gray")
-  })
-  $(".onmouse_c5").mouseout(function(){
-    $(".onmouse_c5").css("color", "white")
-  })
-  $(".onmouse_c5").mouseover(function(){
-    $(".onmouse_c5").css("color", "gray")
-  })
-  $(".onmouse_c5").mouseout(function(){
-    $(".onmouse_c5").css("color", "white")
-  })
-}) 
-function logout(){
-    if (window.confirm("確定登出？")){
-        window.location.href='/signout';
-    }
-}
-</script>
-<style>
-    .top_bar{
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 10%;
-        background-color: #305f9c;
-        display: flex; 
-        align-items: center;
-    }
-    
-    .top_bar_btn{
-        border: 0cm;
-        font-family: Microsoft JhengHei;
-        background-color: rgba(255, 255, 255, 0);
-        color: #FFFFFF;
-        font-size: 13px;
-        border-radius: 3px 3px 3px 3px;
-    }
-    
-    .top_place_eat{
-        width: 100%;
-        height: 10%;
-    }
-    
-    .logo{
-        left: 3%;
-        width: 12%;
-        float: left;
-        margin-top: 10px;
-    }
+{%block login%}
+<button class="login_btn onmouse_c5" onclick="{{userdata.click}}">{{userdata.user}}</button>
+{%endblock%}
 
-   
-    .login_btn{
-        background-color: rgb(214, 143, 10);
-        height: 60%;
-        width: 5%;
-        border-radius: 8px 8px 8px 8px;
-        border: 0px;
-        color: #FFFFFF;
-        font-size: 16px;
-        left: 89%;
-    }
-    
-    .nav{
-        background-color: rgb(233, 233, 233);
-        height: 90%;
-        width: 8%;
-        left: 0;
-        top: 10%;
-        position: fixed;
-        text-align: center;
-    }
-    
-    .indc_outer_box{
-        width: 90%;
-        left: 9%;
-        background-color: rgb(207, 247, 238);
-        background-image: none;
-        height: 80%;
-        position: absolute;
-    }
-    
-    .pot{
-        position: absolute;
-        left: 5%;
-    
-    }
-    
-    .inner_word_al{
-        position: absolute;
-        left: 3%;
-        text-align: justify;
-    }
-
-    .nav_in{
-        width: 8%;
-        height: 10%;
-    }
-    </style> 
-</head>
-<body>
-
-
-  <div class="top_bar">
-    <button class="top_bar_btn" onclick="window.location.href='/'"><h1 class="tit">AFN<span style="color: #c6610f;">CO</span></h1></button>
-    <span style="width: 1%;"></span>
-    <button class="top_bar_btn onmouse_c4" onclick="window.location.href='/'"  style="background-color: #1d3a61;">首頁</button>
-    <span style="width: 1%;"></span>
-    <button class="top_bar_btn onmouse_c1" onclick="window.location.href='/dis'">股票一覽</button>
-    <span style="width: 1%;"></span>
-    <button class="top_bar_btn onmouse_c2" onclick="window.location.href='/main'">更正及增加資料</button>
-    <span style="width: 1%;"></span>
-    <button class="top_bar_btn onmouse_c3" onclick="window.location.href='/delet'">刪除資料</button>
-    <span style="width: 60%;"></span>
-    <button class="login_btn onmouse_c5" onclick="{{userdata.click}}">{{userdata.user}}</button>
-  </div>
-      <div class="top_place_eat"></div>
-
-  <div class="nav">
-    <div class="pot">
-      <h3><strong>導覽</strong></h3>
-        <a class="nav_in">功能</a><br/>
+{%block main%}
+<script src="{{url_for('static', filename='index/main.js')}}"></script>
+<link rel="stylesheet" href="{{url_for('static', filename='index/style.css')}}">
+<link rel="stylesheet" href="{{url_for('static', filename='index/move.css')}}">
+<div class="boxer">
+    <div class="nav">
+        <div class="pot">
+        <h3><strong>導覽</strong></h3>
+            <div class="nav_in">供測試帳號密碼</div>
+            <div class="nav_in">更新資訊</div>
+            <div class="nav_in"></div>
+        </div>
     </div>
-  </div>
-<div class="indc_outer_box" style="top: 11%;">
-    <div class="inner_word_al">
-        <h2>供測試帳號密碼</h2>
-        <li>帳號1：afnco</li>
-        密碼：aaaaaaaa<br><br>
-        <li>帳號2：aa</li>
-        密碼：aaaaaaaa<br>
+    <div class="nava"></div>
+    <div class="indc_outer_box">
+        <div class="inner_word_al">
+            <h2>供測試帳號密碼</h2>
+            <li>帳號1：afnco</li>
+            密碼：aaaaaaaa<br><br>
+            <li>帳號2：aa</li>
+            密碼：aaaaaaaa<br>
+        </div>
+        <div class="inner_word_al">
+            <h2>更新內容 (ver23.1.1)</h2>
+            <li>前端畫面升級</li>
+            <li>使不同寬度的裝置也能順暢使用</li>
+            <li>切換螢幕大小使避免爆版</li>
+            <li>密碼加密</li>
+            <li>更改增加資料頁面的切換方式</li>
+            <li>超連結錯誤除錯</li>
+            <li>alert畫面優化</li>
+            <li>登入或更新後不跳轉至其他路由(Ajax)</li>
+            <li>手機模式選單動畫</li>
+        </div>
     </div>
 </div>
-
-</body>
-</html>
+{%endblock%}

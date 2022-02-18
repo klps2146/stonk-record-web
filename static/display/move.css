@@ -1,0 +1,12 @@
+@media (max-width:500px){
+
+}
+@media (max-width:550px){
+    .one_box{
+        width: 100%;
+        flex-wrap: wrap;
+    }
+    .svf{
+        width: 100%;
+    }
+}

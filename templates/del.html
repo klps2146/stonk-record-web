@@ -1,199 +1,30 @@
-<html>
-<head>
-<meta name="viewport" content="width-device-width, initial-scale=1.0"/>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="js/main.js"></script>
-<link rel="icon" type="image/png" href="{{url_for('static', filename='favicon.ico')}}"/>
-<link rel="stylesheet" href="css/style.css">
-<title>預計及增加資料</title>
-<style> 
-.up_box{
-    width: 100%;
-    height: 50px;
-    display: flex;
-    align-items: center; 
-}
+{%extends "base.html"%}
 
+{%block login%}
 
-.top_bar{
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 10%;
-    background-color: #305f9c;
-    display: flex; 
-    align-items: center;
-}
+{%endblock%}
 
-.top_bar_btn{
-    border: 0cm;
-    font-family: Microsoft JhengHei;
-    background-color: rgba(255, 255, 255, 0);
-    color: #FFFFFF;
-    font-size: 13px;
-    border-radius: 3px 3px 3px 3px;
-}
-
-.top_place_eat{
-    width: 100%;
-    height: 10%;
-}
-
-.logo{
-    left: 3%;
-    width: 12%;
-    float: left;
-    margin-top: 10px;
-}
-
-.login_btn{
-    background-color: rgb(214, 143, 10);
-    height: 60%;
-    width: 5%;
-    border-radius: 8px 8px 8px 8px;
-    border: 0px;
-    color: #FFFFFF;
-    font-size: 16px;
-    left: 89%;
-}
-</style> 
-<script> 
-window.onload=function(){
-    var Today=new Date();
-    date=Today.getFullYear()+"/"+(Today.getMonth()+1)+"/"+Today.getDate();
-    console.log(date);
-    document.getElementById("date").value=date;
-    document.getElementById("year").value=Today.getFullYear();
-    // if (Today.getMonth()+1==1||Today.getMonth()+1==2||Today.getMonth()+1==3){
-    //     document.getElementById("Q1").setAttribute("selected","");
-    // }
-    // if (Today.getMonth()+1==4||Today.getMonth()+1==5||Today.getMonth()+1==6){
-    //     document.getElementById("Q2").setAttribute("selected","");
-    // }
-    // if (Today.getMonth()+1==7||Today.getMonth()+1==8||Today.getMonth()+1==9){
-    //     document.getElementById("Q3").setAttribute("selected","");
-    // }
-    // if (Today.getMonth()+1==10||Today.getMonth()+1==11||Today.getMonth()+1==12){
-    //     document.getElementById("Q4").setAttribute("selected","");
-    // }   
+{%block main%}
+<script src="{{url_for('static', filename='del/main.js')}}"></script>
+<link rel="stylesheet" href="{{url_for('static', filename='del/style.css')}}">
+<link rel="stylesheet" href="{{url_for('static', filename='del/move.css')}}">
+<script>
     
-
-} 
-
-function checkr(){
-    if (document.getElementById("getc").value==""){
-        alert("輸入公司名稱(刪除整個公司資料)")
-        return false;
-    }
-    else{
-        if (window.confirm("確定要刪除 "+String(document.getElementById("getc").value)+" 所有內容 [[將無法恢復]]")){
-            return true;
-        }
-        else{
-            document.getElementById("getc").value="";
-            return false;
-        }
-    }
-    return false;
-
-function sub(){
-    if (document.getElementById("a").value==""||document.getElementById("b").value==""  ){
-        alert("輸入公司名稱或年分(刪除某個年份)")
-        return false;
-    }
-    else{
-        if (window.confirm("確定要刪除 "+String(document.getElementById("a").value)+" "+String(document.getElementById("b").value)+"的資料 [[將無法恢復]]")){
-            return true;
-        }
-        else{
-            document.getElementById("getc").value="";
-            return false;
-        }
-    }
-    return false;
-}
-}
-$(document).ready(function(){
-  $(".onmouse_c0").mouseover(function(){
-    $(".onmouse_c0").css("color", "rgb(214, 143, 10)")
-  })
-  $(".onmouse_c0").mouseout(function(){
-    $(".onmouse_c0").css("color", "white")
-  })
-  $(".onmouse_c1").mouseover(function(){
-    $(".onmouse_c1").css("color", "rgb(214, 143, 10)")
-  })
-  $(".onmouse_c1").mouseout(function(){
-    $(".onmouse_c1").css("color", "white")
-  })
-  $(".onmouse_c2").mouseover(function(){
-    $(".onmouse_c2").css("color", "rgb(214, 143, 10)")
-  })
-  $(".onmouse_c2").mouseout(function(){
-    $(".onmouse_c2").css("color", "white")
-  })
-  $(".onmouse_c3").mouseover(function(){
-    $(".onmouse_c3").css("color", "rgb(214, 143, 10)")
-  })
-  $(".onmouse_c3").mouseout(function(){
-    $(".onmouse_c3").css("color", "white")
-  })
-  $(".onmouse_c4").mouseover(function(){
-    $(".onmouse_c4").css("color", "rgb(214, 143, 10)")
-  })
-  $(".onmouse_c4").mouseout(function(){
-    $(".onmouse_c4").css("color", "white")
-  })
-  $(".onmouse_c5").mouseover(function(){
-    $(".onmouse_c5").css("color", "gray")
-  })
-  $(".onmouse_c5").mouseout(function(){
-    $(".onmouse_c5").css("color", "white")
-  })
-  $(".onmouse_c5").mouseover(function(){
-    $(".onmouse_c5").css("color", "gray")
-  })
-  $(".onmouse_c5").mouseout(function(){
-    $(".onmouse_c5").css("color", "white")
-  })
-}) 
-function logout(){
-    if (window.confirm("確定登出？")){
-        window.location.href='/signout';
-    }
-}
 </script>
-</head>
-<body>
-  <div class="top_bar">
-    <button class="top_bar_btn" onclick="window.location.href='/'"><h1 class="tit">AFN<span style="color: #c6610f;">CO</span></h1></button>
-    <span style="width: 1%;"></span>
-    <button class="top_bar_btn onmouse_c4" onclick="window.location.href='/'">首頁</button>
-    <span style="width: 1%;"></span>
-    <button class="top_bar_btn onmouse_c1" onclick="window.location.href='/dis'">股票一覽</button>
-    <span style="width: 1%;"></span>
-    <button class="top_bar_btn onmouse_c2" onclick="window.location.href='/main'">更正及增加資料</button>
-    <span style="width: 1%;"></span>
-    <button class="top_bar_btn onmouse_c3" onclick="window.location.href='/delet'"  style="background-color: #1d3a61;">刪除資料</button>
-    <span style="width: 60%;"></span>
-    <button class="login_btn onmouse_c5" onclick="{{userdata.click}}">{{userdata.user}}</button>
-  </div>
-      <div class="top_place_eat"></div>
 <form action="/del" method="POST" onsubmit="return sub()">
-<h4>刪除公司中的某年分</h4>
-刪除公司之名稱<br>
-<input name="company" placeholder="公司名稱" id="a"><br/>
-刪除資料年分<br/>
-<input name="year" placeholder="年分" id="b"><br/>
-
-<input type="submit"><input name="company_del" style="display: none;" type="text">
+    <h4>刪除公司中的某年分</h4>
+    刪除公司之名稱<br>
+    <input name="company" placeholder="公司名稱" id="a"><br/>
+    刪除資料年分<br/>
+    <input name="year" placeholder="年分" id="b"><br/>
+    
+    <input type="submit"><input name="company_del" style="display: none;" type="text">
+    
 </form>
-<form action="/del" method="POST" onsubmit="return checkr();">
-<h4>刪除整個公司的資料</h4>
-刪除公司之名稱<br/>
-<input type="text" name="company_del" placeholder="公司名稱" id="getc"><br/>
-<input type="submit">
+    <form action="/del" method="POST" onsubmit="return checkr();">
+    <h4>刪除整個公司的資料</h4>
+    刪除公司之名稱<br/>
+    <input type="text" name="company_del" placeholder="公司名稱" id="getc"><br/>
+    <input type="submit">
 </form>
-</body>
-</html>
+{%endblock%}

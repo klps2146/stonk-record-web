@@ -1,0 +1,9 @@
+@media(max-width:500px){
+    .login_p{
+        border: 0px;
+    }
+    .icon_i{
+        width: 90px;
+        height: 90px;
+    }
+}

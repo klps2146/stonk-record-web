@@ -1,311 +1,119 @@
-<html>
-<head>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="js/main.js"></script>
-<meta name="viewport" content="width-device-width, initial-scale=1.0"/>
-<link rel="icon" type="image/png" href="{{url_for('static', filename='favicon.ico')}}"/>
-<link rel="stylesheet" href="css/style.css">
-<title>預計及增加資料</title>
-<style>
-.top_bar{
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%; 
-    height: 10%;
-    background-color: #305f9c;
-    display: flex; 
-    align-items: center;
-}
+{%extends "base.html"%}
 
-.top_bar_btn{
-    border: 0cm;
-    font-family: Microsoft JhengHei;
-    background-color: rgba(255, 255, 255, 0);
-    color: #FFFFFF;
-    font-size: 13px;
-    border-radius: 3px 3px 3px 3px;
-}
+{%block login%}
+<button class="login_btn onmouse_c5" onclick="{{userdata.click}}">{{userdata.user}}</button>
+{%endblock%}
 
-.top_place_eat{
-    width: 100%;
-    height: 10%;
-}
+{%block spr%}
+<div class="ms">
+    <select class="select" id="fcv">
+        <option class="fvv cg1" value="1">季報</option>
+        <option class="fvv cg2" value="2">月報</option>
+    </select>
+</div>
+{%endblock%}
 
-.logo{
-    left: 3%;
-    width: 12%;
-    float: left;
-    margin-top: 10px;
-}
-
-.login_btn{
-    background-color: rgb(214, 143, 10);
-    height: 60%;
-    width: 5%;
-    border-radius: 8px 8px 8px 8px;
-    border: 0px;
-    color: #FFFFFF;
-    font-size: 16px;
-    left: 89%;
-
-}
-</style> 
-<script> 
+{%block head%}
+<script>
+$("#fcv").blur(function(){
+    if(document.getElementById("fcv").options[0].selected){
+        $(".res1").css("display", "block");
+        $(".res2").css("display", "none");
+    }
+    else{
+        $(".res1").css("display", "none");
+        $(".res2").css("display", "block");
+    }
+    //     $(".cg1").click(function(){
+    //     $(".res1").css("display", "block");
+    //     $(".res2").css("display", "none");
+    //         })
+    //     $(".cg2").click(function(){
+    //     $(".res1").css("display", "none");
+    //     $(".res2").css("display", "block");
+    // })
+})
 window.onload=function(){
     var Today=new Date();
     date=Today.getFullYear()+"/"+(Today.getMonth()+1)+"/"+Today.getDate();
     console.log(date);
     document.getElementById("date").value=date;
+    document.getElementById("date1").value=date;
     document.getElementById("year").value=Today.getFullYear();
-    // if (Today.getMonth()+1==1||Today.getMonth()+1==2||Today.getMonth()+1==3){
-    //     document.getElementById("Q1").setAttribute("selected","");
-    // }
-    // if (Today.getMonth()+1==4||Today.getMonth()+1==5||Today.getMonth()+1==6){
-    //     document.getElementById("Q2").setAttribute("selected","");
-    // }
-    // if (Today.getMonth()+1==7||Today.getMonth()+1==8||Today.getMonth()+1==9){
-    //     document.getElementById("Q3").setAttribute("selected","");
-    // }
-    // if (Today.getMonth()+1==10||Today.getMonth()+1==11||Today.getMonth()+1==12){
-    //     document.getElementById("Q4").setAttribute("selected","");
-    // }   
-}
- 
-state=1;
-function clicke(){
-    var checked = document.querySelector('[name=EPS_check]:checked');
-    if (checked){
-        state+=1;
-        document.getElementById("EPS_1").style.display="none";
-        document.getElementById("EPS_2").style.display="none";
-        document.getElementById("EPS_3").style.display="none";
-        document.getElementById("EPS_4").style.display="none";
-        document.getElementById("EPS_1").value="";
-        document.getElementById("EPS_2").value="";
-        document.getElementById("EPS_3").value="";
-        document.getElementById("EPS_4").value="";
-        document.getElementById("m_1").style.display="inline";
-        document.getElementById("m_2").style.display="inline";
-        document.getElementById("m_3").style.display="inline";
-        document.getElementById("m_4").style.display="inline";
-        document.getElementById("m_5").style.display="inline";
-        document.getElementById("m_6").style.display="inline";
-        document.getElementById("m_7").style.display="inline";
-        document.getElementById("m_8").style.display="inline";
-        document.getElementById("m_9").style.display="inline";
-        document.getElementById("m_10").style.display="inline";
-        document.getElementById("m_11").style.display="inline";
-        document.getElementById("m_12").style.display="inline";
-    }
-    else{
-        state-=1;
-        document.getElementById("EPS_1").style.display="inline";
-        document.getElementById("EPS_2").style.display="inline";
-        document.getElementById("EPS_3").style.display="inline";
-        document.getElementById("EPS_4").style.display="inline";
-        document.getElementById("m_1").value="";
-        document.getElementById("m_2").value="";
-        document.getElementById("m_3").value="";
-        document.getElementById("m_4").value="";
-        document.getElementById("m_5").value="";
-        document.getElementById("m_6").value="";
-        document.getElementById("m_7").value="";
-        document.getElementById("m_8").value="";
-        document.getElementById("m_9").value="";
-        document.getElementById("m_10").value="";
-        document.getElementById("m_11").value="";
-        document.getElementById("m_12").value="";
-        document.getElementById("m_1").style.display="none";
-        document.getElementById("m_2").style.display="none";
-        document.getElementById("m_3").style.display="none";
-        document.getElementById("m_4").style.display="none";
-        document.getElementById("m_5").style.display="none";
-        document.getElementById("m_6").style.display="none";
-        document.getElementById("m_7").style.display="none";
-        document.getElementById("m_8").style.display="none";
-        document.getElementById("m_9").style.display="none";
-        document.getElementById("m_10").style.display="none";
-        document.getElementById("m_11").style.display="none";
-        document.getElementById("m_12").style.display="none";
-    }
+    document.getElementById("year1").value=Today.getFullYear();
 }
 
+</script>
+{%endblock%}
 
-function checkm(){
-    let issue=0;
-    let eps_1=document.form.EPS_1.value;
-    let eps_2=document.form.EPS_2.value;
-    let eps_3=document.form.EPS_3.value;
-    let eps_4=document.form.EPS_4.value;
+{%block main%}
 
-    let m_1=document.form.m_1.value;
-    let m_2=document.form.m_2.value;
-    let m_3=document.form.m_3.value;
-    let m_4=document.form.m_4.value;
-    let m_5=document.form.m_5.value;
-    let m_6=document.form.m_6.value;
-    let m_7=document.form.m_7.value;
-    let m_8=document.form.m_8.value;
-    let m_9=document.form.m_9.value;
-    let m_10=document.form.m_10.value;
-    let m_11=document.form.m_11.value;
-    let m_12=document.form.m_12.value;
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="{{url_for('static', filename='main/main.js')}}"></script>
+<link rel="stylesheet" href="{{url_for('static', filename='main/style.css')}}">
+<link rel="stylesheet" href="{{url_for('static', filename='main/move.css')}}">
+<div class="sele">
+    <div class="ms1">
+        <form method="POST" id="form-z" class="form res1" action="/res" name="form">
+            股票(公司)名稱<br/>
+            <input type="text" id="company" placeholder="股票(公司)名稱" name="company" required><br/>
+            
+            <input type="text" class="qe" placeholder="EPS Q1" name="EPS_1" style="display: block;" autocomplete="off" required pattern="[0-9]{0-3}">
+            <input type="text" class="qe" placeholder="EPS Q2" name="EPS_2" style="display: block;" autocomplete="off" required pattern="[0-9]{0-3}">
+            <input type="text" class="qe" placeholder="EPS Q3" name="EPS_3" style="display: block;" autocomplete="off" required pattern="[0-9]{0-3}">
+            <input type="text" class="qe" placeholder="EPS Q4" name="EPS_4" style="display: block;" autocomplete="off" required pattern="[0-9]{0-3}">
+            <!-- 不可刪除 -->
+            <input type="text" class="mon" placeholder="1月" name="m_1" style="display: none;" autocomplete="off">
+            <input type="text" class="mon" placeholder="2月" name="m_2" style="display: none;" autocomplete="off">
+            <input type="text" class="mon" placeholder="3月" name="m_3" style="display: none;" autocomplete="off">
+            <input type="text" class="mon" placeholder="4月" name="m_4" style="display: none;" autocomplete="off">
+            <input type="text" class="mon" placeholder="5月" name="m_5" style="display: none;" autocomplete="off">
+            <input type="text" class="mon" placeholder="6月" name="m_6" style="display: none;" autocomplete="off">
+            <input type="text" class="mon" placeholder="7月" name="m_7" style="display: none;" autocomplete="off">
+            <input type="text" class="mon" placeholder="8月" name="m_8" style="display: none;" autocomplete="off">
+            <input type="text" class="mon" placeholder="9月" name="m_9" style="display: none;" autocomplete="off">
+            <input type="text" class="mon" placeholder="10月" name="m_10" style="display: none;" autocomplete="off">
+            <input type="text" class="mon" placeholder="11月" name="m_11" style="display: none;" autocomplete="off">
+            <input type="text" class="mon" placeholder="12月" name="m_12" style="display: none;" autocomplete="off">
 
-    let dividend_rate=document.form.dividend_rate.value;
-    let share=document.form.share.value;
-    // try{
-    //     eps_unit=parseInt(eps);
-    //     if (eps_unit>1000){
-    //         alert("EPS數字過大");
-    //         issue+=1;
-    //     }
-    // }
-    // catch{
-    //     alert("EPS應為數字而非"+typeof(eps));
-    //     eps="";
-    // }
-    // if (state==1){
-    //     if (eps_1.length<=0 | eps_2.length<=0 | eps_3.length<=0 | eps_4.length<=0){
-    //     issue+=1;
-    //     alert("EPS不可為空");
-    // }
-    // else{
-    //     if (m_1.length<=0 |
-    //         m_2.length<=0 |
-    //         m_3.length<=0 |
-    //         m_4.length<=0 |
-    //         m_5.length<=0 |
-    //         m_6.length<=0 |
-    //         m_7.length<=0 |
-    //         m_8.length<=0 |
-    //         m_9.length<=0 |
-    //         m_10.length<=0 |
-    //         m_11.length<=0 |
-    //         m_12.length<=0
-    //         ){
-    //             issue+=1;
-    //             alert("EPS不可為空");
-    //         }
-    // }
-    // }
-    if (dividend_rate.length<=0){
-        issue+=1;
-        alert("配息率不可為空");
-    }
-    if (share.length<=0){
-        issue+=1;
-        alert("股價不可為空");
-    }
-    console.log(share.length);
-    if (issue==0){
-        return true;
-    }
-    else{
-        return false;
-    }
-}
+            配息率<br/>
+            <input type="text" id="dividend_rate" placeholder="配息率" name="dividend_rate" autocomplete="off" required pattern="[0-9]{0-3}">%<br/>
+            股價<br/>
+            <input type="text" id="share" placeholder="股價" name="share" autocomplete="off" required pattern="[0-9]{0-999999999999}"><br/>
+            年分<br/>
+            <input type="text" id="year" name="year" placeholder="年分" autocomplete="off" required pattern="[0-9]{4}"><br/>
+            <input type="text" id="date" name="date" style="display: none;"><br/>
+            <input type="submit" id="submit" class="form-submit" value="submit" >
+        </form>
 
-$(document).ready(function(){
-  $(".onmouse_c0").mouseover(function(){
-    $(".onmouse_c0").css("color", "rgb(214, 143, 10)")
-  })
-  $(".onmouse_c0").mouseout(function(){
-    $(".onmouse_c0").css("color", "white")
-  })
-  $(".onmouse_c1").mouseover(function(){
-    $(".onmouse_c1").css("color", "rgb(214, 143, 10)")
-  })
-  $(".onmouse_c1").mouseout(function(){
-    $(".onmouse_c1").css("color", "white")
-  })
-  $(".onmouse_c2").mouseover(function(){
-    $(".onmouse_c2").css("color", "rgb(214, 143, 10)")
-  })
-  $(".onmouse_c2").mouseout(function(){
-    $(".onmouse_c2").css("color", "white")
-  })
-  $(".onmouse_c3").mouseover(function(){
-    $(".onmouse_c3").css("color", "rgb(214, 143, 10)")
-  })
-  $(".onmouse_c3").mouseout(function(){
-    $(".onmouse_c3").css("color", "white")
-  })
-  $(".onmouse_c4").mouseover(function(){
-    $(".onmouse_c4").css("color", "rgb(214, 143, 10)")
-  })
-  $(".onmouse_c4").mouseout(function(){
-    $(".onmouse_c4").css("color", "white")
-  })
-  $(".onmouse_c5").mouseover(function(){
-    $(".onmouse_c5").css("color", "gray")
-  })
-  $(".onmouse_c5").mouseout(function(){
-    $(".onmouse_c5").css("color", "white")
-  })
-  $(".onmouse_c5").mouseover(function(){
-    $(".onmouse_c5").css("color", "gray")
-  })
-  $(".onmouse_c5").mouseout(function(){
-    $(".onmouse_c5").css("color", "white")
-  })
-})
-function logout(){
-    if (window.confirm("確定登出？")){
-        window.location.href='/signout';
-    }
-}
-</script> 
-</head>
-<body>
-  <div class="top_bar">
-    <button class="top_bar_btn" onclick="window.location.href='/'"><h1 class="tit">AFN<span style="color: #c6610f;">CO</span></h1></button>
-    <span style="width: 1%;"></span>
-    <button class="top_bar_btn onmouse_c4" onclick="window.location.href='/'">首頁</button>
-    <span style="width: 1%;"></span>
-    <button class="top_bar_btn onmouse_c1" onclick="window.location.href='/dis'">股票一覽</button>
-    <span style="width: 1%;"></span>
-    <button class="top_bar_btn onmouse_c2" onclick="window.location.href='/main'" style="background-color: #1d3a61;">更正及增加資料</button>
-    <span style="width: 1%;"></span>
-    <button class="top_bar_btn onmouse_c3" onclick="window.location.href='/delet'">刪除資料</button>
-    <span style="width: 60%;"></span>
-    <button class="login_btn onmouse_c5" onclick="{{userdata.click}}">{{userdata.user}}</button>
-  </div>
-      <div class="top_place_eat"></div>
-
-<form method="POST" id="form" class="form" action="/res" name="form" onsubmit="return checkm();">
-股票(公司)名稱<br/>
-<input type="text" id="company" placeholder="股票(公司)名稱" name="company"><br/>
-
-EPS <input type="checkbox" onclick="clicke()" name="EPS_check" id="EPS_check">每月EPS<br/>
-<input type="text" id="EPS_1" placeholder="EPS Q1" name="EPS_1" style="display: inline;" autocomplete="off"><br/>
-<input type="text" id="EPS_2" placeholder="EPS Q2" name="EPS_2" style="display: inline;" autocomplete="off"><br/>
-<input type="text" id="EPS_3" placeholder="EPS Q3" name="EPS_3" style="display: inline;" autocomplete="off"><br/>
-<input type="text" id="EPS_4" placeholder="EPS Q4" name="EPS_4" style="display: inline;" autocomplete="off"><br/>
-
-<input type="text" id="m_1" placeholder="1月" name="m_1" style="display: none;" autocomplete="off">
-<input type="text" id="m_2" placeholder="2月" name="m_2" style="display: none;" autocomplete="off">
-<input type="text" id="m_3" placeholder="3月" name="m_3" style="display: none;" autocomplete="off"><br/>
-<input type="text" id="m_4" placeholder="4月" name="m_4" style="display: none;" autocomplete="off">
-<input type="text" id="m_5" placeholder="5月" name="m_5" style="display: none;" autocomplete="off">
-<input type="text" id="m_6" placeholder="6月" name="m_6" style="display: none;" autocomplete="off"><br/>
-<input type="text" id="m_7" placeholder="7月" name="m_7" style="display: none;" autocomplete="off">
-<input type="text" id="m_8" placeholder="8月" name="m_8" style="display: none;" autocomplete="off">
-<input type="text" id="m_9" placeholder="9月" name="m_9" style="display: none;" autocomplete="off"><br/>
-<input type="text" id="m_10" placeholder="10月" name="m_10" style="display: none;" autocomplete="off">
-<input type="text" id="m_11" placeholder="11月" name="m_11" style="display: none;" autocomplete="off">
-<input type="text" id="m_12" placeholder="12月" name="m_12" style="display: none;" autocomplete="off"><br/>
-配息率<br/>
-<input type="text" id="dividend_rate" placeholder="配息率" name="dividend_rate" autocomplete="off">%<br/>
-股價<br/>
-<input type="text" id="share" placeholder="股價" name="share" autocomplete="off"><br/>
-年分<br/>
-<input type="text" id="year" name="year" placeholder="年分" autocomplete="off"><br/>
-
-
-<input type="text" id="date" name="date" style="display: none;"><br/>
-
-<input type="submit" id="submit" class="form-submit" value="submit" >
-</form>
-</body>
-</html>
+        <form method="POST" id="form" class="form res2" action="/res" name="form">
+            股票(公司)名稱<br/>
+            <input type="text" id="company" placeholder="股票(公司)名稱" name="company" required><br/>
+            <input type="text" class="qe" placeholder="EPS Q1" name="EPS_1" style="display: none;" autocomplete="off">
+            <input type="text" class="qe" placeholder="EPS Q2" name="EPS_2" style="display: none;" autocomplete="off">
+            <input type="text" class="qe" placeholder="EPS Q3" name="EPS_3" style="display: none;" autocomplete="off">
+            <input type="text" class="qe" placeholder="EPS Q4" name="EPS_4" style="display: none;" autocomplete="off">
+            <input type="text" class="mon" placeholder="1月" name="m_1" style="display: block;" autocomplete="off" required pattern="[0-9]{0-3}">
+            <input type="text" class="mon" placeholder="2月" name="m_2" style="display: block;" autocomplete="off" required pattern="[0-9]{0-3}">
+            <input type="text" class="mon" placeholder="3月" name="m_3" style="display: block;" autocomplete="off" required pattern="[0-9]{0-3}">
+            <input type="text" class="mon" placeholder="4月" name="m_4" style="display: block;" autocomplete="off" required pattern="[0-9]{0-3}">
+            <input type="text" class="mon" placeholder="5月" name="m_5" style="display: block;" autocomplete="off" required pattern="[0-9]{0-3}">
+            <input type="text" class="mon" placeholder="6月" name="m_6" style="display: block;" autocomplete="off" required pattern="[0-9]{0-3}">
+            <input type="text" class="mon" placeholder="7月" name="m_7" style="display: block;" autocomplete="off" required pattern="[0-9]{0-3}">
+            <input type="text" class="mon" placeholder="8月" name="m_8" style="display: block;" autocomplete="off" required pattern="[0-9]{0-3}">
+            <input type="text" class="mon" placeholder="9月" name="m_9" style="display: block;" autocomplete="off" required pattern="[0-9]{0-3}">
+            <input type="text" class="mon" placeholder="10月" name="m_10" style="display: block;" autocomplete="off" required pattern="[0-9]{0-3}">
+            <input type="text" class="mon" placeholder="11月" name="m_11" style="display: block;" autocomplete="off" required pattern="[0-9]{0-3}">
+            <input type="text" class="mon" placeholder="12月" name="m_12" style="display: block;" autocomplete="off" required pattern="[0-9]{0-3}">
+            配息率<br/>
+            <input type="text" id="dividend_rate" placeholder="配息率" name="dividend_rate" autocomplete="off" required pattern="[0-9]{0-3}">%<br/>
+            股價<br/>
+            <input type="text" id="share" placeholder="股價" name="share" autocomplete="off" required pattern="[0-9]{0-999999999999}"><br/>
+            年分<br/>
+            <input type="text" id="year1" name="year" placeholder="年分" autocomplete="off" required pattern="[0-9]{4}"><br/>
+            <input type="text" id="date1" name="date" style="display: none;"><br/>
+            <input type="submit" id="submit" class="form-submit" value="submit" >
+        </form>
+    </div>
+</div>
+{%endblock%}

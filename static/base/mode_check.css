@@ -1,0 +1,15 @@
+@media(max-width:500px){
+    .top_href{
+        display: none;
+    }
+    .close{
+        display: flex;
+        margin-left: 25px;
+    }
+    .top_bar{
+        height: 40px;
+    }
+    .tf{
+        height: 40px;
+    }
+}

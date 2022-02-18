@@ -1,0 +1,66 @@
+table, th, td {
+    border:1px solid black; 
+}
+
+.eps_m{
+    background-color: rgb(250, 187, 164);
+}
+
+.col_u{
+    background-color: rgb(218, 185, 233);
+}
+ 
+.col_u_d{
+    background-color: rgb(193, 130, 223);
+}
+
+.title{
+    font-weight: bold;
+}
+
+.eps_season{
+    background-color: rgb(255, 255, 0);
+}
+
+.form_inside_text_eps_Q{
+    width: 100%;
+    height: 100%;
+    background-color: rgb(255, 255, 0);
+    border: 0px;
+}
+.form_inside_text{
+    background-color: rgb(195, 236, 154);
+    border: 0px;
+    width: 100%;
+    height: 100%;
+}
+
+.form_inside_text_eps_m{
+    border: 0px;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(250, 187, 164);
+}
+
+.one_box{
+    display: flex;
+    width: 100%;
+    flex-wrap: wrap;
+}
+
+.svf{
+    flex: none;
+    width: 600px;
+    flex-wrap: wrap;
+}
+
+.bbcws{
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    flex-wrap: wrap;
+}
+
+table{
+    margin: 2px;
+}
