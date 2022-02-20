@@ -1,5 +1,7 @@
 {%extends "base.html"%}
 
+{%block title%}資加資料{%endblock%}
+
 {%block login%}
 <button class="login_btn onmouse_c5" onclick="{{userdata.click}}">{{userdata.user}}</button>
 {%endblock%}
@@ -15,34 +17,6 @@
 
 {%block head%}
 <script>
-$("#fcv").blur(function(){
-    if(document.getElementById("fcv").options[0].selected){
-        $(".res1").css("display", "block");
-        $(".res2").css("display", "none");
-    }
-    else{
-        $(".res1").css("display", "none");
-        $(".res2").css("display", "block");
-    }
-    //     $(".cg1").click(function(){
-    //     $(".res1").css("display", "block");
-    //     $(".res2").css("display", "none");
-    //         })
-    //     $(".cg2").click(function(){
-    //     $(".res1").css("display", "none");
-    //     $(".res2").css("display", "block");
-    // })
-})
-window.onload=function(){
-    var Today=new Date();
-    date=Today.getFullYear()+"/"+(Today.getMonth()+1)+"/"+Today.getDate();
-    console.log(date);
-    document.getElementById("date").value=date;
-    document.getElementById("date1").value=date;
-    document.getElementById("year").value=Today.getFullYear();
-    document.getElementById("year1").value=Today.getFullYear();
-}
-
 </script>
 {%endblock%}
 
@@ -86,6 +60,8 @@ window.onload=function(){
             <input type="submit" id="submit" class="form-submit" value="submit" >
         </form>
 
+
+        
         <form method="POST" id="form" class="form res2" action="/res" name="form">
             股票(公司)名稱<br/>
             <input type="text" id="company" placeholder="股票(公司)名稱" name="company" required><br/>

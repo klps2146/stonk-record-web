@@ -1,7 +1,9 @@
 {%extends "base.html"%}
 
-{%block login%}
+{%block title%}刪除資料{%endblock%}
 
+{%block login%}
+<button class="login_btn onmouse_c5" onclick="{{userdata.click}}">{{userdata.user}}</button>
 {%endblock%}
 
 {%block main%}
@@ -9,22 +11,20 @@
 <link rel="stylesheet" href="{{url_for('static', filename='del/style.css')}}">
 <link rel="stylesheet" href="{{url_for('static', filename='del/move.css')}}">
 <script>
-    
 </script>
-<form action="/del" method="POST" onsubmit="return sub()">
     <h4>刪除公司中的某年分</h4>
     刪除公司之名稱<br>
-    <input name="company" placeholder="公司名稱" id="a"><br/>
+    <input name="company" placeholder="公司名稱" id="cy"><br/>
     刪除資料年分<br/>
-    <input name="year" placeholder="年分" id="b"><br/>
-    
-    <input type="submit"><input name="company_del" style="display: none;" type="text">
-    
-</form>
+    <input name="year" placeholder="年分" id="yr"><br/>
+    <button type="button" id="spc" onclick="fc()">刪除</button>
+
+
+<!-- </form>
     <form action="/del" method="POST" onsubmit="return checkr();">
     <h4>刪除整個公司的資料</h4>
     刪除公司之名稱<br/>
     <input type="text" name="company_del" placeholder="公司名稱" id="getc"><br/>
     <input type="submit">
 </form>
-{%endblock%}
+{%endblock%} -->

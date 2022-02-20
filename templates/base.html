@@ -1,6 +1,8 @@
-<html>
+<!DOCTYPE html>
+<html lang="zh-TW">
 <head>
 <meta name="viewport" content="width-device-width, initial-scale=1.0"/>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="{{url_for('static', filename='base/data_base.js')}}"></script>
 <link rel="icon" type="image/png" href="{{url_for('static', filename='favicon.ico')}}"/>
@@ -8,60 +10,6 @@
 <link rel="stylesheet" href="{{url_for('static', filename='base/mode_check.css')}}">
 <title>{%block title%}{%endblock%}</title>
 <script>  
-$(document).ready(function(){
-  // $("#cli").hide();
-  $(".onmouse_c0").mouseover(function(){
-    $(".onmouse_c0").css("color", "rgb(214, 143, 10)")
-  })
-  $(".onmouse_c0").mouseout(function(){
-    $(".onmouse_c0").css("color", "white")
-  })
-  $(".onmouse_c1").mouseover(function(){
-    $(".onmouse_c1").css("color", "rgb(214, 143, 10)")
-  })
-  $(".onmouse_c1").mouseout(function(){
-    $(".onmouse_c1").css("color", "white")
-  })
-  $(".onmouse_c2").mouseover(function(){
-    $(".onmouse_c2").css("color", "rgb(214, 143, 10)")
-  })
-  $(".onmouse_c2").mouseout(function(){
-    $(".onmouse_c2").css("color", "white")
-  })
-  $(".onmouse_c3").mouseover(function(){
-    $(".onmouse_c3").css("color", "rgb(214, 143, 10)")
-  })
-  $(".onmouse_c3").mouseout(function(){
-    $(".onmouse_c3").css("color", "white")
-  })
-  $(".onmouse_c4").mouseover(function(){
-    $(".onmouse_c4").css("color", "rgb(214, 143, 10)")
-  })
-  $(".onmouse_c4").mouseout(function(){
-    $(".onmouse_c4").css("color", "white")
-  })
-  $(".onmouse_c5").mouseover(function(){
-    $(".onmouse_c5").css("color", "gray")
-  })
-  $(".onmouse_c5").mouseout(function(){
-    $(".onmouse_c5").css("color", "white")
-  })
-  $(".onmouse_c5").mouseover(function(){
-    $(".onmouse_c5").css("color", "gray")
-  })
-  $(".onmouse_c5").mouseout(function(){
-    $(".onmouse_c5").css("color", "white")
-  })
-  $("#more_info").click(function(){
-    $("#cli").fadeToggle(150);
-  })
-
-}) 
-function logout(){
-    if (window.confirm("確定登出？")){
-        window.location.href='/signout';
-    }
-}
 </script>
 <div class="top_bar">
   <div class="tf">

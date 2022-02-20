@@ -1,11 +1,9 @@
-from flask import Flask, redirect, session, render_template, request, url_for, abort, make_response
+from flask import Flask, redirect, session, render_template, request, url_for, abort, make_response, jsonify
 import pymongo, time, os
 import cryptocode
-
 # from flask_bcrypt import Bcrypt
 
 client = pymongo.MongoClient("mongodb+srv://root:root123@realmcluster.rbqar.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
-
 db=client.website
 collection=None
 collection_pwd=db.user
@@ -49,10 +47,11 @@ def acce_required():
     if request.cookies.get("user")=="" or request.cookies.get("user")==None:
         datas["user"]="登入"
         datas["click"]="window.location.href='/login'"
+        datas["state"]="0"
     else:
         datas["user"]=cryptocode.decrypt(request.cookies.get("user"), sect) 
         datas["click"]="logout()"
-    print(datas)
+        datas["state"]="1"
     return datas
 
 @app.before_request
@@ -347,7 +346,10 @@ def display(): # sorting data
                 output_doc["aim"]=data_clus[fram]["aim"]
             except:
                 output_doc["aim"]=""
-            output_doc["yield_now"]=(data_clus[fram][time.strftime('%Y',time.gmtime())]["yield"])
+            try:
+                output_doc["yield_now"]=(data_clus[fram][time.strftime('%Y',time.gmtime())]["yield"])
+            except:
+                pass
             try:
                 if data_clus[fram]["aim"]!="":
                     eps_aim=round(100*(float(data_clus[fram][time.strftime('%Y',time.gmtime())]["dividend"]))/(float(data_clus[fram]["aim"])),2)
@@ -363,6 +365,7 @@ def display(): # sorting data
                 output_clus.append(output_doc)
                 output_doc={}
             fram+=1
+        
         return render_template("display.html", data=output_clus)
     else:
         return redirect("/login")
@@ -554,7 +557,8 @@ def delete():
         print(have)
         if have ==0:
             collection.delete_one({"company":company_del}) 
-    return redirect("/dis")
+    # return redirect("/dis")
+    return jsonify({}) #Ajax
 
 @app.route("/signin", methods=["POST"])
 def signin():
@@ -567,35 +571,15 @@ def signin():
             if i["password"]==pwd:
                 # session["account"]=account
 
-                res=redirect("/")
+                res=jsonify({"issue":0})
                 res.set_cookie("user", cryptocode.encrypt(account, sect), max_age=8000, httponly=True)
                 # res.set_cookie("user", account, max_age=9000)
                 return res
             else:
                 # session["account"]=None
-                return """ 
-                <title>密碼錯誤</title>
-                <h3>密碼錯誤</h3>
-                <p style="color: #0000FF;"> redirecting...</p>
-                <script>
-                    function a(){
-                        window.location.href="/login";
-                    }
-                    window.onload=setTimeout(a, 1600);
-                </script>
-                """
+                return jsonify({"issue":1}) # 密碼錯誤
     # session["account"]=None
-    return """ 
-    <title>無此帳號</title>
-    <h3>無此帳號</h3>
-    <p style="color: #0000FF;"> redirecting...</p>
-    <script>
-        function a(){
-            window.location.href="/login";
-        }
-        window.onload=setTimeout(a, 600);
-    </script>
-    """
+    return jsonify({"issue":2}) # 無帳號
 
 @app.route("/signup", methods=["POST"])
 def signup():
@@ -616,27 +600,9 @@ def signup():
             "account":account,
             "password":pwd
         })
-        return """
-        <title>註冊成功</title>
-        <h1>帳號註冊成功</h1>
-        <script>
-            function a(){
-                window.location.href='/login';
-            }
-            window.onload=setTimeout(a, 600);
-        </script>
-        """
+        return jsonify({"state":1})
     else:
-        return """
-        <title>帳號名稱已被使用</title>
-        <h1>帳號名稱已被使用</h1>
-        <script>
-            function a(){
-                window.location.href='/assign';
-            }
-            window.onload=setTimeout(a, 1800);
-        </script>
-        """
+        return jsonify({"state":0, "rep":account, "n":user_name})
 
 @app.route("/signout")
 def signout():

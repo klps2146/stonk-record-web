@@ -1,23 +1,97 @@
 {%extends "base.html"%}
 
+{%block title%}AFNCO-登入{%endblock%}
+
 {%block login%}
 <button class="login_btn onmouse_c5" onclick="window.location.href='/login'">登入</button>
 {%endblock%}
 
 {%block main%}
+<script>
+//{%if userdata.state=="1"%}
+function to(){
+    window.location.href="/";
+}
+onload=function(){
+    Swal.fire({
+    icon: 'error',
+    title: '請先登出',
+    timer: true,
+    allowEscapeKey: false,
+    allowOutsideClick: false,
+    showLoaderOnConfirm: true,
+    showConfirmButton: false,
+    timer: 1500
+    })
+    window.setTimeout(to, 1250);
+}
+//{%else%}
+$(document).ready(function(){
+    $("form").submit(function(){
+        $SCRIPT_ROOT={{ request.script_root|tojson|safe }};
+        var form_data=new FormData();
+        form_data.append("account", $("#account").val());
+        form_data.append("pwd", $("#pwd").val());
+        $.ajax({
+            type: "POST",
+            url: $SCRIPT_ROOT + "/signin",
+            data: form_data,
+            contentType: false,
+            processData: false,
+            dataType: "json",
+            success: function (datas){
+                if (datas.issue===0){
+                    location.href="/";
+                }
+                if (datas.issue===1){
+                    Swal.fire({
+                        title: "密碼錯誤",
+                        html: "重新輸入密碼",
+                        icon: "error",
+                        timer: true,
+                        timer: 2000,
+                        allowEscapeKey: false,
+                        allowOutsideClick: false,
+                        showLoaderOnConfirm: true,
+                        showConfirmButton: false,
+                    });
+                    document.getElementById("pwd").value="";
+                }
+                else if (datas.issue===2){
+                    Swal.fire({
+                        title: "無此帳號",
+                        html: "重新輸入帳號",
+                        icon: "error",
+                        timer: true,
+                        timer: 2000,
+                        allowEscapeKey: false,
+                        allowOutsideClick: false,
+                        showLoaderOnConfirm: true,
+                        showConfirmButton: false,
+                    });
+                    document.getElementById("pwd").value="";
+                    document.getElementById("account").value="";
+                }
+            }
+        })
+    })
+})
+//{%endif%}
+</script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="{{url_for('static', filename='signin/scricp.js')}}"></script>
 <link rel="stylesheet" href="{{url_for('static', filename='signin/style.css')}}">
 <link rel="stylesheet" href="{{url_for('static', filename='signin/move.css')}}">
 <div class="inner_box">
     <div class="login_p">
-        <form action="/signin" method="POST" onsubmit="return ncp()" class="form">
+        <form action="/signin" method="POST" id="aaa" onsubmit="return false" class="form">
             <div class="icon_div">
                 <img src="{{url_for('static', filename='favicon.ico')}}" class="icon_i" onclick="window.location.href='/'"><br/>
             </div>
             <div><h2>登入</h2></div>
             <div class="data_part">
-                <input type="text" placeholder="帳號" class="ins" id="account" name="account" autocomplete="off" required  pattern="[0-9a-zA-Z]{4,40}"><br/>
-                <input type="password" placeholder="密碼" class="ins" id="pwd" name="pwd" autocomplete="off" required pattern="{8,9999}"><br/>
+                <input type="text" placeholder="帳號" class="ins" id="account" autocomplete="off" required  pattern="[0-9a-zA-Z]{4,40}"><br/>
+                <input type="password" placeholder="密碼" class="ins" id="pwd" autocomplete="off" required pattern="[0-9a-zA-Z]{8,9999}"><br/>
                 <input type="submit" class="send" value="登入">
                 <div><span style="color: rgb(122, 122, 122);">沒有帳號?<span style="color: #3885e9;" onclick="window.location.href='/assign'"><u>註冊</u></span></div>
             </div>

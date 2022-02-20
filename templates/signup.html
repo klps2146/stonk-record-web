@@ -1,16 +1,101 @@
 {%extends "base.html"%}
 
+{%block title%}AFNCO-註冊{%endblock%}
+
 {%block login%}
 <button class="login_btn onmouse_c5" onclick="window.location.href='/login'">登入</button>
 {%endblock%}
 
 {%block main%}
+<script>
+//{%if userdata.state=="1"%}
+function to(){
+    window.location.href="/";
+}
+onload=function(){
+    Swal.fire({
+    icon: 'error',
+    title: '請先登出',
+    timer: true,
+    allowEscapeKey: false,
+    allowOutsideClick: false,
+    showLoaderOnConfirm: true,
+    showConfirmButton: false,
+    timer: 1500
+    })
+    window.setTimeout(to, 1250);
+}
+//{%else%}
+
+$(document).ready(function(){
+    $("form").submit(function(){
+        $SCRIPT_ROOT={{ request.script_root|tojson|safe }};
+        var form_data=new FormData();
+        form_data.append('usn', $("#usn").val());
+        form_data.append('acc', $("#account").val());
+        form_data.append("pwd", $("#pwd").val());
+        $.ajax({
+            type: "POST",
+            url: $SCRIPT_ROOT + "/signup",
+            data: form_data,
+            contentType: false,
+            processData: false,
+            dataType: "json",
+            success: function(data){
+                if(data.state===1){
+                    function esc(){location.href="/login"}
+                    Swal.fire({
+                        title: "註冊成功",
+                        html: "請先<a href='/login'>登入<a/>",
+                        icon: "success",
+                        timer: true,
+                        timer: 2000,
+                        allowEscapeKey: false,
+                        allowOutsideClick: false,
+                        showLoaderOnConfirm: true,
+                        showConfirmButton: false,
+                    })
+                    window.setTimeout(esc, 1900)
+                }
+                else if(data.state===0){
+                    function relo(){
+                        location.reload();
+                        $("#usn").attr("value", sda);
+                    }
+                    var sda=data.n;
+                    Swal.fire({
+                        title: "註冊失敗",
+                        html: "<div style='color: red'>重複的帳號名稱("+data.rep+")</div>",
+                        icon: "warning",
+                        timer: true,
+                        timer: 1000,
+                        allowEscapeKey: false,
+                        allowOutsideClick: false,
+                        showLoaderOnConfirm: true,
+                        showConfirmButton: false,
+                    })
+                    window.setTimeout(relo, 900)
+                }
+            },
+            error: function(data){
+                Swal.fire(
+                    "錯誤",
+                    "參數出錯",
+                    "error"
+                )
+            },
+        });
+    })
+})
+//{%endif%}
+</script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="{{url_for('static', filename='signup/main.js')}}"></script>
 <link rel="stylesheet" href="{{url_for('static', filename='signup/style.css')}}">
 <link rel="stylesheet" href="{{url_for('static', filename='signup/move.css')}}">
 <div class="inner_box"> 
     <div class="login_p">
-      <form action="/signup" method="POST" onsubmit="return chec()">
+        <form action="/signup" onsubmit="return false" id="stn">
             <img src="{{url_for('static', filename='favicon.ico')}}" class="icon_i" onclick="window.location.href='/'"><br/>
             <div><h2 style="margin: 10px;">註冊</h2></div>
             <input type="text" placeholder="使用者名稱" class="ins" id="usn" name="usn" autocomplete="off" required><br/>
@@ -21,7 +106,7 @@
             <div style="margin: 6px;"><input type="checkbox" name="term" id="term">我以詳閱並同意<a href="/term" target="_blank">服務條款</a></div>
             <input class="submit" id="submit" type="submit" value="註冊">
             <div><span style="color: rgb(122, 122, 122); font-size: 14px;">已有帳號?<span style="color: #3885e9;" onclick="window.location.href='/login'"><u>登入</u></span></div>
-      </form>
+        </form>
     </div> 
 </div>
 {%endblock%}

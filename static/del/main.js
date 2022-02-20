@@ -31,3 +31,45 @@ function sub(){
     return false;
 }
 }
+
+function fc() {
+    $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+    var form_data = new FormData();
+    form_data.append('company', $("#cy").val());
+    form_data.append('year', $("#yr").val());
+    form_data.append("company_del", "");
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+        }).then(function(result){
+        if (result.isConfirmed) {
+            $.ajax({
+                type: "POST",
+                url: $SCRIPT_ROOT + "/del",
+                data: form_data,
+                contentType: false,
+                processData: false,
+                dataType: "json",
+                success: function(data){
+                    Swal.fire(
+                        'Deleted!',
+                        'Your file has been deleted.',
+                        'success'
+                    )
+                },
+                error: function(data){
+                    Swal.fire(
+                        "Error",
+                        "Couldn't find the targeted company and the year.",
+                        "error"
+                    )
+                }
+            })
+        };
+    })
+}
