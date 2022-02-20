@@ -17,9 +17,20 @@ window.onload=function(){
     // }   
 }
 function logout(){
-    if (window.confirm("確定登出？")){
-        window.location.href='/signout';
+  Swal.fire({
+    title: '登出?',
+    text: "需要重新登入",
+    icon: 'question',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: '登出',
+    cancelButtonText: "取消",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      location.href="/signout";
     }
+  })
 }
 $(document).ready(function(){
     // $("#cli").hide();
