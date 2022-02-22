@@ -1,6 +1,6 @@
 from flask import Flask, redirect, session, render_template, request, url_for, abort, make_response, jsonify
 import pymongo, time, os
-import cryptocode
+import cryptocode, webget
 # from flask_bcrypt import Bcrypt
 
 client = pymongo.MongoClient("mongodb+srv://root:root123@realmcluster.rbqar.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
@@ -14,7 +14,6 @@ app.config["SESSION_COOKIE_NAME"]="dnjnf2y%24"
 sect="hujhnjvsk76879679oyHUKJBDGUYVH786876%R^$#%$#$^&YTGHDt78%D^(&Tygvukj"
 # app.permanent_session_lifetime=datetime.timedelta(seconds=1*60)
 # session.permanent=True
-
 def clearfnc():
     session.pop("account")
     res=redirect("/login")
@@ -102,6 +101,10 @@ def deletf():
         return render_template("del.html", userdata=acce_required())
     else:
         return redirect("/login")
+
+@app.route("/update_db")
+def upd():
+    pass
 
 @app.route("/") # main
 def indexdd():
@@ -525,15 +528,25 @@ def delete():
     # collection=db[f"users_{session['account']}"]
     sp=cryptocode.decrypt(request.cookies.get("user"), sect) 
     collection=db[f"users_{sp}"]
+
     try:
         company=request.form["company"]
         year=request.form["year"]
-    except:
-        pass
-    try:
         company_del=request.form["company_del"]
     except:
         pass
+    datas=collection.find()
+    get_one=0
+    year_che=0
+    for i in datas:
+        if i["company"]==company or i["company"]==company_del:
+            get_one+=1
+            for f in i:
+                if f!="_id" and f!="company" and f!="date" and f!="guess" and f!="share" and f!="yield_now" and f!="aim" and f!="l_aim" and f != "l_add" and f!="r_add":
+                    if f==year:
+                        year_che+=1
+    if get_one!=1 or year_che<1:
+        return jsonify({"sta":0})
     if company_del=="":
         try:
             collection.update_one({
@@ -542,23 +555,26 @@ def delete():
                 year:1,
             }})
         except:
-            return render_template("error.html")
+            return jsonify({"sta":0})
     elif company_del!="":
         try:
             collection.delete_one({"company":company_del})
         except:
-            return render_template("error.html")
-    datas=collection.find()
+            return jsonify({"sta":0})
+    
+    ## 資料為空時刪除
     have=0
     for i in datas:
         for f in i:
             if f!="_id" and f!="company" and f!="date" and f!="guess" and f!="share" and f!="yield_now" and f!="aim" and f!="l_aim" and f != "l_add" and f!="r_add":
                 have+=1
+                print(have)
+
         print(have)
         if have ==0:
             collection.delete_one({"company":company_del}) 
     # return redirect("/dis")
-    return jsonify({}) #Ajax
+    return jsonify({"sta":1}) #Ajax
 
 @app.route("/signin", methods=["POST"])
 def signin():

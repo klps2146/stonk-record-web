@@ -99,11 +99,11 @@ $(document).ready(function(){
             <img src="{{url_for('static', filename='favicon.ico')}}" class="icon_i" onclick="window.location.href='/'"><br/>
             <div><h2 style="margin: 10px;">註冊</h2></div>
             <input type="text" placeholder="使用者名稱" class="ins" id="usn" name="usn" autocomplete="off" required><br/>
-            <input type="text" style="margin-bottom: 2px; margin-top: 4px;" placeholder="帳號名稱" class="ins" id="account" name="acc" autocomplete="off" required pattern="[0-9a-zA-Z]{4,40}"><br/>
+            <input type="text" style="margin-bottom: 2px; margin-top: 8px;" placeholder="帳號名稱" class="ins" id="account" name="acc" autocomplete="off" required pattern="[0-9a-zA-Z]{4,40}"><br/>
 	        <div id="pwd_ms" class="caution">請使用4~40個字元的帳號(不含特殊符號)</div>
-            <input type="password" style="margin-bottom: 2px; margin-top: 2px;" placeholder="設定密碼" class="ins" id="pwd" name="pwd" autocomplete="off" required pattern="[0-9a-zA-Z]{8,80}"><br/>
+            <input type="password" style="margin-bottom: 2px; margin-top: 18px;" placeholder="設定密碼" class="ins" id="pwd" name="pwd" autocomplete="off" required pattern="[0-9a-zA-Z]{8,80}"><br/>
             <div id="pwd_m" class="caution">請使用8~80個字元的密碼(不含特殊符號)</div>
-            <div style="margin: 6px;"><input type="checkbox" name="term" id="term">我以詳閱並同意<a href="/term" target="_blank">服務條款</a></div>
+            <div style="margin: 8px;"><input type="checkbox" name="term" id="term">我以詳閱並同意<a href="/term" target="_blank">服務條款</a></div>
             <input class="submit" id="submit" type="submit" value="註冊">
             <div><span style="color: rgb(122, 122, 122); font-size: 14px;">已有帳號?<span style="color: #3885e9;" onclick="window.location.href='/login'"><u>登入</u></span></div>
         </form>

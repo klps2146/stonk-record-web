@@ -62,8 +62,7 @@ body{
 
 .top_href{
     flex: none;
-    margin-left: 4;
-    margin-right: 4;
+    margin: 4px;
 }
 
 .top_bar_btn{

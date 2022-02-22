@@ -6,19 +6,82 @@
 <button class="login_btn onmouse_c5" onclick="{{userdata.click}}">{{userdata.user}}</button>
 {%endblock%}
 
+{%block spr%}
+<div class="ms">
+    <select class="select" id="fcv">
+        <option class="fvv cg1" value="1">年分</option>
+        <option class="fvv cg2" value="2">公司</option>
+    </select>
+</div>
+{%endblock%}
+
 {%block main%}
+<script>
+$(document).ready(function(){
+    $("#spc").submit(function(){
+        $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+        var form_data = new FormData();
+        form_data.append('company', $("#cy").val());
+        form_data.append('year', $("#yr").val());
+        form_data.append("company_del", "");
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+            }).then(function(result){
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: "POST",
+                    url: $SCRIPT_ROOT + "/del",
+                    data: form_data,
+                    contentType: false,
+                    processData: false,
+                    dataType: "json",
+                    success: function(data){
+                        if (data.sta===1){
+                            Swal.fire(
+                                'Deleted!',
+                                'Your file has been deleted.',
+                                'success'
+                            )
+                        }
+                        else if (data.sta===0){
+                            Swal.fire(
+                                "Error",
+                                "Couldn't find the targeted company and the year.",
+                                "error"
+                            )
+                        }
+                    },
+                    error: function(data){
+                        Swal.fire(
+                            "Error",
+                            "Couldn't find the targeted company and the year.",
+                            "error"
+                        )
+                    }
+                })
+            };
+        })
+    })
+})
+</script>
 <script src="{{url_for('static', filename='del/main.js')}}"></script>
 <link rel="stylesheet" href="{{url_for('static', filename='del/style.css')}}">
 <link rel="stylesheet" href="{{url_for('static', filename='del/move.css')}}">
-<script>
-</script>
+
     <h4>刪除公司中的某年分</h4>
     刪除公司之名稱<br>
-    <input name="company" placeholder="公司名稱" id="cy"><br/>
+<form action="/del" onsubmit="return false" id="spc">
+    <input name="company" placeholder="公司名稱" id="cy" required><br/>
     刪除資料年分<br/>
-    <input name="year" placeholder="年分" id="yr"><br/>
-    <button type="button" id="spc" onclick="fc()">刪除</button>
-
+    <input name="year" placeholder="年分" id="yr" required><br/>
+    <input type="submit" value="刪除">
+</form>
 
 <!-- </form>
     <form action="/del" method="POST" onsubmit="return checkr();">
