@@ -1,4 +1,2 @@
-User-agent: Googlebot
-User-agent: AdsBot-Google
-User-agent: *
-Disallow: /signup
+User-agent:
+Disallow:
