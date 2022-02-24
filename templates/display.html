@@ -6,6 +6,10 @@
 <button class="login_btn onmouse_c5" onclick="{{data.click}}">{{data.user}}</button>
 {%endblock%}
 
+{%block spr%}
+
+{%endblock%}
+
 {%block main%}
 <script>
 $(document).ready(function(){
@@ -26,10 +30,10 @@ $(document).ready(function(){
     $(".onmouse_c5").css("color", "white")
   })
   //{%for i in data%}
-  $(".{{i['company']}}").hide();
+  $(".{{i['company']}}").css("display", "none");
   $(".{{i['company']}}_click").click(function(){
     if ($(".{{i['company']}}_cfm").is(":hidden")){
-      $(".{{i['company']}}").show(160);
+      $(".{{i['company']}}").show(10);
       // alert($(".{{i['company']}}_fa").value)
       // if (parseInt($("#{{i['company']}}_fa").value) < parseInt(date)-1){
         //  $(".{{i['company']}}_{{f}}_s").hide();
@@ -37,7 +41,7 @@ $(document).ready(function(){
       // }
     }
     else{
-      $(".{{i['company']}}").hide(160);
+      $(".{{i['company']}}").hide(10);
     }
   })
   //{%endfor%}
@@ -80,10 +84,10 @@ $(document).ready(function(){
               <script>
                 $(document).ready(function(){
                   $(".{{i['company']}}_click").click(function(){
-                    $(".{{i['company']}}_{{f}}_s").hide(160);
+                    $(".{{i['company']}}_{{f}}_s").hide(1);
                   });
                   $(".{{i['company']}}_{{f}}_n").click(function(){
-                    $(".{{i['company']}}_{{f}}_s").toggle(160);
+                    $(".{{i['company']}}_{{f}}_s").toggle(1);
                   })
                 })
               </script>
