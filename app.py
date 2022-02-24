@@ -545,7 +545,7 @@ def delete():
                 if f!="_id" and f!="company" and f!="date" and f!="guess" and f!="share" and f!="yield_now" and f!="aim" and f!="l_aim" and f != "l_add" and f!="r_add":
                     if f==year:
                         year_che+=1
-    if get_one!=1 or year_che<1:
+    if get_one!=1 or year_che<1: #exi
         return jsonify({"sta":0})
     if company_del=="":
         try:
@@ -565,12 +565,10 @@ def delete():
     ## 資料為空時刪除
     have=0
     for i in datas:
+        print(i)
         for f in i:
             if f!="_id" and f!="company" and f!="date" and f!="guess" and f!="share" and f!="yield_now" and f!="aim" and f!="l_aim" and f != "l_add" and f!="r_add":
                 have+=1
-                print(have)
-
-        print(have)
         if have ==0:
             collection.delete_one({"company":company_del}) 
     # return redirect("/dis")
