@@ -3,3 +3,4 @@ window.onload=function(){
     date=Today.getFullYear()+"/"+(Today.getMonth()+1)+"/"+Today.getDate();
     document.getElementById("date").value=date;
 }
+
