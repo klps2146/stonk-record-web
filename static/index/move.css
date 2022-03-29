@@ -2,4 +2,7 @@
     .nav, .nava{
         display: none;
     }
+    .game{
+        margin-top: 50px;
+    }
 }

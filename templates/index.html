@@ -7,6 +7,133 @@
 {%endblock%}
 
 {%block main%}
+<style>
+.game{
+    width: 130px;
+    height: 130px;
+    margin: 0px;
+    bottom: 30px;
+    position: absolute;
+
+}
+</style>
+<style>
+    .board{
+        width: 120px;
+        height: 120px;
+        margin: auto;
+        border: 5PX solid #000000;
+        border-radius: 5px;
+        position: relative;
+    }
+    .board>.cell{
+        box-sizing: border-box;
+        width: 40px;
+        height: 40px;
+        line-height: 40px;
+        font-size: 20px;
+        border: 1px solid #000000;
+        cursor: pointer;
+        display: inline-block;
+        vertical-align: middle;
+        text-align: center;
+    }
+    .board>.line{
+        height: 120px;
+        width: 120px;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+    </style>
+    <script type="text/babel">
+    class Cell extends React.Component{
+        constructor(props){
+            super(props);
+        }
+        render(){
+            let text="";
+            if (this.props.mark==0){
+                text="O";
+            }
+            else if (this.props.mark==1){
+                text="X";
+            }
+            return <div className="cell" onClick={this.clickHandler.bind(this)}>{text}</div>
+        }
+        clickHandler(e){ 
+            this.props.update(this.props.index);
+        }
+    }
+    class Line extends React.Component{
+        render(){
+            let startX=this.props.startLine%3;
+            let startY=Math.floor(this.props.startLine/3)
+            let endX=this.props.endLine%3;
+            let endY=Math.floor(this.props.endLine/3);
+            return <svg className="line"><line x1={startX*100+50} y1={startY*100+50} x2={endX*100+50} y2={endY*100+50} stroke="red" strokeWidth="6"></line></svg>
+                    
+        }
+    }
+    class Board extends React.Component{
+        constructor(props){
+            super(props);
+            this.state={
+                circle: 0,
+                marks: [-1, -1, -1, -1, -1, -1, -1, -1, -1],
+                winner: null,
+            }
+        }
+        render(){
+            let cells=[];
+            for (let i=0; i<this.state.marks.length; i++){
+                cells.push(<Cell mark={this.state.marks[i]} index={i} update={this.updateMark.bind(this)}/>);
+            }
+            if (this.state.winner!=null){
+                cells.push(<Line startLine={this.state.winner.lineStart} endLine={this.state.winner.lineEnd}/>);
+            }
+            return <div className="board">{cells}</div>
+        }
+        updateMark(index){
+            let currentMark=this.state.marks[index];
+            if (currentMark===-1 && this.state.winner===null){
+                this.setState((preState)=>{
+                    let mark=preState.circle%2;
+                    preState.marks[index]=mark;
+                    let win=this.checkWinner(preState.marks);
+                    return {
+                        circle: preState.circle+=1,
+                        marks: preState.marks,
+                        winner: win
+                    }
+                })
+            }
+        }
+        checkWinner(marks){
+            for (let i=0; i<3; i++){
+                if (marks[3*i]===marks[3*i+1]&&marks[3*i]===marks[3*i+2]&&marks[3*i+1]===marks[3*i+2]&&marks[3*i]!=-1){
+                    return {tagName: marks[3*i], lineStart: i*3, lineEnd: i*3+2};
+                }
+            }
+            for (let i=0; i<3; i++){
+                if (marks[i]===marks[i+3]&&marks[i]===marks[i+6]&&marks[i+3]===marks[i+6]&&marks[i]!=-1){
+                    return {tagName: marks[3*i], lineStart: i, lineEnd: i+6};
+                }
+            }
+            if (marks[0]===marks[4]&&marks[0]===marks[8]&&marks[4]===marks[8]&&marks[0]!=-1){
+                return {tagName: marks[0], lineStart: 0, lineEnd: 8};
+            }
+            if (marks[2]===marks[4]&&marks[2]===marks[6]&&marks[4]===marks[6]&&marks[2]!=-1){
+                return {tagName: marks[2], lineStart: 2, lineEnd: 6};
+            }
+    
+            return null;
+        }
+    }
+    window.addEventListener("load", ()=>{
+        ReactDOM.render(<Board/>, document.getElementById("game_part"));
+    })
+    </script>
 <script src="{{url_for('static', filename='index/main.js')}}"></script>
 <link rel="stylesheet" href="{{url_for('static', filename='index/style.css')}}">
 <link rel="stylesheet" href="{{url_for('static', filename='index/move.css')}}">
@@ -16,8 +143,10 @@
         <h3><strong>導覽</strong></h3>
             <div class="nav_in">供測試帳號密碼</div>
             <div class="nav_in">更新資訊</div>
-            <div class="nav_in"></div>
+            <div class="nav_in" onclick="window.location.href='/little_game_1_had'">遊戲</div>
         </div>
+    <div class="game" id="game_part">
+    </div>
     </div>
     <div class="nava"></div>
     <div class="indc_outer_box">

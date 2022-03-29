@@ -1,0 +1,128 @@
+<html>
+<head>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script crossorigin src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
+<style>
+.board{
+    width: 300px;
+    height: 300px;
+    margin: 50PX auto;
+    border: 5PX solid #000000;
+    border-radius: 10px;
+    position: relative;
+}
+.board>.cell{
+    box-sizing: border-box;
+    width: 100px;
+    height: 100px;
+    line-height: 100px; /*垂直致中 (height = line-hight)*/
+    font-size: 50px;
+    border: 1px solid #000000;
+    cursor: pointer;
+    display: inline-block; /*使框框並排(和下方屬性)*/
+    vertical-align: middle;
+    text-align: center;
+}
+.board>.line{
+    height: 300px;
+    height: 300px;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+</style>
+<script type="text/babel">
+class Cell extends React.Component{ // 遊戲框框組件
+    constructor(props){
+        super(props);
+    }
+    render(){
+        let text="";
+        if (this.props.mark==0){
+            text="O";
+        }
+        else if (this.props.mark==1){
+            text="X";
+        }
+        return <div className="cell" onClick={this.clickHandler.bind(this)}>{text}</div>
+    }
+    clickHandler(e){ 
+        this.props.update(this.props.index); // 對應建立時的update
+    }
+}
+class Line extends React.Component{
+    render(){
+        let startX=this.props.startLine%3;
+        let startY=Math.floor(this.props.startLine/3)
+        let endX=this.props.endLine%3;
+        let endY=Math.floor(this.props.endLine/3);
+        return <svg className="line"><line x1={startX*100+50} y1={startY*100+50} x2={endX*100+50} y2={endY*100+50} stroke="red" strokeWidth="6"></line></svg>;
+    }
+}
+class Board extends React.Component{
+    constructor(props){
+        super(props);
+        /* Array 編號(序列)
+            0 1 2
+            3 4 5
+            6 7 8   */
+        this.state={
+            circle: 0, // 回合
+            marks: [-1, -1, -1, -1, -1, -1, -1, -1, -1], // -1空 0圈 1叉
+            winner: null,
+        }
+    }
+    render(){
+        let cells=[];
+        for (let i=0; i<this.state.marks.length; i++){
+            cells.push(<Cell mark={this.state.marks[i]} index={i} update={this.updateMark.bind(this)}/>);
+        }
+        if (this.state.winner!=null){
+            cells.push(<Line startLine={this.state.winner.lineStart} endLine={this.state.winner.lineEnd}/>);
+        }
+        return <div className="board">{cells}</div>
+    }
+    updateMark(index){
+        let currentMark=this.state.marks[index];
+        if (currentMark===-1 && this.state.winner===null){
+            this.setState((preState)=>{
+                let mark=preState.circle%2;
+                preState.marks[index]=mark;
+                let win=this.checkWinner(preState.marks);
+                return { // 資料更新
+                    circle: preState.circle+=1,
+                    marks: preState.marks,
+                    winner: win
+                }
+            })
+        }
+    }
+    checkWinner(marks){
+        // 橫向 (3X)
+        for (let i=0; i<3; i++){
+            if (marks[3*i]===marks[3*i+1]&&marks[3*i]===marks[3*i+2]&&marks[3*i+1]===marks[3*i+2]&&marks[3*i]!=-1){
+                return {tagName: marks[3*i], lineStart: i*3, lineEnd: i*3+2};
+            }
+        }
+        // 直向 (3X)
+        for (let i=0; i<3; i++){
+            if (marks[i]===marks[i+3]&&marks[i]===marks[i+6]&&marks[i+3]===marks[i+6]&&marks[i]!=-1){
+                return {tagName: marks[3*i], lineStart: i, lineEnd: i+6};
+            }
+        }
+        // 斜向 (2X)
+        if (marks[0]===marks[4]&&marks[0]===marks[8]&&marks[4]===marks[8]&&marks[0]!=-1){
+            return {tagName: marks[0], lineStart: 0, lineEnd: 8};
+        }
+        if (marks[2]===marks[4]&&marks[2]===marks[6]&&marks[4]===marks[6]&&marks[2]!=-1){
+            return {tagName: marks[2], lineStart: 2, lineEnd: 6};
+        }
+
+        return null;
+    }
+}
+window.addEventListener("load", ()=>{
+    ReactDOM.render(<Board/>, document.body)
+})
+</script>

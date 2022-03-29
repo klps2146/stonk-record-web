@@ -1,3 +1,4 @@
+from pydoc import render_doc
 from flask import Flask, redirect, session, render_template, request, url_for, abort, make_response, jsonify
 import pymongo, time, os
 import cryptocode, webget
@@ -624,3 +625,65 @@ def signout():
     res.set_cookie("user","")
     return res
 
+@app.route("/dis_new")
+def dis_new():
+    return render_template("dis_aja.html")
+
+@app.route("/dis_ajx")
+def display_ajx(): # sorting data
+    if state_check_bool():
+        # collection=db[f"users_{session['account']}"]
+        sp=cryptocode.decrypt(request.cookies.get("user"), sect) 
+        collection=db[f"users_{sp}"]
+        datas=collection.find()
+        data_clus=[]
+        year_clus={}
+        year_doc=[]
+        company_clus=[]
+        output_doc={}
+        output_clus=[]
+        for i in datas:
+            data_clus.append(i)
+            for f in i:
+                if f=="company":
+                    company_clus.append(i["company"])
+                if f!="_id" and f!="company" and f!="date" and f!="guess" and f!="share" and f!="yield_now" and f!="aim" and f!="l_aim" and f != "l_add" and f!="r_add":
+                    year_doc.append(f)
+            else:
+                year_clus[i["company"]]=map(str,(sorted(list(map(int, year_doc)))))
+                year_doc=[]
+        fram=0
+        for company_n in year_clus:
+            output_doc["company"]=company_n
+            output_doc["date"]=data_clus[fram]["date"]
+            output_doc["share"]=data_clus[fram]["share"]
+            try:
+                output_doc["aim"]=data_clus[fram]["aim"]
+            except:
+                output_doc["aim"]=""
+            try:
+                output_doc["yield_now"]=(data_clus[fram][time.strftime('%Y',time.gmtime())]["yield"])
+            except:
+                pass
+            try:
+                if data_clus[fram]["aim"]!="":
+                    eps_aim=round(100*(float(data_clus[fram][time.strftime('%Y',time.gmtime())]["dividend"]))/(float(data_clus[fram]["aim"])),2)
+                    output_doc["l_aim"]=eps_aim
+                    eps_add=eps_aim-float(data_clus[fram]["share"])
+                    output_doc["l_add"]=round(eps_add,2)
+                    output_doc["r_add"]=round(100*eps_add/float(data_clus[fram]["share"]),2)
+            except:
+                pass
+            for year_ in year_clus[company_n]:
+                output_doc[year_]=data_clus[fram][str(year_)]
+            else:
+                output_clus.append(output_doc)
+                output_doc={}
+            fram+=1
+        return jsonify(output_clus)
+    else:
+        return "None session found"
+
+@app.route("/little_game_1_had")
+def game1():
+    return render_template("ltg-01-cprt.html")
