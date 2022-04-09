@@ -630,7 +630,7 @@ def dis_new():
         sp=cryptocode.decrypt(request.cookies.get("user"), sect) 
         collection=db[f"users_{sp}"]
         datas=collection.find()
-        amount=None
+        amount=0
         for i in datas:
             amount+=1
         return render_template("dis_aja.html", times=amount)
