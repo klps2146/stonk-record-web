@@ -1,0 +1,26 @@
+@media (max-width:620px){
+    .each_table{
+        width: 100%;
+    }
+    table{
+        width: 100%;
+    }
+    .tr, td, th{
+        width: 20%;
+    }
+    .table_in{
+        width: 20%;
+    }
+    .container{
+        width: 100%;
+    }
+    .function_form{
+        width: 90px;
+    }
+    .title{
+        width: 20%;
+    }
+    .hide{
+        /* display: none; */
+    }
+}

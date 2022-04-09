@@ -1,7 +1,7 @@
-from pydoc import render_doc
-from flask import Flask, redirect, session, render_template, request, url_for, abort, make_response, jsonify
+from datetime import date
+from flask import Flask, redirect, session, render_template, request, url_for, abort, make_response, jsonify, make_response
 import pymongo, time, os
-import cryptocode, webget
+import cryptocode
 # from flask_bcrypt import Bcrypt
 
 client = pymongo.MongoClient("mongodb+srv://root:root123@realmcluster.rbqar.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
@@ -627,11 +627,18 @@ def signout():
 
 @app.route("/dis_new")
 def dis_new():
-    return render_template("dis_aja.html")
+    if state_check_bool():
+        sp=cryptocode.decrypt(request.cookies.get("user"), sect) 
+        collection=db[f"users_{sp}"]
+        amount=collection.find().count()
+        return render_template("dis_aja.html", times=amount)
+    else:
+        return redirect("/login")
 
-@app.route("/dis_ajx")
+@app.route("/dis_ajx", methods=["POST"])
 def display_ajx(): # sorting data
     if state_check_bool():
+        times=int(request.form.get("tmc"))
         # collection=db[f"users_{session['account']}"]
         sp=cryptocode.decrypt(request.cookies.get("user"), sect) 
         collection=db[f"users_{sp}"]
@@ -680,10 +687,90 @@ def display_ajx(): # sorting data
                 output_clus.append(output_doc)
                 output_doc={}
             fram+=1
-        return jsonify(output_clus)
+        
+        return jsonify(output_clus[times])
     else:
         return "None session found"
 
 @app.route("/little_game_1_had")
 def game1():
     return render_template("ltg-01-cprt.html")
+
+@app.route("/dis_new2faddfncoeew")
+def nd2():
+    return render_template("dis_new.html")
+
+@app.route("/ajaxUpdate", methods=["POST"])
+def procUni():
+    if state_check_bool():
+        # collection=db[f"users_{session['account']}"]
+        sp=cryptocode.decrypt(request.cookies.get("user"), sect) 
+        collection=db[f"users_{sp}"]
+        state=int(request.form.get("state"))
+        companySelector=request.form.get("company")
+        shareNew=float(request.form.get("share"))
+        aimNew=(request.form.get("aim"))
+        dates=request.form.get("date")
+        detail_list_string=request.form.get("detail")
+        yearly_data=detail_list_string.split("/")
+        yearly_data.remove("")
+        for i in yearly_data:
+            datas=list(map(float, i.split("_"))) # datas索引設計一覽 0: 年分 // 1-4or12: Q1-Q4orM1-M12 // 5or13: 配息
+            if state==1:
+                ey=datas[1]+datas[2]+datas[3]+datas[4]+datas[5]+datas[6]+datas[7]+datas[8]+datas[9]+datas[10]+datas[11]+datas[12]
+                collection.update_one({
+                    "company":companySelector
+                },{
+                    "$set":{
+                        "share":shareNew,
+                        "date":dates,
+                        "aim":aimNew,
+                        str(int(datas[0])):{
+                            "EPS_year":round(ey, 2),
+                            "EPS_m_1":round(datas[1], 2),
+                            "EPS_m_2":round(datas[2], 2),
+                            "EPS_m_3":round(datas[3], 2),
+                            "EPS_m_4":round(datas[4], 2),
+                            "EPS_m_5":round(datas[5], 2),
+                            "EPS_m_6":round(datas[6], 2),
+                            "EPS_m_7":round(datas[7], 2),
+                            "EPS_m_8":round(datas[8], 2),
+                            "EPS_m_9":round(datas[9], 2),
+                            "EPS_m_10":round(datas[10], 2),
+                            "EPS_m_11":round(datas[11], 2),
+                            "EPS_m_12":round(datas[12], 2),
+                            "EPS_Q1":"",
+                            "dividend_rate":round((100*datas[13]/ey), 2),
+                            "dividend":round(datas[13], 2),
+                            "yield":round(100*datas[13]/shareNew, 2),
+                        }
+                    }
+                })
+            else:
+                if state==0:
+                    collection.update_one({
+                        "company":companySelector
+                    },{
+                        "$set":{
+                            "date":dates,
+                            "share":round(shareNew,2),
+                            "aim":(aimNew),
+                            str(int(datas[0])):{ 
+                                "EPS_year":round((datas[1]+datas[2]+datas[3]+datas[4]), 2),
+                                "EPS_m_1":"",
+                                "EPS_Q1":round(datas[1], 2),
+                                "EPS_Q2":round(datas[2], 2),
+                                "EPS_Q3":round(datas[3], 2),
+                                "EPS_Q4":round(datas[4], 2),
+                                "dividend_rate":round(100*datas[5]/(datas[1]+datas[2]+datas[3]+datas[4]), 2),
+                                "dividend":round(datas[5], 2),
+                                "yield":round(100*(datas[5]/shareNew), 2),
+                            }
+                        }
+                    })
+        return jsonify(dates)
+    else:
+        return ""
+
+
+app.run()
