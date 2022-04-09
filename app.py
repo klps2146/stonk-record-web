@@ -629,7 +629,10 @@ def dis_new():
     if state_check_bool():
         sp=cryptocode.decrypt(request.cookies.get("user"), sect) 
         collection=db[f"users_{sp}"]
-        amount=6#collection.find().count()
+        datas=collection.find()
+        amount=None
+        for i in datas:
+            amount+=1
         return render_template("dis_aja.html", times=amount)
     else:
         return redirect("/login")
