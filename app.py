@@ -1,4 +1,3 @@
-from datetime import date
 from flask import Flask, redirect, session, render_template, request, url_for, abort, make_response, jsonify, make_response
 import pymongo, time, os
 import cryptocode
@@ -771,6 +770,3 @@ def procUni():
         return jsonify(dates)
     else:
         return ""
-
-
-app.run()
