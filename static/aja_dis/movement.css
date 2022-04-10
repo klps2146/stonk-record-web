@@ -23,4 +23,12 @@
     .hide{
         /* display: none; */
     }
+    .remove_each{
+        margin-left: 3px;
+    }
+}
+@media (max-width:410px){
+    .remove_each{
+        display: none;
+    }
 }

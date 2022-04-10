@@ -3,19 +3,23 @@
 {%block title%}資料一覽{%endblock%}
 
 {%block login%}
-<button class="login_btn onmouse_c5"></button>
+<button class="login_btn onmouse_c5" onclick="{{userdata.click}}">{{userdata.user}}</button>
 {%endblock%}
 
 {%block spr%}
 <button onclick="click_change_tmg()" id="cfn">展開</button>
-<button onclick="window.location.href='/dis'">穩定版</button>
+<button onclick="window.location.href='/dis'">舊版</button>
 {%endblock%}
 
 {%block head%}
 <link rel="stylesheet" href="{{url_for('static', filename='aja_dis/style_dp.css')}}">
 <link rel="stylesheet" href="{{url_for('static', filename='aja_dis/movement.css')}}">
 <script src="{{url_for('static', filename='aja_dis/fuc.js')}}"></script>
-<!-- <script type="text/babel">
+
+
+<!-- React -->
+
+<script type="text/babel">
 var final_put=[];
 var updater=[];
 
@@ -45,8 +49,54 @@ function contect(){
                     render(){
                         return <tr>
                                 <th onClick={this.clickHandler.bind(this)} className="cpname" colspan="4">{datas["company"]} ({datas["date"]})</th>
-                                <th className="function_form"><input className="updateing_each" type="submit" value="更新"/></th>
+                                <th className="function_form">
+                                <div className="flexBoxer">
+                                    <input className="updateing_each" type="submit" value="更新"/>
+                                    <div className="remove_each" onClick={this.removeHandler.bind(this)}>刪除</div>
+                                </div>
+                                </th>
                             </tr>;
+                    }
+                    removeHandler(e){
+                        let rmv=new FormData()
+                        rmv.append("remove_compnay_name", datas["company"])
+                        Swal.fire({
+                            title: '刪除<span style="color:red">所有</span>資料',
+                            text: "「所也資料」將無法復原",
+                            icon: 'question',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: '刪除',
+                            cancelButtonText: "取消",
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                $.ajax({
+                                    type: "POST",
+                                    processData: false,
+                                    contentType: false,
+                                    data: rmv,
+                                    url: "/remove_ajax",
+                                    success: (datas)=>{
+                                        document.getElementById(datas["disappear_item"]).remove();
+                                        const Toast = Swal.mixin({
+                                            toast: true,
+                                            position: 'top-end',
+                                            showConfirmButton: false,
+                                            timer: 1000,
+                                            timerProgressBar: true,
+                                        })
+                                        Toast.fire({
+                                            icon: 'success',
+                                            title: '資料刪除成功',
+                                            width: '230px',
+                                            background: "#d7ffd7d1",
+                                        })
+                                    }
+                                })
+                            }
+                        })
+
                     }
                     clickHandler(){
                         if ($(".analyze_"+datas["company"]).css("display")=="none"){ // warning css selector point at
@@ -104,6 +154,7 @@ function contect(){
                             }
                             dividendTextChangingHandler(e){
                                 this.setState({dividend:e.currentTarget.value});
+                                
                             }
                             yearClickHandler(e){
                                 if ($(".Q_"+datas["company"]+"_"+year_clus[i]).css("display")=="none"){
@@ -181,8 +232,6 @@ function contect(){
                         }
                     }
                 } // year clus loop ending
-
-
 
                 class Analyze extends React.Component{
                     render(){
@@ -310,9 +359,40 @@ function contect(){
                             data: updateData,
                             url: "/ajaxUpdate",
                             success: (datas)=>{
-                                final_put=[];
-                                updater=[];
-                                contect();
+                                // final_put=[];
+                                // updater=[];
+                                // contect();
+                                const Toast = Swal.mixin({
+                                    toast: true,
+                                    position: 'top-end',
+                                    showConfirmButton: false,
+                                    timer: 1000,
+                                    timerProgressBar: true,
+                                })
+                                Toast.fire({
+                                    icon: 'success',
+                                    title: '資料更新成功',
+                                    width: '230px',
+                                    background: "#d7ffd7d1",
+                                })
+                            },
+                            error: (datas)=>{
+                                const Toast = Swal.mixin({
+                                    toast: true,
+                                    position: 'top-end',
+                                    showConfirmButton: false,
+                                    timer: 1000,
+                                    timerProgressBar: true,
+                                    didOpen: (toast) => {
+                                        toast.addEventListener('mouseenter', Swal.stopTimer)
+                                        toast.addEventListener('mouseleave', Swal.resumeTimer)
+                                    }
+                                })
+                                Toast.fire({
+                                    icon: 'error',
+                                    title: '資料更新失敗 '+datas,
+                                    width: "230px",
+                                })
                             }
                         })
                     }
@@ -329,11 +409,11 @@ function contect(){
         
     }
 }
-</script> -->
+</script>
 
+<!--=============================================================A EDITOR================================================================================================-->
 
-<script>
-"use strict";
+<!-- <script>
 
 var final_put = [];
 var updater = [];
@@ -861,7 +941,7 @@ function contect() {
     });
   }
 }
-</script>
+</script> -->
 {%endblock%}
 
 {%block main%}  

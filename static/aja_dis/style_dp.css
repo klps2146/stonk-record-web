@@ -30,20 +30,30 @@ table{
     height: 34px;
     border-radius: 17px;
     background-color: #d7ffd7;
-    color: #7a7a7a;
+    color: #2c2c2c;
     border: 0px;
     text-align: center;
     padding: 0;
 }
 .remove_each{
+    margin-right: 0;
+    margin-left: 14px;
     width: 34px;
     height: 34px;
     border-radius: 17px;
     background-color: #ffd7d7;
-    color: #7a7a7a;
+    color: #2c2c2c;
     border: 0px;
     text-align: center;
     padding: 0;
+    font-size: 14px;
+    line-height: 34px;
+    font-weight: 200;
+}
+.flexBoxer{
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 .static{
     background-color: #d3e2ff;

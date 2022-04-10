@@ -20,6 +20,7 @@ def clearfnc():
     res.delete_cookie("user")
     return res
 
+# 登入驗正 Exist OR Not ######### 漏洞  Cookies 竄改有使用者
 def state_check_bool():
     # if session["account"]==None:
     #     return False
@@ -28,7 +29,10 @@ def state_check_bool():
     if request.cookies.get("user")=="" or request.cookies.get("user")==None:
         return False
     else:
-        return True
+        if cryptocode.decrypt(request.cookies.get("user"), sect)==False:
+            return redirect("/signout")
+        else:
+            return True
 
 def state_output():
     datas={}
@@ -40,6 +44,7 @@ def state_output():
         datas["click"]="window.location.href='/login'"
     return datas    
 
+# 使用者狀態標記 (Output)
 def acce_required():
     datas={}
     # if session["account"]!=None:
@@ -63,12 +68,15 @@ def login_required():
     #     return None
     try:
         if request.cookies.get("users")=="":
-            return None
+            if cryptocode.decrypt(request.cookies.get("user"), sect)==False:
+                res=redirect("/")
+                res.set_cookie("user", "", httponly=True)
+                return res
         else:
             return None
     except:
         res=redirect("/")
-        res.set_cookie("user", "")
+        res.set_cookie("user", "", httponly=True)
         return res
 
 @app.errorhandler(404)
@@ -621,7 +629,7 @@ def signup():
 @app.route("/signout")
 def signout():
     res=redirect("/")
-    res.set_cookie("user","")
+    res.set_cookie("user", "", httponly=True)
     return res
 
 @app.route("/dis_new")
@@ -633,7 +641,7 @@ def dis_new():
         amount=0
         for i in datas:
             amount+=1
-        return render_template("dis_aja.html", times=amount)
+        return render_template("dis_aja.html", times=amount, userdata=acce_required())
     else:
         return redirect("/login")
 
@@ -641,7 +649,6 @@ def dis_new():
 def display_ajx(): # sorting data
     if state_check_bool():
         times=int(request.form.get("tmc"))
-        # collection=db[f"users_{session['account']}"]
         sp=cryptocode.decrypt(request.cookies.get("user"), sect) 
         collection=db[f"users_{sp}"]
         datas=collection.find()
@@ -773,3 +780,14 @@ def procUni():
         return jsonify(dates)
     else:
         return ""
+
+@app.route("/remove_ajax", methods=["POST"])
+def remove_ajax():
+    if state_check_bool():
+        remove_company=request.form.get("remove_compnay_name")
+        sp=cryptocode.decrypt(request.cookies.get("user"), sect) 
+        collection=db[f"users_{sp}"]
+        collection.delete_one({"company":remove_company})
+        return jsonify({"disappear_item": remove_company})
+    else:
+        return redirect("/")
