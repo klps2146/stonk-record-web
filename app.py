@@ -777,7 +777,9 @@ def procUni():
                             }
                         }
                     })
-        return jsonify(dates)
+        updatas=(collection.find_one({"company":companySelector}))
+        updatas.pop('_id')
+        return jsonify(updatas)
     else:
         return ""
 
@@ -791,3 +793,17 @@ def remove_ajax():
         return jsonify({"disappear_item": remove_company})
     else:
         return redirect("/")
+
+@app.route("/XSS_preventor")
+def nto():
+    pass
+
+@app.route("/GUI_creater", methods=["POST"])
+def GUI_add():
+    if state_check_bool():
+        sp=cryptocode.decrypt(request.cookies.get("user"), sect) 
+        collection=db[f"users_{sp}"]
+        company=request.form.get("")
+        return jsonify()
+    else:
+        return jsonify({"sip:":21})
