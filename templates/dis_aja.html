@@ -23,9 +23,14 @@
 var final_put=[];
 
 
-window.onload=contect();
-
-function contect_one(datas){
+window.onload=function(){
+	contect();
+	Creater();
+    document.getElementById("noBlank").addEventListener("blur", function(){
+        document.getElementById("noBlank").value=document.getElementById("noBlank").value.split(" ").join("");
+    });
+}
+function contect_one(datas){ // 更新後資料處理及輸出
     var Today=new Date();
     var yearNow=Today.getFullYear();
     var updater=[];
@@ -283,9 +288,9 @@ function contect_one(datas){
     var a=new Date();
     var csa=a.getFullYear();
     try{
-      var target=datas[csa]["dividend"]/datas["aim"]*100;
-      var differ=(datas[csa]["dividend"]/datas["aim"]*100-datas["share"]);
-      var ttr=100*((datas[csa]["dividend"]/datas["aim"]*100-datas["share"])/datas["share"]);
+      var target=Math.round((datas[csa]["dividend"]/datas["aim"]*100)*100)/100;
+      var differ=Math.round((datas[csa]["dividend"]/datas["aim"]*100-datas["share"])*100)/100;
+      var ttr=Math.round((100*((datas[csa]["dividend"]/datas["aim"]*100-datas["share"])/datas["share"]))*100)/100;
     }
     catch(e){
       console.log(e);
@@ -402,402 +407,876 @@ function contect_one(datas){
 }
 
 
-
-
-
 function contect(){
     let Today=new Date();
     let yearNow=Today.getFullYear();
     let fd=new FormData()
     for (let x=0; x<{{times}}; x++){
-        fd.set("tmc", x);
-        // contect_one(fd);
-        $.ajax({
-            type: "POST",
-            url: "/dis_ajx",
-            contentType: false,
-            processData: false,
-            data: fd,
-            success: (datas)=>{
-                var yinow=null;
-                var React_Output=[];
-                let clus=[]; 
-                let year_clus=[]; // 年分
-                let sendState=null;
-                let item_list=(Object.keys(datas)); // 字典索引
-                class NameTab extends React.Component{
-                    render(){
-                        return <tr>
-                                <th onClick={this.clickHandler.bind(this)} className="cpname" colspan="4">{datas["company"]} ({datas["date"]})</th>
-                                <th className="function_form">
-                                <div className="flexBoxer">
-                                    <input className="updateing_each" type="submit" value="更新"/>
-                                    <div className="remove_each" onClick={this.removeHandler.bind(this)}>刪除</div>
-                                </div>
-                                </th>
-                            </tr>;
-                    }
-                    removeHandler(e){
-                        let rmv=new FormData()
-                        rmv.append("remove_compnay_name", datas["company"])
-                        Swal.fire({
-                            title: '刪除<span style="color:red">所有</span>資料',
-                            text: "「所也資料」將無法復原",
-                            icon: 'question',
-                            showCancelButton: true,
-                            confirmButtonColor: '#3085d6',
-                            cancelButtonColor: '#d33',
-                            confirmButtonText: '刪除',
-                            cancelButtonText: "取消",
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                $.ajax({
-                                    type: "POST",
-                                    processData: false,
-                                    contentType: false,
-                                    data: rmv,
-                                    url: "/remove_ajax",
-                                    success: (datas)=>{
-                                        document.getElementById(datas["disappear_item"]).remove();
-                                        const Toast = Swal.mixin({
-                                            toast: true,
-                                            position: 'top-end',
-                                            showConfirmButton: false,
-                                            timer: 1000,
-                                            timerProgressBar: true,
-                                        })
-                                        Toast.fire({
-                                            icon: 'success',
-                                            title: '資料刪除成功',
-                                            width: '230px',
-                                            background: "#ffffffdd",
-                                        })
-                                    }
-                                })
-                            }
-                        })
+	fd.set("tmc", x);
+	// contect_one(fd);
+	$.ajax({
+		type: "POST",
+		url: "/dis_ajx",
+		contentType: false,
+		processData: false,
+		data: fd,
+		success: (datas)=>{
+			var yinow=null;
+			var React_Output=[];
+			let clus=[]; 
+			let year_clus=[]; // 年分
+			let sendState=null;
+			let item_list=(Object.keys(datas)); // 字典索引
+			class NameTab extends React.Component{
+				render(){
+					return <tr>
+							<th onClick={this.clickHandler.bind(this)} className="cpname" colspan="4">{datas["company"]} ({datas["date"]})</th>
+							<th className="function_form">
+							<div className="flexBoxer">
+								<input className="updateing_each" type="submit" value="更新"/>
+								<div className="remove_each" onClick={this.removeHandler.bind(this)}>刪除</div>
+							</div>
+							</th>
+						</tr>;
+				}
+				removeHandler(e){
+					let rmv=new FormData()
+					rmv.append("remove_compnay_name", datas["company"])
+					Swal.fire({
+						title: '刪除<span style="color:red">所有</span>資料',
+						text: "「所也資料」將無法復原",
+						icon: 'question',
+						showCancelButton: true,
+						confirmButtonColor: '#3085d6',
+						cancelButtonColor: '#d33',
+						confirmButtonText: '刪除',
+						cancelButtonText: "取消",
+					}).then((result) => {
+						if (result.isConfirmed) {
+							$.ajax({
+								type: "POST",
+								processData: false,
+								contentType: false,
+								data: rmv,
+								url: "/remove_ajax",
+								success: (datas)=>{
+									document.getElementById(datas["disappear_item"]).remove();
+									const Toast = Swal.mixin({
+										toast: true,
+										position: 'top-end',
+										showConfirmButton: false,
+										timer: 1000,
+										timerProgressBar: true,
+									})
+									Toast.fire({
+										icon: 'success',
+										title: '資料刪除成功',
+										width: '230px',
+										background: "#ffffffdd",
+									})
+								}
+							})
+						}
+					})
 
-                    }
-                    clickHandler(){
-                        if ($(".analyze_"+datas["company"]).css("display")=="none"){ // warning css selector point at
-                            $(".analyze_"+datas["company"]).css("display", "");
-                            $("."+datas["company"]).css("display", "");
-                            $(".Q_"+datas["company"]).css("display", "none");
-                        }
-                        else{
-                            $("."+datas["company"]).css("display", "none");
-                            $(".analyze_"+datas["company"]).css("display", "none");
-                        
-                        }
-                    }
-                }
-                class TopTab extends React.Component{
-                    render(){
-                        return <tr className={"static "+datas["company"]+" d1"} style={ {display:"none"}}>
-                                <td className="title">season</td>
-                                <td className="title">EPS</td>
-                                <td className="title">配息</td>
-                                <td className="title">配息率</td>
-                                <td className="title">殖利率</td>
-                                </tr>;
-                    }
-                }
-                React_Output.push(<NameTab/>);
-                React_Output.push(<TopTab/>);
+				}
+				clickHandler(){
+					if ($(".analyze_"+datas["company"]).css("display")=="none"){ // warning css selector point at
+						$(".analyze_"+datas["company"]).css("display", "");
+						$("."+datas["company"]).css("display", "");
+						$(".Q_"+datas["company"]).css("display", "none");
+					}
+					else{
+						$("."+datas["company"]).css("display", "none");
+						$(".analyze_"+datas["company"]).css("display", "none");
+					
+					}
+				}
+			}
+			class TopTab extends React.Component{
+				render(){
+					return <tr className={"static "+datas["company"]+" d1"} style={ {display:"none"}}>
+							<td className="title">season</td>
+							<td className="title">EPS</td>
+							<td className="title">配息</td>
+							<td className="title">配息率</td>
+							<td className="title">殖利率</td>
+							</tr>;
+				}
+			}
+			React_Output.push(<NameTab/>);
+			React_Output.push(<TopTab/>);
 
-                for (let i=0; i<=item_list.length; i++){
-                    if (item_list[i]!="yield"&&item_list[i]!="aim"&&item_list[i]!="company"&&item_list[i]!="date"&&item_list[i]!="share"&&item_list[i]!="yield_now"&&item_list[i]!=undefined&&item_list[i]!="l_add"&&item_list[i]!="r_add"&&item_list[i]!="l_aim"&&item_list[i]!="aim"&&item_list[i]!="guess"){
-                        year_clus.push(item_list[i]);
-                    }
-                }
-                for (let i=0; i<year_clus.length; i++){
-                    let processing=datas[year_clus[i]];
-                    if (processing!=undefined){
-                        if (year_clus[i]==yearNow){
-                            yinow=processing["yield"];
-                        }
-                        class Content extends React.Component{
-                            constructor(props){
-                                super(props);
-                                this.state={
-                                    dividend: this.props.divSta,
-                                }
-                            }
-                            render(){
-                                return <tr className={datas["company"]+" d1"} style={ {display:"none"}}>
-                                    <td style={ {backgroundColor:"#C182DF"}} onClick={this.yearClickHandler.bind(this)}>{year_clus[i]}</td>
-                                    <td style={ {backgroundColor:"#e1c4ee"}}>{processing["EPS_year"]}</td>
-                                    <td style={ {backgroundColor:"#e1c4ee"}}><input onChange={this.dividendTextChangingHandler.bind(this)} type="text" value={this.state.dividend} className={"inlineText "+"divi"+datas["company"]+"_"+year_clus[i]}/></td>
-                                    <td style={ {backgroundColor:"#e1c4ee"}}>{processing["dividend_rate"]}</td>
-                                    <td style={ {backgroundColor:"#e1c4ee"}}>{processing["yield"]}</td>
-                                </tr>;
-                            }
-                            dividendTextChangingHandler(e){
-                                this.setState({dividend:e.currentTarget.value});
-                                
-                            }
-                            yearClickHandler(e){
-                                if ($(".Q_"+datas["company"]+"_"+year_clus[i]).css("display")=="none"){
-                                    $(".Q_"+datas["company"]+"_"+year_clus[i]).css("display", "");
-                                }
-                                else{
-                                    $(".Q_"+datas["company"]+"_"+year_clus[i]).css("display", "none");
-                                }
-                            }
-                        }
+			for (let i=0; i<=item_list.length; i++){
+				if (item_list[i]!="yield"&&item_list[i]!="aim"&&item_list[i]!="company"&&item_list[i]!="date"&&item_list[i]!="share"&&item_list[i]!="yield_now"&&item_list[i]!=undefined&&item_list[i]!="l_add"&&item_list[i]!="r_add"&&item_list[i]!="l_aim"&&item_list[i]!="aim"&&item_list[i]!="guess"){
+					year_clus.push(item_list[i]);
+				}
+			}
+			for (let i=0; i<year_clus.length; i++){
+				let processing=datas[year_clus[i]];
+				if (processing!=undefined){
+					if (year_clus[i]==yearNow){
+						yinow=processing["yield"];
+					}
+					class Content extends React.Component{
+						constructor(props){
+							super(props);
+							this.state={
+								dividend: this.props.divSta,
+							}
+						}
+						render(){
+							return <tr className={datas["company"]+" d1"} style={ {display:"none"}}>
+								<td style={ {backgroundColor:"#C182DF"}} onClick={this.yearClickHandler.bind(this)}>{year_clus[i]}</td>
+								<td style={ {backgroundColor:"#e1c4ee"}}>{processing["EPS_year"]}</td>
+								<td style={ {backgroundColor:"#e1c4ee"}}><input onChange={this.dividendTextChangingHandler.bind(this)} type="text" value={this.state.dividend} className={"inlineText "+"divi"+datas["company"]+"_"+year_clus[i]}/></td>
+								<td style={ {backgroundColor:"#e1c4ee"}}>{processing["dividend_rate"]}</td>
+								<td style={ {backgroundColor:"#e1c4ee"}}>{processing["yield"]}</td>
+							</tr>;
+						}
+						dividendTextChangingHandler(e){
+							this.setState({dividend:e.currentTarget.value});
+							
+						}
+						yearClickHandler(e){
+							if ($(".Q_"+datas["company"]+"_"+year_clus[i]).css("display")=="none"){
+								$(".Q_"+datas["company"]+"_"+year_clus[i]).css("display", "");
+							}
+							else{
+								$(".Q_"+datas["company"]+"_"+year_clus[i]).css("display", "none");
+							}
+						}
+					}
 
-                        React_Output.push(<Content divSta={processing["dividend"]}/>);
+					React_Output.push(<Content divSta={processing["dividend"]}/>);
 
-                        class Detail extends React.Component{
-                            constructor(props){
-                                super(props);
-                                this.state={
-                                    q:processing[this.props.q],
-                                }
-                            }
-                            render(){
-                                return <tr className={datas["company"]+" Q_"+datas["company"]+" Q_"+datas["company"]+"_"+year_clus[i]+" d2"} style={  {display:"none"}}> 
-                                        <td style={ {backgroundColor:"#DAB9E9"}}>Q{this.props.mon}</td>
-                                        <td style={ {backgroundColor:"#f5f4b3"}}><input onChange={this.qOnchangeHandler.bind(this)} type="text" value={this.state.q} className={"inlineText "+this.props.q+"_"+datas["company"]+"_"+year_clus[i]}/></td>
-                                        <td>{processing[this.props.a]}</td>
-                                        <td>{processing[this.props.b]}</td>
-                                        <td>{processing[this.props.c]}</td>
-                                    </tr>;
-                            }
-                            qOnchangeHandler(e){
-                                this.setState({q:e.currentTarget.value});
-                            }
-                        }
-                        class Detail2 extends React.Component{
-                            constructor(props){
-                                super(props);
-                                this.state={
-                                    a:processing[this.props.a],
-                                    b:processing[this.props.b],
-                                    c:processing[this.props.c],
-                                }
-                            }
-                            render(){
-                                return <tr className={datas["company"]+" Q_"+datas["company"]+" Q_"+datas["company"]+"_"+year_clus[i]+" d2"} style={  {display:"none"}}> 
-                                        <td style={ {backgroundColor:"#DAB9E9"}}>Q{this.props.mon}</td>
-                                        <td style={ {backgroundColor:"#f5f4b3"}}>{processing[this.props.q]}</td>
-                                        <td style={ {backgroundColor:"#e7b89d"}}><input onChange={this.aOnchangeHandler.bind(this)} type="text" value={this.state.a} className={"inlineText "+this.props.a+"_"+datas["company"]+"_"+year_clus[i]}/></td>
-                                        <td style={ {backgroundColor:"#e7b89d"}}><input onChange={this.bOnchangeHandler.bind(this)} type="text" value={this.state.b} className={"inlineText "+this.props.b+"_"+datas["company"]+"_"+year_clus[i]}/></td>
-                                        <td style={ {backgroundColor:"#e7b89d"}}><input onChange={this.cOnchangeHandler.bind(this)} type="text" value={this.state.c} className={"inlineText "+this.props.c+"_"+datas["company"]+"_"+year_clus[i]}/></td>
-                                    </tr>
-                            }
-                            aOnchangeHandler(e){
-                                this.setState({a:e.currentTarget.value});
-                            }
-                            bOnchangeHandler(e){
-                                this.setState({b:e.currentTarget.value});
-                            }
-                            cOnchangeHandler(e){
-                                this.setState({c:e.currentTarget.value});
-                            }
-                        }
-                        if (processing["EPS_Q1"]==""){
-                            sendState=1;
-                            React_Output.push(<Detail2 mon="1" a="EPS_m_1" b="EPS_m_2" c="EPS_m_3"/>);
-                            React_Output.push(<Detail2 mon="2" a="EPS_m_4" b="EPS_m_5" c="EPS_m_6"/>);
-                            React_Output.push(<Detail2 mon="3" a="EPS_m_7" b="EPS_m_8" c="EPS_m_9"/>);
-                            React_Output.push(<Detail2 mon="4" a="EPS_m_10" b="EPS_m_11" c="EPS_m_12"/>);
-                        }
-                        else if (processing["EPS_m_1"]==""){
-                            sendState=0;
-                            React_Output.push(<Detail mon="1" q="EPS_Q1"/>);
-                            React_Output.push(<Detail mon="2" q="EPS_Q2"/>);
-                            React_Output.push(<Detail mon="3" q="EPS_Q3"/>);
-                            React_Output.push(<Detail mon="4" q="EPS_Q4"/>);
-                        }
-                    }
-                } // year clus loop ending
+					class Detail extends React.Component{
+						constructor(props){
+							super(props);
+							this.state={
+								q:processing[this.props.q],
+							}
+						}
+						render(){
+							return <tr className={datas["company"]+" Q_"+datas["company"]+" Q_"+datas["company"]+"_"+year_clus[i]+" d2"} style={  {display:"none"}}> 
+									<td style={ {backgroundColor:"#DAB9E9"}}>Q{this.props.mon}</td>
+									<td style={ {backgroundColor:"#f5f4b3"}}><input onChange={this.qOnchangeHandler.bind(this)} type="text" value={this.state.q} className={"inlineText "+this.props.q+"_"+datas["company"]+"_"+year_clus[i]}/></td>
+									<td>{processing[this.props.a]}</td>
+									<td>{processing[this.props.b]}</td>
+									<td>{processing[this.props.c]}</td>
+								</tr>;
+						}
+						qOnchangeHandler(e){
+							this.setState({q:e.currentTarget.value});
+						}
+					}
+					class Detail2 extends React.Component{
+						constructor(props){
+							super(props);
+							this.state={
+								a:processing[this.props.a],
+								b:processing[this.props.b],
+								c:processing[this.props.c],
+							}
+						}
+						render(){
+							return <tr className={datas["company"]+" Q_"+datas["company"]+" Q_"+datas["company"]+"_"+year_clus[i]+" d2"} style={  {display:"none"}}> 
+									<td style={ {backgroundColor:"#DAB9E9"}}>Q{this.props.mon}</td>
+									<td style={ {backgroundColor:"#f5f4b3"}}>{processing[this.props.q]}</td>
+									<td style={ {backgroundColor:"#e7b89d"}}><input onChange={this.aOnchangeHandler.bind(this)} type="text" value={this.state.a} className={"inlineText "+this.props.a+"_"+datas["company"]+"_"+year_clus[i]}/></td>
+									<td style={ {backgroundColor:"#e7b89d"}}><input onChange={this.bOnchangeHandler.bind(this)} type="text" value={this.state.b} className={"inlineText "+this.props.b+"_"+datas["company"]+"_"+year_clus[i]}/></td>
+									<td style={ {backgroundColor:"#e7b89d"}}><input onChange={this.cOnchangeHandler.bind(this)} type="text" value={this.state.c} className={"inlineText "+this.props.c+"_"+datas["company"]+"_"+year_clus[i]}/></td>
+								</tr>
+						}
+						aOnchangeHandler(e){
+							this.setState({a:e.currentTarget.value});
+						}
+						bOnchangeHandler(e){
+							this.setState({b:e.currentTarget.value});
+						}
+						cOnchangeHandler(e){
+							this.setState({c:e.currentTarget.value});
+						}
+					}
+					if (processing["EPS_Q1"]==""){
+						sendState=1;
+						React_Output.push(<Detail2 mon="1" a="EPS_m_1" b="EPS_m_2" c="EPS_m_3"/>);
+						React_Output.push(<Detail2 mon="2" a="EPS_m_4" b="EPS_m_5" c="EPS_m_6"/>);
+						React_Output.push(<Detail2 mon="3" a="EPS_m_7" b="EPS_m_8" c="EPS_m_9"/>);
+						React_Output.push(<Detail2 mon="4" a="EPS_m_10" b="EPS_m_11" c="EPS_m_12"/>);
+					}
+					else if (processing["EPS_m_1"]==""){
+						sendState=0;
+						React_Output.push(<Detail mon="1" q="EPS_Q1"/>);
+						React_Output.push(<Detail mon="2" q="EPS_Q2"/>);
+						React_Output.push(<Detail mon="3" q="EPS_Q3"/>);
+						React_Output.push(<Detail mon="4" q="EPS_Q4"/>);
+					}
+				}
+			} // year clus loop ending
 
-                class Analyze extends React.Component{
-                    render(){
-                        return <tr className={this.props.class+" analyze_"+datas["company"]+" d1"} style={ {display:"none"}}>
-                                <td className="table_in">{this.props.blank1}</td>
-                                <td className="table_in">{this.props.blank2}</td>
-                                <td className={"hide table_in"}>{this.props.blank3}</td>
-                                <td className="table_in">{this.props.blank4}</td>
-                                <td className="table_in">{this.props.blank5}</td>
-                            </tr>
-                    }
-                }
-                class Analyzea extends React.Component{
-                    constructor(props){
-                        super(props);
-                        this.state={
-                            share:this.props.blank2,
-                        }
-                    }
-                    render(){
-                        return <tr>
-                                <td className="table_in">{this.props.blank1}</td>
-                                <td className="table_in"><input onChange={this.onChangeHandler.bind(this)} type="text" value={this.state.share} className={"inlineText "+"share_"+datas["company"]}/></td>
-                                <td className={"hide table_in"}>{this.props.blank3}</td>
-                                <td className="table_in">{this.props.blank4}</td>
-                                <td className="table_in">{this.props.blank5}</td>
-                            </tr>;
-                    }
-                    onChangeHandler(e){
-                        this.setState({share:e.currentTarget.value});
-                    }
-                }
-                class AnalyzeAim extends React.Component{
-                    constructor(props){
-                        super(props);
-                        this.state={
-                            aim:this.props.blank5,
-                        }
-                    }
-                    render(){
-                        return <tr style={ {display:"none"}} className={this.props.class+" analyze_"+datas["company"]+" d1"}>
-                                <td className="table_in">{this.props.blank1}</td>
-                                <td className="table_in">{this.props.blank2}</td>
-                                <td className={"hide table_in"}>{this.props.blank3}</td>
-                                <td className="table_in">{this.props.blank4}</td>
-                                <td className="table_in"><input onChange={this.onChangeHandler.bind(this)} type="text" value={this.state.aim} className={"inlineText "+"aim"+datas["company"]}/></td>
-                            </tr>;
-                    }
-                    onChangeHandler(e){
-                        this.setState({aim:e.currentTarget.value});
-                    }
-                }
-                if (yinow===null){
-                    yinow="資料未更新";
-                }
-                else{
-                    yinow+="%";
-                }
-                React_Output.push(<AnalyzeAim blank1="目標價" blank2={datas["l_aim"]} blank5={datas["aim"]} class={datas["company"]}/>);
-                React_Output.push(<Analyze blank1="利差" blank2={datas["l_add"]}  blank5={datas["r_add"]} class={datas["company"]}/>);
-                React_Output.push(<Analyze blank1="買進價" blank5="" class={datas["company"]}/>);
-                React_Output.push(<Analyzea blank1="目前價位" blank2={datas["share"]} blank4="目前殖利率" blank5={yinow}/>);
-                React_Output.push(<Analyze blank1="便宜價" blank5="" class={datas["company"]}/>);
-                class Final extends React.Component{
-                    constructor(props){
-                        super(props);
-                        this.state={
+			class Analyze extends React.Component{
+				render(){
+					return <tr className={this.props.class+" analyze_"+datas["company"]+" d1"} style={ {display:"none"}}>
+							<td className="table_in">{this.props.blank1}</td>
+							<td className="table_in">{this.props.blank2}</td>
+							<td className={"hide table_in"}>{this.props.blank3}</td>
+							<td className="table_in">{this.props.blank4}</td>
+							<td className="table_in">{this.props.blank5}</td>
+						</tr>
+				}
+			}
+			class Analyzea extends React.Component{
+				constructor(props){
+					super(props);
+					this.state={
+						share:this.props.blank2,
+					}
+				}
+				render(){
+					return <tr>
+							<td className="table_in">{this.props.blank1}</td>
+							<td className="table_in"><input onChange={this.onChangeHandler.bind(this)} type="text" value={this.state.share} className={"inlineText "+"share_"+datas["company"]}/></td>
+							<td className={"hide table_in"}>{this.props.blank3}</td>
+							<td className="table_in">{this.props.blank4}</td>
+							<td className="table_in">{this.props.blank5}</td>
+						</tr>;
+				}
+				onChangeHandler(e){
+					this.setState({share:e.currentTarget.value});
+				}
+			}
+			class AnalyzeAim extends React.Component{
+				constructor(props){
+					super(props);
+					this.state={
+						aim:this.props.blank5,
+					}
+				}
+				render(){
+					return <tr style={ {display:"none"}} className={this.props.class+" analyze_"+datas["company"]+" d1"}>
+							<td className="table_in">{this.props.blank1}</td>
+							<td className="table_in">{this.props.blank2}</td>
+							<td className={"hide table_in"}>{this.props.blank3}</td>
+							<td className="table_in">{this.props.blank4}</td>
+							<td className="table_in"><input onChange={this.onChangeHandler.bind(this)} type="text" value={this.state.aim} className={"inlineText "+"aim"+datas["company"]}/></td>
+						</tr>;
+				}
+				onChangeHandler(e){
+					this.setState({aim:e.currentTarget.value});
+				}
+			}
+			if (yinow===null){
+				yinow="資料未更新";
+			}
+			else{
+				yinow+="%";
+			}
+			React_Output.push(<AnalyzeAim blank1="目標價" blank2={datas["l_aim"]} blank5={datas["aim"]} class={datas["company"]}/>);
+			React_Output.push(<Analyze blank1="利差" blank2={datas["l_add"]}  blank5={datas["r_add"]} class={datas["company"]}/>);
+			React_Output.push(<Analyze blank1="買進價" blank5="" class={datas["company"]}/>);
+			React_Output.push(<Analyzea blank1="目前價位" blank2={datas["share"]} blank4="目前殖利率" blank5={yinow}/>);
+			React_Output.push(<Analyze blank1="便宜價" blank5="" class={datas["company"]}/>);
+			class Final extends React.Component{
+				constructor(props){
+					super(props);
+					this.state={
 
-                        }
-                    }
-                    render(){
-                        return <div className="each_table" id={datas["company"]}><form onSubmit={this.updateSubmitHandler.bind(this)} action="/"><table>
-                            {React_Output}
-                        </table><div></div></form></div>;
-                    }
-                    updateSubmitHandler(e){
-                        e.preventDefault();
-                        var Today=new Date();
-                        var date=Today.getFullYear()+"/"+(Today.getMonth()+1)+"/"+Today.getDate();
-                        let updateData=new FormData();
-                        updateData.append("state", sendState);
-                        updateData.append("company", datas["company"]);
-                        updateData.append("share", $(".share_"+datas["company"]).val());
-                        updateData.append("aim", $(".aim"+datas["company"]).val())
-                        updateData.append("date", date)
-                        if (sendState==1){
-                            let stringProcessing="";
-                            for (let u=0; u<year_clus.length; u++){
-                                stringProcessing+=(year_clus[u]+"_"+
-                                $(".EPS_m_1_"+datas["company"]+"_"+year_clus[u]).val()+"_"+
-                                $(".EPS_m_2_"+datas["company"]+"_"+year_clus[u]).val()+"_"+
-                                $(".EPS_m_3_"+datas["company"]+"_"+year_clus[u]).val()+"_"+
-                                $(".EPS_m_4_"+datas["company"]+"_"+year_clus[u]).val()+"_"+
-                                $(".EPS_m_5_"+datas["company"]+"_"+year_clus[u]).val()+"_"+
-                                $(".EPS_m_6_"+datas["company"]+"_"+year_clus[u]).val()+"_"+
-                                $(".EPS_m_7_"+datas["company"]+"_"+year_clus[u]).val()+"_"+
-                                $(".EPS_m_8_"+datas["company"]+"_"+year_clus[u]).val()+"_"+
-                                $(".EPS_m_9_"+datas["company"]+"_"+year_clus[u]).val()+"_"+
-                                $(".EPS_m_10_"+datas["company"]+"_"+year_clus[u]).val()+"_"+
-                                $(".EPS_m_11_"+datas["company"]+"_"+year_clus[u]).val()+"_"+
-                                $(".EPS_m_12_"+datas["company"]+"_"+year_clus[u]).val()+"_"+
-                                $(".divi"+datas["company"]+"_"+year_clus[u]).val()+"/"
-                                );
-                            }
-                            updateData.append("detail", stringProcessing);
-                        }
-                        else if (sendState==0){
-                            let stringProccessed="";
-                            for (let u=0; u<year_clus.length; u++){
-                                let yNow=year_clus[u];
-                                stringProccessed+=(yNow+"_"+
-                                    $(".EPS_Q1_"+datas["company"]+"_"+year_clus[u]).val()+"_"+
-                                    $(".EPS_Q2_"+datas["company"]+"_"+year_clus[u]).val()+"_"+
-                                    $(".EPS_Q3_"+datas["company"]+"_"+year_clus[u]).val()+"_"+
-                                    $(".EPS_Q4_"+datas["company"]+"_"+year_clus[u]).val()+"_"+
-                                    $(".divi"+datas["company"]+"_"+year_clus[u]).val()+"/"
-                                );
-                            }
-                            updateData.append("detail", stringProccessed);
-                        }
-                        $.ajax({
-                            type: "POST",
-                            processData: false,
-                            contentType: false,
-                            data: updateData,
-                            url: "/ajaxUpdate",
-                            success: (datas_upd)=>{
-                                // update one
-                                contect_one(datas_upd);
-                                const Toast = Swal.mixin({
-                                    toast: true,
-                                    position: 'top-end',
-                                    showConfirmButton: false,
-                                    timer: 1000,
-                                    timerProgressBar: true,
-                                })
-                                Toast.fire({
-                                    icon: 'success',
-                                    title: '資料更新成功',
-                                    width: '230px',
-                                    background: "#ffffffdd",
-                                })
-                            },
-                            error: (datas)=>{
-                                const Toast = Swal.mixin({
-                                    toast: true,
-                                    position: 'top-end',
-                                    showConfirmButton: false,
-                                    timer: 1000,
-                                    timerProgressBar: true,
-                                    didOpen: (toast) => {
-                                        toast.addEventListener('mouseenter', Swal.stopTimer)
-                                        toast.addEventListener('mouseleave', Swal.resumeTimer)
-                                    }
-                                })
-                                Toast.fire({
-                                    icon: 'error',
-                                    title: '資料更新失敗 '+datas,
-                                    width: "230px",
-                                })
-                            }
-                        })
-                    }
-                }
-                final_put.push(<Final/>);
-                class OUT extends React.Component{
-                    render(){
-                        return <div className="form_container">{final_put}</div>;
-                    }
-                }
-                ReactDOM.render(<OUT/>, document.getElementById("container"));
-            }
-        })
+					}
+				}
+				render(){
+					return <div className="each_table" id={datas["company"]}><form onSubmit={this.updateSubmitHandler.bind(this)} action="/"><table>
+						{React_Output}
+					</table><div></div></form></div>;
+				}
+				updateSubmitHandler(e){
+					e.preventDefault();
+					var Today=new Date();
+					var date=Today.getFullYear()+"/"+(Today.getMonth()+1)+"/"+Today.getDate();
+					let updateData=new FormData();
+					updateData.append("state", sendState);
+					updateData.append("company", datas["company"]);
+					updateData.append("share", $(".share_"+datas["company"]).val());
+					updateData.append("aim", $(".aim"+datas["company"]).val())
+					updateData.append("date", date)
+					if (sendState==1){
+						let stringProcessing="";
+						for (let u=0; u<year_clus.length; u++){
+							stringProcessing+=(year_clus[u]+"_"+
+							$(".EPS_m_1_"+datas["company"]+"_"+year_clus[u]).val()+"_"+
+							$(".EPS_m_2_"+datas["company"]+"_"+year_clus[u]).val()+"_"+
+							$(".EPS_m_3_"+datas["company"]+"_"+year_clus[u]).val()+"_"+
+							$(".EPS_m_4_"+datas["company"]+"_"+year_clus[u]).val()+"_"+
+							$(".EPS_m_5_"+datas["company"]+"_"+year_clus[u]).val()+"_"+
+							$(".EPS_m_6_"+datas["company"]+"_"+year_clus[u]).val()+"_"+
+							$(".EPS_m_7_"+datas["company"]+"_"+year_clus[u]).val()+"_"+
+							$(".EPS_m_8_"+datas["company"]+"_"+year_clus[u]).val()+"_"+
+							$(".EPS_m_9_"+datas["company"]+"_"+year_clus[u]).val()+"_"+
+							$(".EPS_m_10_"+datas["company"]+"_"+year_clus[u]).val()+"_"+
+							$(".EPS_m_11_"+datas["company"]+"_"+year_clus[u]).val()+"_"+
+							$(".EPS_m_12_"+datas["company"]+"_"+year_clus[u]).val()+"_"+
+							$(".divi"+datas["company"]+"_"+year_clus[u]).val()+"/"
+							);
+						}
+						updateData.append("detail", stringProcessing);
+					}
+					else if (sendState==0){
+						let stringProccessed="";
+						for (let u=0; u<year_clus.length; u++){
+							let yNow=year_clus[u];
+							stringProccessed+=(yNow+"_"+
+								$(".EPS_Q1_"+datas["company"]+"_"+year_clus[u]).val()+"_"+
+								$(".EPS_Q2_"+datas["company"]+"_"+year_clus[u]).val()+"_"+
+								$(".EPS_Q3_"+datas["company"]+"_"+year_clus[u]).val()+"_"+
+								$(".EPS_Q4_"+datas["company"]+"_"+year_clus[u]).val()+"_"+
+								$(".divi"+datas["company"]+"_"+year_clus[u]).val()+"/"
+							);
+						}
+						updateData.append("detail", stringProccessed);
+					}
+					$.ajax({
+						type: "POST",
+						processData: false,
+						contentType: false,
+						data: updateData,
+						url: "/ajaxUpdate",
+						success: (datas_upd)=>{
+							// update one
+							contect_one(datas_upd);
+							const Toast = Swal.mixin({
+								toast: true,
+								position: 'top-end',
+								showConfirmButton: false,
+								timer: 1000,
+								timerProgressBar: true,
+							})
+							Toast.fire({
+								icon: 'success',
+								title: '資料更新成功',
+								width: '230px',
+								background: "#ffffffdd",
+							})
+						},
+						error: (datas)=>{
+							const Toast = Swal.mixin({
+								toast: true,
+								position: 'top-end',
+								showConfirmButton: false,
+								timer: 1000,
+								timerProgressBar: true,
+								didOpen: (toast) => {
+									toast.addEventListener('mouseenter', Swal.stopTimer)
+									toast.addEventListener('mouseleave', Swal.resumeTimer)
+								}
+							})
+							Toast.fire({
+								icon: 'error',
+								title: '資料更新失敗 '+datas,
+								width: "230px",
+							})
+						}
+					})
+				}
+			}
+			final_put.push(<Final/>);
+
+			class OUT extends React.Component{
+				render(){
+					return <div className="form_container">{final_put}</div>;
+				}
+			}
+			ReactDOM.render(<OUT/>, document.getElementById("container"));
+			}
+		})
+	}
+}
+
+
+
+class Title extends React.Component{
+    render(){
+        
+    }
+    clickHandler(e){
+
+    }
+}
+
+class NewDatasUpdate extends React.Component{
+    constructor(props){
+        super(props);
+        this.state={
+
+        };
+    }
+    render(){
         
     }
 }
+
+class CreaterSelector extends React.Component{
+	constructor(props){
+		super(props);
+		this.defaultState={
+            company: null,
+			type: "q",
+			year: 2022,
+            dividend: null,
+			dividend_rate: null,
+            q1: null,
+            q2: null,
+            q3: null,
+            q4: null,
+            m1: null,
+            m2: null,
+            m3: null,
+            m4: null,
+            m5: null,
+            m6: null,
+            m7: null,
+            m8: null,
+            m9: null,
+            m10: null,
+            m11: null,
+            m12: null,
+            share: null,
+            aim: null,
+            epsTotal: null,
+            yield: null,
+            eps_aim: null,
+            yield_different: null,
+            eps_different: null,
+		};
+        this.state=this.defaultState;
+	}
+	render(){
+
+		return <form onSubmit={this.submitHandler.bind(this)}>
+                <table>
+				<tr>
+					<th className="cpname" colspan="4"><input placeholder="公司名稱(不可有空格)" value={this.state.company} id="noBlank" onblur="Trim(this,this.value,'all')" onChange={this.companyChange.bind(this)} required onkeyup="this.value=this.value.replace(/\s+/g,'')" type="text" className="inlineText" style={ {width: "99%"}}/></th>
+					<th className="function_form">
+					<div className="flexBoxer">
+						<select value={this.state.type} onChange={this.selecChangetHandler.bind(this)}>
+							<option value="q">季</option>
+							<option value="m">月</option>
+						</select>
+						 <input name="nn" className="updateing_each" type="submit" value="送出"/>
+					</div>
+					</th>
+				</tr>
+				<tr>
+                    <td className="title">season</td>
+                    <td className="title">EPS</td>
+                    <td className="title">配息</td>
+                    <td className="title">配息率 %</td>
+                    <td className="title">殖利率 %</td>
+				</tr>
+				<tr>
+                    <td className="table_in"><input type="number" step="1" min="2010" max="2100" required className="inlineText" value={this.state.year} onChange={this.yearChanging.bind(this)} placeholder="年分"/></td>
+                    <td className="table_in">{this.state.epsTotal}</td>
+                    <td className="table_in">{this.state.dividend}</td>
+                    <td className="table_in"><input type="number" step="0.01" min="0" max="100" required className="inlineText" value={this.state.dividend_rate} onChange={this.dividendRateChangeHandler.bind(this)} placeholder="配息率"/></td>
+                    <td className="table_in">{this.state.yield}</td>
+                </tr>
+				<tr>
+                    <td className="table_in">Q1</td>
+                    <td className="table_in"><input type="number" step="0.01" min="0" max="1000" required className="inlineText mOff" value={this.state.q1} onChange={this.change_q1.bind(this)} placeholder="Q1"/></td>
+                    <td className="table_in"><input type="number" step="0.01" min="0" max="1000" id="qOff1" required className="inlineText qOff" value={this.state.m1} onChange={this.change_m1.bind(this)} placeholder="一月"/></td>
+                    <td className="table_in"><input type="number" step="0.01" min="0" max="1000" id="qOff2" required className="inlineText qOff" value={this.state.m2} onChange={this.change_m2.bind(this)} placeholder="二月"/></td>
+                    <td className="table_in"><input type="number" step="0.01" min="0" max="1000" id="qOff3" required className="inlineText qOff" value={this.state.m3} onChange={this.change_m3.bind(this)} placeholder="三月"/></td>
+                </tr> 
+				<tr> 
+                    <td className="table_in">Q2</td> 
+                    <td className="table_in"><input type="number" step="0.01" min="0" max="1000" required className="inlineText mOff" value={this.state.q2} onChange={this.change_q2.bind(this)} placeholder="Q2"/></td>
+                    <td className="table_in"><input type="number" step="0.01" min="0" max="1000" id="qOff4" required className="inlineText qOff" value={this.state.m4} onChange={this.change_m4.bind(this)} placeholder="四月"/></td>
+                    <td className="table_in"><input type="number" step="0.01" min="0" max="1000" id="qOff5" required className="inlineText qOff" value={this.state.m5} onChange={this.change_m5.bind(this)} placeholder="五月"/></td>
+                    <td className="table_in"><input type="number" step="0.01" min="0" max="1000" id="qOff6" required className="inlineText qOff" value={this.state.m6} onChange={this.change_m6.bind(this)} placeholder="六月"/></td>
+                </tr> 
+				<tr> 
+                    <td className="table_in">Q3</td> 
+                    <td className="table_in"><input type="number" step="0.01" min="0" max="1000" required className="inlineText mOff" value={this.state.q3} onChange={this.change_q3.bind(this)} placeholder="Q3"/></td>
+                    <td className="table_in"><input type="number" step="0.01" min="0" max="1000" id="qOff7" required className="inlineText qOff" value={this.state.m7} onChange={this.change_m7.bind(this)} placeholder="七月"/></td>
+                    <td className="table_in"><input type="number" step="0.01" min="0" max="1000" id="qOff8" required className="inlineText qOff" value={this.state.m8} onChange={this.change_m8.bind(this)} placeholder="八月"/></td>
+                    <td className="table_in"><input type="number" step="0.01" min="0" max="1000" id="qOff9" required className="inlineText qOff" value={this.state.m9} onChange={this.change_m9.bind(this)} placeholder="九月"/></td>
+                </tr> 
+				<tr> 
+                    <td className="table_in">Q4</td> 
+                    <td className="table_in"><input type="number" step="0.01" min="0" max="1000" required className="inlineText mOff" value={this.state.q4} onChange={this.change_q4.bind(this)} placeholder="Q4"/></td>
+                    <td className="table_in"><input type="number" step="0.01" min="0" max="1000" id="qOff10" required className="inlineText qOff" value={this.state.m10} onChange={this.change_m10.bind(this)} placeholder="十月"/></td>
+                    <td className="table_in"><input type="number" step="0.01" min="0" max="1000" id="qOff11" required className="inlineText qOff" value={this.state.m11} onChange={this.change_m11.bind(this)} placeholder="十一月"/></td>
+                    <td className="table_in"><input type="number" step="0.01" min="0" max="1000" id="qOff12" required className="inlineText qOff" value={this.state.m12} onChange={this.change_m12.bind(this)} placeholder="十二月"/></td>
+                </tr> 
+				<tr> 
+                    <td className="table_in">目標價</td>
+                    <td className="table_in">{this.state.eps_aim}</td>
+                    <td className="table_in"></td>
+                    <td className="table_in"></td>
+                    <td className="table_in"><input type="number" className="inlineText" value={this.state.aim} onChange={this.changeAimHandler.bind(this)} placeholder="目標殖利率"/></td>
+                </tr>
+				<tr>
+                    <td className="table_in">利差</td>
+                    <td className="table_in">{this.state.eps_different}</td>
+                    <td className="table_in"></td>
+                    <td className="table_in"></td>
+                    <td className="table_in">{this.state.yield_different}</td>
+                </tr>
+				<tr>
+                    <td className="table_in">買進價</td>
+                    <td className="table_in"></td>
+                    <td className="table_in"></td>
+                    <td className="table_in"></td>
+                    <td className="table_in"></td>
+                </tr>
+				<tr>
+                    <td className="table_in">目前價位</td>
+                    <td className="table_in"><input type="number" step="0.01" min="0" required className="inlineText" value={this.state.share} onChange={this.changeShareHandler.bind(this)} placeholder="股價"/></td>
+                    <td className="table_in"></td>
+                    <td className="table_in">目前殖利率</td>
+                    <td className="table_in">{this.state.yield}</td>
+                </tr>
+				<tr>
+                    <td className="table_in">便宜價</td>
+                    <td className="table_in"></td>
+                    <td className="table_in"></td>
+                    <td className="table_in"></td>
+                    <td className="table_in"></td>
+                </tr>
+			</table>
+            </form>;
+	}
+    companyChange(e){
+        this.setState({company: e.currentTarget.value});
+    }
+    componentDidMount(){
+        $(".qOff").css("display", "none");
+        document.getElementById("qOff1").removeAttribute("required");
+        document.getElementById("qOff2").removeAttribute("required");
+        document.getElementById("qOff3").removeAttribute("required");
+        document.getElementById("qOff4").removeAttribute("required");
+        document.getElementById("qOff5").removeAttribute("required");
+        document.getElementById("qOff6").removeAttribute("required");
+        document.getElementById("qOff7").removeAttribute("required");
+        document.getElementById("qOff8").removeAttribute("required");
+        document.getElementById("qOff9").removeAttribute("required");
+        document.getElementById("qOff10").removeAttribute("required");
+        document.getElementById("qOff11").removeAttribute("required");
+        document.getElementById("qOff12").removeAttribute("required");
+        // if (this.state.type=="q"){
+        //     // document.getElementsByClassName("qOff").setAttribute("required");
+            
+        //     document.getElementsByClassName("mOff").readonly=false;
+        // }
+        // else if (this.state.type=="q"){
+        //     $(".qOff").css("display", "");
+        //     // document.getElementsByClassName("qOff").removeAttribute("required");
+        //     document.getElementsByClassName("mOff").readonly=true;
+        //     this.changingCounting("q1");
+        //     this.changingCounting("q2");
+        //     this.changingCounting("q3");
+        //     this.changingCounting("q4");
+        // }
+    }
+    epsTotalCounting(e){
+        this.changingCounting("q1");
+        this.changingCounting("q2");
+        this.changingCounting("q3");
+        this.changingCounting("q4");
+    }
+    change_q1(e){
+        this.setState({q1: e.currentTarget.value});
+        this.epsTotalCounting();
+        this.MainEpsChangingCounting();
+    };
+    change_q2(e){
+        this.setState({q2: e.currentTarget.value});
+        this.epsTotalCounting();
+        this.MainEpsChangingCounting();
+    };
+    change_q3(e){
+        this.setState({q3: e.currentTarget.value});
+        this.epsTotalCounting();
+        this.MainEpsChangingCounting();
+    };
+    change_q4(e){
+        this.setState({q4: e.currentTarget.value});
+        this.epsTotalCounting();
+        this.MainEpsChangingCounting();
+    };
+    change_m1(e){
+        this.setState({m1: e.currentTarget.value});
+        this.epsTotalCounting();
+        this.changingCounting("q1");
+    };
+    change_m2(e){
+        this.setState({m2: e.currentTarget.value});
+        this.epsTotalCounting();
+        this.changingCounting("q1");
+    };
+    change_m3(e){
+        this.setState({m3: e.currentTarget.value});
+        this.epsTotalCounting();
+        this.changingCounting("q1");
+    };
+    change_m4(e){
+        this.setState({m4: e.currentTarget.value});
+        this.epsTotalCounting();
+        this.changingCounting("q2");
+    };
+    change_m5(e){
+        this.setState({m5: e.currentTarget.value});
+        this.epsTotalCounting();
+        this.changingCounting("q2");
+    };
+    change_m6(e){
+        this.setState({m6: e.currentTarget.value});
+        this.epsTotalCounting();
+        this.changingCounting("q2");
+    };
+    change_m7(e){
+        this.setState({m7: e.currentTarget.value});
+        this.epsTotalCounting();
+        this.changingCounting("q3");
+    };
+    change_m8(e){
+        this.setState({m8: e.currentTarget.value});
+        this.epsTotalCounting();
+        this.changingCounting("q3");
+    };
+    change_m9(e){
+        this.setState({m9: e.currentTarget.value});
+        this.epsTotalCounting();
+        this.changingCounting("q3");
+    };
+    change_m10(e){
+        this.setState({m10: e.currentTarget.value})
+        this.epsTotalCounting();
+        this.changingCounting("q4");
+    };
+    change_m11(e){ 
+        this.setState({m11: e.currentTarget.value})
+        this.epsTotalCounting();
+        this.changingCounting("q4");
+    };
+    change_m12(e){ 
+        this.setState({m12: e.currentTarget.value})
+        this.epsTotalCounting();
+        this.changingCounting("q4");
+    };
+    dividendRateChangeHandler(e){
+        this.setState({dividend_rate: e.currentTarget.value});
+        this.changingCounting("q1");
+        this.changingCounting("q2");
+        this.changingCounting("q3");
+        this.changingCounting("q4");
+        this.MainEpsChangingCounting();
+    };
+    changeAimHandler(e){
+        this.setState({aim: e.currentTarget.value});
+        this.changingCounting("q1");
+        this.changingCounting("q2");
+        this.changingCounting("q3");
+        this.changingCounting("q4");
+        this.aimCounting();
+    };
+    changeShareHandler(e){
+        this.setState({share: e.currentTarget.value});
+        this.changingCounting("q1");
+        this.changingCounting("q2");
+        this.changingCounting("q3");
+        this.changingCounting("q4");
+        this.MainEpsChangingCounting();
+    };
+    yearChanging(e){
+        this.setState({year: e.currentTarget.value});
+        this.changingCounting("q1");
+        this.changingCounting("q2");
+        this.changingCounting("q3");
+        this.changingCounting("q4");
+    };
+	selecChangetHandler(e){
+		this.setState({type: e.currentTarget.value});
+        if (this.state.type=="m"){
+            document.getElementById("qOff1").required=false;
+            document.getElementById("qOff2").required=false;
+            document.getElementById("qOff3").required=false;
+            document.getElementById("qOff4").required=false;
+            document.getElementById("qOff5").required=false;
+            document.getElementById("qOff6").required=false;
+            document.getElementById("qOff7").required=false;
+            document.getElementById("qOff8").required=false;
+            document.getElementById("qOff9").required=false;
+            document.getElementById("qOff10").required=false;
+            document.getElementById("qOff11").required=false;
+            document.getElementById("qOff12").required=false;
+            document.getElementsByClassName("mOff").readonly=false;
+            $(".qOff").css("display", "none");
+        }
+        else if (this.state.type=="q"){
+            document.getElementById("qOff1").required=true;
+            document.getElementById("qOff2").required=true;
+            document.getElementById("qOff3").required=true;
+            document.getElementById("qOff4").required=true;
+            document.getElementById("qOff5").required=true;
+            document.getElementById("qOff6").required=true;
+            document.getElementById("qOff7").required=true;
+            document.getElementById("qOff8").required=true;
+            document.getElementById("qOff9").required=true;
+            document.getElementById("qOff10").required=true;
+            document.getElementById("qOff11").required=true;
+            document.getElementById("qOff12").required=true;
+            $(".qOff").css("display", "");
+            document.getElementsByClassName("mOff").readonly=true;
+            this.changingCounting("q1");
+            this.changingCounting("q2");
+            this.changingCounting("q3");
+            this.changingCounting("q4");
+        }
+    }
+
+	submitHandler(e){
+        this.changingCounting("q1");
+        this.changingCounting("q2");
+        this.changingCounting("q3");
+        this.changingCounting("q4");
+        this.MainEpsChangingCounting();
+        e.preventDefault();
+		let submitFT=new FormData();
+        var Today=new Date();
+        var date=Today.getFullYear()+"/"+(Today.getMonth()+1)+"/"+Today.getDate();
+        submitFT.append("new_company", this.state.company.split(" ").join(""));
+        submitFT.append("dividend_rate", this.state.dividend_rate);
+        submitFT.append("share", this.state.share);
+        if (this.state.aim==null){
+            submitFT.append("aim", "");
+        }
+        else{
+            submitFT.append("aim", this.state.aim);
+        }
+        submitFT.append("type", this.state.type);
+        submitFT.append("year", this.state.year);
+        submitFT.append("epsTotal", this.state.epsTotal);
+        submitFT.append("yield", this.state.yield);
+        submitFT.append("dividend", this.state.dividend);
+        submitFT.append("dates", date);
+		if (this.state.type=="q"){
+            submitFT.append("q1", this.state.q1);
+            submitFT.append("q2", this.state.q2);
+            submitFT.append("q3", this.state.q3);
+            submitFT.append("q4", this.state.q4);
+		}
+		else if (this.state.type=="m"){
+            submitFT.append("m1", this.state.m1);
+            submitFT.append("m2", this.state.m2);
+            submitFT.append("m3", this.state.m3);
+            submitFT.append("m4", this.state.m4);
+            submitFT.append("m5", this.state.m5);
+            submitFT.append("m6", this.state.m6);
+            submitFT.append("m7", this.state.m7);
+            submitFT.append("m8", this.state.m8);
+            submitFT.append("m9", this.state.m9);
+            submitFT.append("m10", this.state.m10);
+            submitFT.append("m11", this.state.m11);
+            submitFT.append("m12", this.state.m12);
+		}
+        $.ajax({
+            processData: false,
+            contentType: false,
+            data: submitFT,
+            url: "/GUI_creater",
+            type: "POST",
+            success: function(datas, retD=this){
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 2000,
+                    timerProgressBar: true,
+                });
+                Toast.fire({
+                    icon: 'success',
+                    title: '資料增加成功',
+                    width: '230px',
+                    background: "#ffffffdd",
+                });
+                // ReactDOM.render(<NewDatasUpdate/>, document.getElementById("creater_updating"));
+            }
+        });
+        this.setState(this.defaultState);
+	}
+    MainEpsChangingCounting(e){
+        // if (this.state.q1!=null&&this.state.q1!=NaN&&this.state.q2!=null&&this.state.q2!=NaN&&this.state.q3!=null&&this.state.q3!=NaN&&this.state.q4!=null&&this.state.q4!=NaN){
+            this.setState((cS)=>({epsTotal: Math.round((parseFloat(cS.q1)+parseFloat(cS.q2)+parseFloat(cS.q3)+parseFloat(cS.q4))*100)/100}));
+        // }
+        // if (this.dividend_rate!=null&&this.dividend_rate!=NaN&&this.epsTotal!=null&&this.epsTotal!=NaN){
+            this.setState((cS)=>({dividend: Math.round(parseFloat(cS.dividend_rate)*parseFloat(cS.epsTotal)/100*100)/100}));
+        // }
+        this.yieldCounting();
+        this.aimCounting();
+        
+    }
+    changingCounting(e){
+        if (e=="q1"){
+            if (this.state.m1!=null&&this.state.m2!=null&&this.state.m3!=null){
+                this.setState((cS)=>{return {q1: Math.round((parseFloat(cS.m1)+parseFloat(cS.m2)+parseFloat(cS.m3))*100)/100};});
+                this.MainEpsChangingCounting();
+            }
+        }
+        else if (e=="q2"){
+            if (this.state.m4!=null&&this.state.m5!=null&&this.state.m6!=null){
+                this.setState((cS)=>{return {q2: Math.round((parseFloat(cS.m4)+parseFloat(cS.m5)+parseFloat(cS.m6))*100)/100};});
+                this.MainEpsChangingCounting();
+            }
+        }
+        else if (e=="q3"){
+            if (this.state.m7!=null&&this.state.m8!=null&&this.state.m9!=null){
+                this.setState((cS)=>{return {q3: Math.round((parseFloat(cS.m7)+parseFloat(cS.m8)+parseFloat(cS.m9))*100)/100};});
+                this.MainEpsChangingCounting();
+            }
+        }
+        else if (e=="q4"){
+            if (this.state.m10!=null&&this.state.m11!=null&&this.state.m12!=null){
+                this.setState((cS)=>{return {q4: Math.round((parseFloat(cS.m10)+parseFloat(cS.m11)+parseFloat(cS.m12))*100)/100};});
+                this.MainEpsChangingCounting();
+            }
+        }
+    }
+    yieldCounting(e){
+        // if (this.state.share!=null&&this.state.dividend!=null&&this.state.dividend!=NaN){
+            this.setState((cS)=>({yield: Math.round((parseFloat(cS.dividend/cS.share)*100))/100}))
+        // }
+    }
+    aimCounting(e){
+        this.setState((cS)=>({eps_aim: Math.round(parseFloat(cS.dividend)/parseFloat(cS.aim)*100)/100}));
+        this.setState((cS)=>({eps_different: Math.round((parseFloat(cS.eps_aim)-parseFloat(cS.share))*100)/100}));
+        this.setState((cS)=>({yield_different: Math.round(parseFloat(cS.eps_different)/parseFloat(cS.share)*100)/100}));
+    }
+}
+
+function Creater(){
+	ReactDOM.render(<CreaterSelector/>, document.getElementById("creater"));
+}
 </script>
 
+<!--=============================================================A EDITOR================================================================================================-->
+<!--=============================================================A EDITOR================================================================================================-->
+<!--=============================================================A EDITOR================================================================================================-->
 <!--=============================================================A EDITOR================================================================================================-->
 <script>
 "use strict";
 
 var final_put = [];
-window.onload = contect();
+
+window.onload = function () {
+  contect();
+  Creater();
+  document.getElementById("noBlank").addEventListener("blur", function () {
+    document.getElementById("noBlank").value = document.getElementById("noBlank").value.split(" ").join("");
+  });
+};
 
 function contect_one(datas) {
+  // 更新後資料處理及輸出
   var Today = new Date();
   var yearNow = Today.getFullYear();
   var updater = [];
@@ -1249,16 +1728,17 @@ function contect_one(datas) {
   }
 
   var a = new Date();
-  var csa = a.getFullYear();;
-  try{
-    var target = datas[csa]["dividend"] / datas["aim"] * 100;
-    var differ = datas[csa]["dividend"] / datas["aim"] * 100 - datas["share"];
-    var ttr = 100 * ((datas[csa]["dividend"] / datas["aim"] * 100 - datas["share"]) / datas["share"]);
-  }
-  catch(e){
-	var target="";
-	var differ="";
-	var ttr="";
+  var csa = a.getFullYear();
+
+  try {
+    var target = Math.round(datas[csa]["dividend"] / datas["aim"] * 100 * 100) / 100;
+    var differ = Math.round((datas[csa]["dividend"] / datas["aim"] * 100 - datas["share"]) * 100) / 100;
+    var ttr = Math.round(100 * ((datas[csa]["dividend"] / datas["aim"] * 100 - datas["share"]) / datas["share"]) * 100) / 100;
+  } catch (e) {
+    console.log(e);
+    var target = "";
+    var differ = "";
+    var ttr = "";
   }
 
   updater.push( /*#__PURE__*/React.createElement(AnalyzeAim, {
@@ -1984,6 +2464,820 @@ function contect() {
     });
   }
 }
+
+class Title extends React.Component {
+  render() {}
+
+  clickHandler(e) {}
+
+}
+
+class NewDatasUpdate extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+
+  render() {}
+
+}
+
+class CreaterSelector extends React.Component {
+  constructor(props) {
+    super(props);
+    this.defaultState = {
+      company: null,
+      type: "q",
+      year: 2022,
+      dividend: null,
+      dividend_rate: null,
+      q1: null,
+      q2: null,
+      q3: null,
+      q4: null,
+      m1: null,
+      m2: null,
+      m3: null,
+      m4: null,
+      m5: null,
+      m6: null,
+      m7: null,
+      m8: null,
+      m9: null,
+      m10: null,
+      m11: null,
+      m12: null,
+      share: null,
+      aim: null,
+      epsTotal: null,
+      yield: null,
+      eps_aim: null,
+      yield_different: null,
+      eps_different: null
+    };
+    this.state = this.defaultState;
+  }
+
+  render() {
+    return /*#__PURE__*/React.createElement("form", {
+      onSubmit: this.submitHandler.bind(this)
+    }, /*#__PURE__*/React.createElement("table", null, /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("th", {
+      className: "cpname",
+      colspan: "4"
+    }, /*#__PURE__*/React.createElement("input", {
+      placeholder: "\u516C\u53F8\u540D\u7A31(\u4E0D\u53EF\u6709\u7A7A\u683C)",
+      value: this.state.company,
+      id: "noBlank",
+      onblur: "Trim(this,this.value,'all')",
+      onChange: this.companyChange.bind(this),
+      required: true,
+      onkeyup: "this.value=this.value.replace(/\\s+/g,'')",
+      type: "text",
+      className: "inlineText",
+      style: {
+        width: "99%"
+      }
+    })), /*#__PURE__*/React.createElement("th", {
+      className: "function_form"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "flexBoxer"
+    }, /*#__PURE__*/React.createElement("select", {
+      value: this.state.type,
+      onChange: this.selecChangetHandler.bind(this)
+    }, /*#__PURE__*/React.createElement("option", {
+      value: "q"
+    }, "\u5B63"), /*#__PURE__*/React.createElement("option", {
+      value: "m"
+    }, "\u6708")), /*#__PURE__*/React.createElement("input", {
+      name: "nn",
+      className: "updateing_each",
+      type: "submit",
+      value: "\u9001\u51FA"
+    })))), /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", {
+      className: "title"
+    }, "season"), /*#__PURE__*/React.createElement("td", {
+      className: "title"
+    }, "EPS"), /*#__PURE__*/React.createElement("td", {
+      className: "title"
+    }, "\u914D\u606F"), /*#__PURE__*/React.createElement("td", {
+      className: "title"
+    }, "\u914D\u606F\u7387 %"), /*#__PURE__*/React.createElement("td", {
+      className: "title"
+    }, "\u6B96\u5229\u7387 %")), /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", {
+      className: "table_in"
+    }, /*#__PURE__*/React.createElement("input", {
+      type: "number",
+      step: "1",
+      min: "2010",
+      max: "2100",
+      required: true,
+      className: "inlineText",
+      value: this.state.year,
+      onChange: this.yearChanging.bind(this),
+      placeholder: "\u5E74\u5206"
+    })), /*#__PURE__*/React.createElement("td", {
+      className: "table_in"
+    }, this.state.epsTotal), /*#__PURE__*/React.createElement("td", {
+      className: "table_in"
+    }, this.state.dividend), /*#__PURE__*/React.createElement("td", {
+      className: "table_in"
+    }, /*#__PURE__*/React.createElement("input", {
+      type: "number",
+      step: "0.01",
+      min: "0",
+      max: "100",
+      required: true,
+      className: "inlineText",
+      value: this.state.dividend_rate,
+      onChange: this.dividendRateChangeHandler.bind(this),
+      placeholder: "\u914D\u606F\u7387"
+    })), /*#__PURE__*/React.createElement("td", {
+      className: "table_in"
+    }, this.state.yield)), /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", {
+      className: "table_in"
+    }, "Q1"), /*#__PURE__*/React.createElement("td", {
+      className: "table_in"
+    }, /*#__PURE__*/React.createElement("input", {
+      type: "number",
+      step: "0.01",
+      min: "0",
+      max: "1000",
+      required: true,
+      className: "inlineText mOff",
+      value: this.state.q1,
+      onChange: this.change_q1.bind(this),
+      placeholder: "Q1"
+    })), /*#__PURE__*/React.createElement("td", {
+      className: "table_in"
+    }, /*#__PURE__*/React.createElement("input", {
+      type: "number",
+      step: "0.01",
+      min: "0",
+      max: "1000",
+      id: "qOff1",
+      required: true,
+      className: "inlineText qOff",
+      value: this.state.m1,
+      onChange: this.change_m1.bind(this),
+      placeholder: "\u4E00\u6708"
+    })), /*#__PURE__*/React.createElement("td", {
+      className: "table_in"
+    }, /*#__PURE__*/React.createElement("input", {
+      type: "number",
+      step: "0.01",
+      min: "0",
+      max: "1000",
+      id: "qOff2",
+      required: true,
+      className: "inlineText qOff",
+      value: this.state.m2,
+      onChange: this.change_m2.bind(this),
+      placeholder: "\u4E8C\u6708"
+    })), /*#__PURE__*/React.createElement("td", {
+      className: "table_in"
+    }, /*#__PURE__*/React.createElement("input", {
+      type: "number",
+      step: "0.01",
+      min: "0",
+      max: "1000",
+      id: "qOff3",
+      required: true,
+      className: "inlineText qOff",
+      value: this.state.m3,
+      onChange: this.change_m3.bind(this),
+      placeholder: "\u4E09\u6708"
+    }))), /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", {
+      className: "table_in"
+    }, "Q2"), /*#__PURE__*/React.createElement("td", {
+      className: "table_in"
+    }, /*#__PURE__*/React.createElement("input", {
+      type: "number",
+      step: "0.01",
+      min: "0",
+      max: "1000",
+      required: true,
+      className: "inlineText mOff",
+      value: this.state.q2,
+      onChange: this.change_q2.bind(this),
+      placeholder: "Q2"
+    })), /*#__PURE__*/React.createElement("td", {
+      className: "table_in"
+    }, /*#__PURE__*/React.createElement("input", {
+      type: "number",
+      step: "0.01",
+      min: "0",
+      max: "1000",
+      id: "qOff4",
+      required: true,
+      className: "inlineText qOff",
+      value: this.state.m4,
+      onChange: this.change_m4.bind(this),
+      placeholder: "\u56DB\u6708"
+    })), /*#__PURE__*/React.createElement("td", {
+      className: "table_in"
+    }, /*#__PURE__*/React.createElement("input", {
+      type: "number",
+      step: "0.01",
+      min: "0",
+      max: "1000",
+      id: "qOff5",
+      required: true,
+      className: "inlineText qOff",
+      value: this.state.m5,
+      onChange: this.change_m5.bind(this),
+      placeholder: "\u4E94\u6708"
+    })), /*#__PURE__*/React.createElement("td", {
+      className: "table_in"
+    }, /*#__PURE__*/React.createElement("input", {
+      type: "number",
+      step: "0.01",
+      min: "0",
+      max: "1000",
+      id: "qOff6",
+      required: true,
+      className: "inlineText qOff",
+      value: this.state.m6,
+      onChange: this.change_m6.bind(this),
+      placeholder: "\u516D\u6708"
+    }))), /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", {
+      className: "table_in"
+    }, "Q3"), /*#__PURE__*/React.createElement("td", {
+      className: "table_in"
+    }, /*#__PURE__*/React.createElement("input", {
+      type: "number",
+      step: "0.01",
+      min: "0",
+      max: "1000",
+      required: true,
+      className: "inlineText mOff",
+      value: this.state.q3,
+      onChange: this.change_q3.bind(this),
+      placeholder: "Q3"
+    })), /*#__PURE__*/React.createElement("td", {
+      className: "table_in"
+    }, /*#__PURE__*/React.createElement("input", {
+      type: "number",
+      step: "0.01",
+      min: "0",
+      max: "1000",
+      id: "qOff7",
+      required: true,
+      className: "inlineText qOff",
+      value: this.state.m7,
+      onChange: this.change_m7.bind(this),
+      placeholder: "\u4E03\u6708"
+    })), /*#__PURE__*/React.createElement("td", {
+      className: "table_in"
+    }, /*#__PURE__*/React.createElement("input", {
+      type: "number",
+      step: "0.01",
+      min: "0",
+      max: "1000",
+      id: "qOff8",
+      required: true,
+      className: "inlineText qOff",
+      value: this.state.m8,
+      onChange: this.change_m8.bind(this),
+      placeholder: "\u516B\u6708"
+    })), /*#__PURE__*/React.createElement("td", {
+      className: "table_in"
+    }, /*#__PURE__*/React.createElement("input", {
+      type: "number",
+      step: "0.01",
+      min: "0",
+      max: "1000",
+      id: "qOff9",
+      required: true,
+      className: "inlineText qOff",
+      value: this.state.m9,
+      onChange: this.change_m9.bind(this),
+      placeholder: "\u4E5D\u6708"
+    }))), /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", {
+      className: "table_in"
+    }, "Q4"), /*#__PURE__*/React.createElement("td", {
+      className: "table_in"
+    }, /*#__PURE__*/React.createElement("input", {
+      type: "number",
+      step: "0.01",
+      min: "0",
+      max: "1000",
+      required: true,
+      className: "inlineText mOff",
+      value: this.state.q4,
+      onChange: this.change_q4.bind(this),
+      placeholder: "Q4"
+    })), /*#__PURE__*/React.createElement("td", {
+      className: "table_in"
+    }, /*#__PURE__*/React.createElement("input", {
+      type: "number",
+      step: "0.01",
+      min: "0",
+      max: "1000",
+      id: "qOff10",
+      required: true,
+      className: "inlineText qOff",
+      value: this.state.m10,
+      onChange: this.change_m10.bind(this),
+      placeholder: "\u5341\u6708"
+    })), /*#__PURE__*/React.createElement("td", {
+      className: "table_in"
+    }, /*#__PURE__*/React.createElement("input", {
+      type: "number",
+      step: "0.01",
+      min: "0",
+      max: "1000",
+      id: "qOff11",
+      required: true,
+      className: "inlineText qOff",
+      value: this.state.m11,
+      onChange: this.change_m11.bind(this),
+      placeholder: "\u5341\u4E00\u6708"
+    })), /*#__PURE__*/React.createElement("td", {
+      className: "table_in"
+    }, /*#__PURE__*/React.createElement("input", {
+      type: "number",
+      step: "0.01",
+      min: "0",
+      max: "1000",
+      id: "qOff12",
+      required: true,
+      className: "inlineText qOff",
+      value: this.state.m12,
+      onChange: this.change_m12.bind(this),
+      placeholder: "\u5341\u4E8C\u6708"
+    }))), /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", {
+      className: "table_in"
+    }, "\u76EE\u6A19\u50F9"), /*#__PURE__*/React.createElement("td", {
+      className: "table_in"
+    }, this.state.eps_aim), /*#__PURE__*/React.createElement("td", {
+      className: "table_in"
+    }), /*#__PURE__*/React.createElement("td", {
+      className: "table_in"
+    }), /*#__PURE__*/React.createElement("td", {
+      className: "table_in"
+    }, /*#__PURE__*/React.createElement("input", {
+      type: "number",
+      className: "inlineText",
+      value: this.state.aim,
+      onChange: this.changeAimHandler.bind(this),
+      placeholder: "\u76EE\u6A19\u6B96\u5229\u7387"
+    }))), /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", {
+      className: "table_in"
+    }, "\u5229\u5DEE"), /*#__PURE__*/React.createElement("td", {
+      className: "table_in"
+    }, this.state.eps_different), /*#__PURE__*/React.createElement("td", {
+      className: "table_in"
+    }), /*#__PURE__*/React.createElement("td", {
+      className: "table_in"
+    }), /*#__PURE__*/React.createElement("td", {
+      className: "table_in"
+    }, this.state.yield_different)), /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", {
+      className: "table_in"
+    }, "\u8CB7\u9032\u50F9"), /*#__PURE__*/React.createElement("td", {
+      className: "table_in"
+    }), /*#__PURE__*/React.createElement("td", {
+      className: "table_in"
+    }), /*#__PURE__*/React.createElement("td", {
+      className: "table_in"
+    }), /*#__PURE__*/React.createElement("td", {
+      className: "table_in"
+    })), /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", {
+      className: "table_in"
+    }, "\u76EE\u524D\u50F9\u4F4D"), /*#__PURE__*/React.createElement("td", {
+      className: "table_in"
+    }, /*#__PURE__*/React.createElement("input", {
+      type: "number",
+      step: "0.01",
+      min: "0",
+      required: true,
+      className: "inlineText",
+      value: this.state.share,
+      onChange: this.changeShareHandler.bind(this),
+      placeholder: "\u80A1\u50F9"
+    })), /*#__PURE__*/React.createElement("td", {
+      className: "table_in"
+    }), /*#__PURE__*/React.createElement("td", {
+      className: "table_in"
+    }, "\u76EE\u524D\u6B96\u5229\u7387"), /*#__PURE__*/React.createElement("td", {
+      className: "table_in"
+    }, this.state.yield)), /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", {
+      className: "table_in"
+    }, "\u4FBF\u5B9C\u50F9"), /*#__PURE__*/React.createElement("td", {
+      className: "table_in"
+    }), /*#__PURE__*/React.createElement("td", {
+      className: "table_in"
+    }), /*#__PURE__*/React.createElement("td", {
+      className: "table_in"
+    }), /*#__PURE__*/React.createElement("td", {
+      className: "table_in"
+    }))));
+  }
+
+  companyChange(e) {
+    this.setState({
+      company: e.currentTarget.value
+    });
+  }
+
+  componentDidMount() {
+    $(".qOff").css("display", "none");
+    document.getElementById("qOff1").removeAttribute("required");
+    document.getElementById("qOff2").removeAttribute("required");
+    document.getElementById("qOff3").removeAttribute("required");
+    document.getElementById("qOff4").removeAttribute("required");
+    document.getElementById("qOff5").removeAttribute("required");
+    document.getElementById("qOff6").removeAttribute("required");
+    document.getElementById("qOff7").removeAttribute("required");
+    document.getElementById("qOff8").removeAttribute("required");
+    document.getElementById("qOff9").removeAttribute("required");
+    document.getElementById("qOff10").removeAttribute("required");
+    document.getElementById("qOff11").removeAttribute("required");
+    document.getElementById("qOff12").removeAttribute("required"); // if (this.state.type=="q"){
+    //     // document.getElementsByClassName("qOff").setAttribute("required");
+    //     document.getElementsByClassName("mOff").readonly=false;
+    // }
+    // else if (this.state.type=="q"){
+    //     $(".qOff").css("display", "");
+    //     // document.getElementsByClassName("qOff").removeAttribute("required");
+    //     document.getElementsByClassName("mOff").readonly=true;
+    //     this.changingCounting("q1");
+    //     this.changingCounting("q2");
+    //     this.changingCounting("q3");
+    //     this.changingCounting("q4");
+    // }
+  }
+
+  epsTotalCounting(e) {
+    this.changingCounting("q1");
+    this.changingCounting("q2");
+    this.changingCounting("q3");
+    this.changingCounting("q4");
+  }
+
+  change_q1(e) {
+    this.setState({
+      q1: e.currentTarget.value
+    });
+    this.epsTotalCounting();
+    this.MainEpsChangingCounting();
+  }
+
+  change_q2(e) {
+    this.setState({
+      q2: e.currentTarget.value
+    });
+    this.epsTotalCounting();
+    this.MainEpsChangingCounting();
+  }
+
+  change_q3(e) {
+    this.setState({
+      q3: e.currentTarget.value
+    });
+    this.epsTotalCounting();
+    this.MainEpsChangingCounting();
+  }
+
+  change_q4(e) {
+    this.setState({
+      q4: e.currentTarget.value
+    });
+    this.epsTotalCounting();
+    this.MainEpsChangingCounting();
+  }
+
+  change_m1(e) {
+    this.setState({
+      m1: e.currentTarget.value
+    });
+    this.epsTotalCounting();
+    this.changingCounting("q1");
+  }
+
+  change_m2(e) {
+    this.setState({
+      m2: e.currentTarget.value
+    });
+    this.epsTotalCounting();
+    this.changingCounting("q1");
+  }
+
+  change_m3(e) {
+    this.setState({
+      m3: e.currentTarget.value
+    });
+    this.epsTotalCounting();
+    this.changingCounting("q1");
+  }
+
+  change_m4(e) {
+    this.setState({
+      m4: e.currentTarget.value
+    });
+    this.epsTotalCounting();
+    this.changingCounting("q2");
+  }
+
+  change_m5(e) {
+    this.setState({
+      m5: e.currentTarget.value
+    });
+    this.epsTotalCounting();
+    this.changingCounting("q2");
+  }
+
+  change_m6(e) {
+    this.setState({
+      m6: e.currentTarget.value
+    });
+    this.epsTotalCounting();
+    this.changingCounting("q2");
+  }
+
+  change_m7(e) {
+    this.setState({
+      m7: e.currentTarget.value
+    });
+    this.epsTotalCounting();
+    this.changingCounting("q3");
+  }
+
+  change_m8(e) {
+    this.setState({
+      m8: e.currentTarget.value
+    });
+    this.epsTotalCounting();
+    this.changingCounting("q3");
+  }
+
+  change_m9(e) {
+    this.setState({
+      m9: e.currentTarget.value
+    });
+    this.epsTotalCounting();
+    this.changingCounting("q3");
+  }
+
+  change_m10(e) {
+    this.setState({
+      m10: e.currentTarget.value
+    });
+    this.epsTotalCounting();
+    this.changingCounting("q4");
+  }
+
+  change_m11(e) {
+    this.setState({
+      m11: e.currentTarget.value
+    });
+    this.epsTotalCounting();
+    this.changingCounting("q4");
+  }
+
+  change_m12(e) {
+    this.setState({
+      m12: e.currentTarget.value
+    });
+    this.epsTotalCounting();
+    this.changingCounting("q4");
+  }
+
+  dividendRateChangeHandler(e) {
+    this.setState({
+      dividend_rate: e.currentTarget.value
+    });
+    this.changingCounting("q1");
+    this.changingCounting("q2");
+    this.changingCounting("q3");
+    this.changingCounting("q4");
+    this.MainEpsChangingCounting();
+  }
+
+  changeAimHandler(e) {
+    this.setState({
+      aim: e.currentTarget.value
+    });
+    this.changingCounting("q1");
+    this.changingCounting("q2");
+    this.changingCounting("q3");
+    this.changingCounting("q4");
+    this.aimCounting();
+  }
+
+  changeShareHandler(e) {
+    this.setState({
+      share: e.currentTarget.value
+    });
+    this.changingCounting("q1");
+    this.changingCounting("q2");
+    this.changingCounting("q3");
+    this.changingCounting("q4");
+    this.MainEpsChangingCounting();
+  }
+
+  yearChanging(e) {
+    this.setState({
+      year: e.currentTarget.value
+    });
+    this.changingCounting("q1");
+    this.changingCounting("q2");
+    this.changingCounting("q3");
+    this.changingCounting("q4");
+  }
+
+  selecChangetHandler(e) {
+    this.setState({
+      type: e.currentTarget.value
+    });
+
+    if (this.state.type == "m") {
+      document.getElementById("qOff1").required = false;
+      document.getElementById("qOff2").required = false;
+      document.getElementById("qOff3").required = false;
+      document.getElementById("qOff4").required = false;
+      document.getElementById("qOff5").required = false;
+      document.getElementById("qOff6").required = false;
+      document.getElementById("qOff7").required = false;
+      document.getElementById("qOff8").required = false;
+      document.getElementById("qOff9").required = false;
+      document.getElementById("qOff10").required = false;
+      document.getElementById("qOff11").required = false;
+      document.getElementById("qOff12").required = false;
+      document.getElementsByClassName("mOff").readonly = false;
+      $(".qOff").css("display", "none");
+    } else if (this.state.type == "q") {
+      document.getElementById("qOff1").required = true;
+      document.getElementById("qOff2").required = true;
+      document.getElementById("qOff3").required = true;
+      document.getElementById("qOff4").required = true;
+      document.getElementById("qOff5").required = true;
+      document.getElementById("qOff6").required = true;
+      document.getElementById("qOff7").required = true;
+      document.getElementById("qOff8").required = true;
+      document.getElementById("qOff9").required = true;
+      document.getElementById("qOff10").required = true;
+      document.getElementById("qOff11").required = true;
+      document.getElementById("qOff12").required = true;
+      $(".qOff").css("display", "");
+      document.getElementsByClassName("mOff").readonly = true;
+      this.changingCounting("q1");
+      this.changingCounting("q2");
+      this.changingCounting("q3");
+      this.changingCounting("q4");
+    }
+  }
+
+  submitHandler(e) {
+    this.changingCounting("q1");
+    this.changingCounting("q2");
+    this.changingCounting("q3");
+    this.changingCounting("q4");
+    this.MainEpsChangingCounting();
+    e.preventDefault();
+    let submitFT = new FormData();
+    var Today = new Date();
+    var date = Today.getFullYear() + "/" + (Today.getMonth() + 1) + "/" + Today.getDate();
+    submitFT.append("new_company", this.state.company.split(" ").join(""));
+    submitFT.append("dividend_rate", this.state.dividend_rate);
+    submitFT.append("share", this.state.share);
+
+    if (this.state.aim == null) {
+      submitFT.append("aim", "");
+    } else {
+      submitFT.append("aim", this.state.aim);
+    }
+
+    submitFT.append("type", this.state.type);
+    submitFT.append("year", this.state.year);
+    submitFT.append("epsTotal", this.state.epsTotal);
+    submitFT.append("yield", this.state.yield);
+    submitFT.append("dividend", this.state.dividend);
+    submitFT.append("dates", date);
+
+    if (this.state.type == "q") {
+      submitFT.append("q1", this.state.q1);
+      submitFT.append("q2", this.state.q2);
+      submitFT.append("q3", this.state.q3);
+      submitFT.append("q4", this.state.q4);
+    } else if (this.state.type == "m") {
+      submitFT.append("m1", this.state.m1);
+      submitFT.append("m2", this.state.m2);
+      submitFT.append("m3", this.state.m3);
+      submitFT.append("m4", this.state.m4);
+      submitFT.append("m5", this.state.m5);
+      submitFT.append("m6", this.state.m6);
+      submitFT.append("m7", this.state.m7);
+      submitFT.append("m8", this.state.m8);
+      submitFT.append("m9", this.state.m9);
+      submitFT.append("m10", this.state.m10);
+      submitFT.append("m11", this.state.m11);
+      submitFT.append("m12", this.state.m12);
+    }
+
+    $.ajax({
+      processData: false,
+      contentType: false,
+      data: submitFT,
+      url: "/GUI_creater",
+      type: "POST",
+      success: function (datas, retD = this) {
+        const Toast = Swal.mixin({
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 2000,
+          timerProgressBar: true
+        });
+        Toast.fire({
+          icon: 'success',
+          title: '資料增加成功',
+          width: '230px',
+          background: "#ffffffdd"
+        }); // ReactDOM.render(<NewDatasUpdate/>, document.getElementById("creater_updating"));
+      }
+    });
+    this.setState(this.defaultState);
+  }
+
+  MainEpsChangingCounting(e) {
+    // if (this.state.q1!=null&&this.state.q1!=NaN&&this.state.q2!=null&&this.state.q2!=NaN&&this.state.q3!=null&&this.state.q3!=NaN&&this.state.q4!=null&&this.state.q4!=NaN){
+    this.setState(cS => ({
+      epsTotal: Math.round((parseFloat(cS.q1) + parseFloat(cS.q2) + parseFloat(cS.q3) + parseFloat(cS.q4)) * 100) / 100
+    })); // }
+    // if (this.dividend_rate!=null&&this.dividend_rate!=NaN&&this.epsTotal!=null&&this.epsTotal!=NaN){
+
+    this.setState(cS => ({
+      dividend: Math.round(parseFloat(cS.dividend_rate) * parseFloat(cS.epsTotal) / 100 * 100) / 100
+    })); // }
+
+    this.yieldCounting();
+    this.aimCounting();
+  }
+
+  changingCounting(e) {
+    if (e == "q1") {
+      if (this.state.m1 != null && this.state.m2 != null && this.state.m3 != null) {
+        this.setState(cS => {
+          return {
+            q1: Math.round((parseFloat(cS.m1) + parseFloat(cS.m2) + parseFloat(cS.m3)) * 100) / 100
+          };
+        });
+        this.MainEpsChangingCounting();
+      }
+    } else if (e == "q2") {
+      if (this.state.m4 != null && this.state.m5 != null && this.state.m6 != null) {
+        this.setState(cS => {
+          return {
+            q2: Math.round((parseFloat(cS.m4) + parseFloat(cS.m5) + parseFloat(cS.m6)) * 100) / 100
+          };
+        });
+        this.MainEpsChangingCounting();
+      }
+    } else if (e == "q3") {
+      if (this.state.m7 != null && this.state.m8 != null && this.state.m9 != null) {
+        this.setState(cS => {
+          return {
+            q3: Math.round((parseFloat(cS.m7) + parseFloat(cS.m8) + parseFloat(cS.m9)) * 100) / 100
+          };
+        });
+        this.MainEpsChangingCounting();
+      }
+    } else if (e == "q4") {
+      if (this.state.m10 != null && this.state.m11 != null && this.state.m12 != null) {
+        this.setState(cS => {
+          return {
+            q4: Math.round((parseFloat(cS.m10) + parseFloat(cS.m11) + parseFloat(cS.m12)) * 100) / 100
+          };
+        });
+        this.MainEpsChangingCounting();
+      }
+    }
+  }
+
+  yieldCounting(e) {
+    // if (this.state.share!=null&&this.state.dividend!=null&&this.state.dividend!=NaN){
+    this.setState(cS => ({
+      yield: Math.round(parseFloat(cS.dividend / cS.share) * 100) / 100
+    })); // }
+  }
+
+  aimCounting(e) {
+    this.setState(cS => ({
+      eps_aim: Math.round(parseFloat(cS.dividend) / parseFloat(cS.aim) * 100) / 100
+    }));
+    this.setState(cS => ({
+      eps_different: Math.round((parseFloat(cS.eps_aim) - parseFloat(cS.share)) * 100) / 100
+    }));
+    this.setState(cS => ({
+      yield_different: Math.round(parseFloat(cS.eps_different) / parseFloat(cS.share) * 100) / 100
+    }));
+  }
+
+}
+
+function Creater() {
+  ReactDOM.render( /*#__PURE__*/React.createElement(CreaterSelector, null), document.getElementById("creater"));
+}
 </script>
 
 {%endblock%}
@@ -1991,6 +3285,12 @@ function contect() {
 {%block main%}  
 <div class="toTop" id="gotop">
     <img src="/toTP2.png" style="width: 35px; height: 35px; user-select: none;" ondragstart="return false" oncontextmenu="return false" onselect="return false" oncopy="return false" oncut="return false">
+</div>
+<div id="creater">
+	<button onclick="aaa()">d</button>
+</div>
+<div id="creater_updating">
+
 </div>
 <div id="container">
 

@@ -105,3 +105,10 @@ table{
     background-color: #bebebe50;
     border-radius: 17.5px;
 }
+#creater{
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
