@@ -19,23 +19,23 @@ function click_change_tmg(){
 }
 
 $(function() {
-    $("#creater").toggle(300);
-    $("#creater_osd").toggle(300);
+    $("#creater").toggle(0);
+    $("#creater_osd").toggle(0);
     $("#creater_background").toggle(0);
     $('#gotop').click(function(){
         $('html,body').animate({scrollTop: 0}, 300);
         return false;
     });
     $('#add_data_btn').click(function(){
-        $("#creater").toggle(300);
-        $("#creater_osd").toggle(300);
-        $("#creater_background").toggle(30);
+        $("#creater").toggle(50);
+        $("#creater_osd").toggle(50);
+        $("#creater_background").toggle(10);
     });
     $(document).click(function(e){
         if (e.target.id=="creater_background"){
-            $("#creater").toggle(300);
-            $("#creater_osd").toggle(300);
-            $("#creater_background").toggle(30);
+            $("#creater").toggle(10);
+            $("#creater_osd").toggle(10);
+            $("#creater_background").toggle(10);
         }
     });
 });
