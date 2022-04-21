@@ -106,9 +106,47 @@ table{
     border-radius: 17.5px;
 }
 #creater{
-    width: 100%;
     height: auto;
+    width: auto;
+    top: 52px;
+    background-color: #ffffff;
+}
+#creater_osd{
+    width: 100%;
+    height: 100%;
+    top: 50px;
+    position: fixed;
+}
+
+.add_data{
+    position: fixed;
+    display: flex;
+    flex-wrap: wrap;
+    width: 40px;
+    height: 40px;
+    border-radius: 18px;
+    background-color: #70e77063;
+    top: 58px;
+    right: 4px;
+    padding: 0px;
+    margin: 0px;
+    justify-content: center;
+    align-items: center;
+}
+.add_data>img{
+    width: 36px;
+    height: 36px;
+}
+.select_type{
+    margin-right: 8px;
+    height: 20px;
+}
+#creater_background{
+    background-color: #a2a2a288;
+    width: 100%;
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
+    top: 50px;
 }

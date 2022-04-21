@@ -19,7 +19,7 @@
 
 <!-- React -->
 
-<script type="text/babel" src="">
+<script type="text/babel">
 var final_put=[];
 
 
@@ -791,26 +791,45 @@ function contect(){
 	}
 }
 
+function updating_render_constructor(main_datas_input, year){
+    ReactDOM.render(<NewDatasUpdate datas={main_datas_input} years={year}/>, document.getElementById("creater_updating"));
+}
 
-
-class Title extends React.Component{
+class Top extends React.Component{
     render(){
-        
+		return <tr>
+				<th onClick={this.clickHandler.bind(this)} className="cpname" colspan="4">{this.props.company} ({this.props.date})</th>
+				<th className="function_form">
+				<div className="flexBoxer">
+					<input className="updateing_each" type="submit" value="更新"/>
+					<div className="remove_each" onClick={this.removeHandler.bind(this)}>刪除</div>
+				</div>
+				</th>
+			</tr>;
     }
     clickHandler(e){
 
     }
+	removeHandler(e){
+
+	}
 }
 
 class NewDatasUpdate extends React.Component{
     constructor(props){
         super(props);
+        this.processingData=this.props.datas;
         this.state={
-
+            
         };
     }
     render(){
-        
+        for (let i=0; i<this.processingData.length; i++){
+			let cells=[];
+			data=this.processingData[i];
+			data_year=data[parseInt(this.props.years)];
+			cells.push(<Top company={data["company"]} date={data["date"]}/>);
+		}
     }
 }
 
@@ -850,14 +869,13 @@ class CreaterSelector extends React.Component{
         this.state=this.defaultState;
 	}
 	render(){
-
 		return <form onSubmit={this.submitHandler.bind(this)}>
                 <table>
 				<tr>
 					<th className="cpname" colspan="4"><input placeholder="公司名稱(不可有空格)" value={this.state.company} id="noBlank" onblur="Trim(this,this.value,'all')" onChange={this.companyChange.bind(this)} required onkeyup="this.value=this.value.replace(/\s+/g,'')" type="text" className="inlineText" style={ {width: "99%"}}/></th>
 					<th className="function_form">
 					<div className="flexBoxer">
-						<select value={this.state.type} onChange={this.selecChangetHandler.bind(this)}>
+						<select value={this.state.type} className="select_type" onChange={this.selecChangetHandler.bind(this)}>
 							<option value="q">季</option>
 							<option value="m">月</option>
 						</select>
@@ -865,47 +883,47 @@ class CreaterSelector extends React.Component{
 					</div>
 					</th>
 				</tr>
-				<tr>
+				<tr className="static">
                     <td className="title">season</td>
                     <td className="title">EPS</td>
                     <td className="title">配息</td>
                     <td className="title">配息率 %</td>
                     <td className="title">殖利率 %</td>
 				</tr>
-				<tr>
-                    <td className="table_in"><input type="number" step="1" min="2010" max="2100" required className="inlineText" value={this.state.year} onChange={this.yearChanging.bind(this)} placeholder="年分"/></td>
+				<tr style={ {backgroundColor:"#e1c4ee"}}>
+                    <td style={ {backgroundColor:"rgb(193, 130, 223)"}} className="table_in"><input type="number" step="1" min="2010" max="2100" required className="inlineText" value={this.state.year} onChange={this.yearChanging.bind(this)} placeholder="年分"/></td>
                     <td className="table_in">{this.state.epsTotal}</td>
                     <td className="table_in">{this.state.dividend}</td>
                     <td className="table_in"><input type="number" step="0.01" min="0" max="100" required className="inlineText" value={this.state.dividend_rate} onChange={this.dividendRateChangeHandler.bind(this)} placeholder="配息率"/></td>
                     <td className="table_in">{this.state.yield}</td>
                 </tr>
 				<tr>
-                    <td className="table_in">Q1</td>
-                    <td className="table_in"><input type="number" step="0.01" min="0" max="1000" required className="inlineText mOff" value={this.state.q1} onChange={this.change_q1.bind(this)} placeholder="Q1"/></td>
-                    <td className="table_in"><input type="number" step="0.01" min="0" max="1000" id="qOff1" required className="inlineText qOff" value={this.state.m1} onChange={this.change_m1.bind(this)} placeholder="一月"/></td>
-                    <td className="table_in"><input type="number" step="0.01" min="0" max="1000" id="qOff2" required className="inlineText qOff" value={this.state.m2} onChange={this.change_m2.bind(this)} placeholder="二月"/></td>
-                    <td className="table_in"><input type="number" step="0.01" min="0" max="1000" id="qOff3" required className="inlineText qOff" value={this.state.m3} onChange={this.change_m3.bind(this)} placeholder="三月"/></td>
+                    <td style={ {backgroundColor:"#e1c4ee"}} className="table_in">Q1</td>
+                    <td style={ {backgroundColor:"rgb(245, 244, 179)"}} className="table_in"><input type="number" step="0.01" min="0" max="1000" required className="inlineText mOff" value={this.state.q1} onChange={this.change_q1.bind(this)} placeholder="Q1"/></td>
+                    <td style={ {backgroundColor:"rgb(231, 184, 157)"}} className="table_in"><input type="number" step="0.01" min="0" max="1000" id="qOff1" required className="inlineText qOff" value={this.state.m1} onChange={this.change_m1.bind(this)} placeholder="一月"/></td>
+                    <td style={ {backgroundColor:"rgb(231, 184, 157)"}} className="table_in"><input type="number" step="0.01" min="0" max="1000" id="qOff2" required className="inlineText qOff" value={this.state.m2} onChange={this.change_m2.bind(this)} placeholder="二月"/></td>
+                    <td style={ {backgroundColor:"rgb(231, 184, 157)"}} className="table_in"><input type="number" step="0.01" min="0" max="1000" id="qOff3" required className="inlineText qOff" value={this.state.m3} onChange={this.change_m3.bind(this)} placeholder="三月"/></td>
                 </tr> 
 				<tr> 
-                    <td className="table_in">Q2</td> 
-                    <td className="table_in"><input type="number" step="0.01" min="0" max="1000" required className="inlineText mOff" value={this.state.q2} onChange={this.change_q2.bind(this)} placeholder="Q2"/></td>
-                    <td className="table_in"><input type="number" step="0.01" min="0" max="1000" id="qOff4" required className="inlineText qOff" value={this.state.m4} onChange={this.change_m4.bind(this)} placeholder="四月"/></td>
-                    <td className="table_in"><input type="number" step="0.01" min="0" max="1000" id="qOff5" required className="inlineText qOff" value={this.state.m5} onChange={this.change_m5.bind(this)} placeholder="五月"/></td>
-                    <td className="table_in"><input type="number" step="0.01" min="0" max="1000" id="qOff6" required className="inlineText qOff" value={this.state.m6} onChange={this.change_m6.bind(this)} placeholder="六月"/></td>
+                    <td style={ {backgroundColor:"#e1c4ee"}} className="table_in">Q2</td> 
+                    <td style={ {backgroundColor:"rgb(245, 244, 179)"}} className="table_in"><input type="number" step="0.01" min="0" max="1000" required className="inlineText mOff" value={this.state.q2} onChange={this.change_q2.bind(this)} placeholder="Q2"/></td>
+                    <td style={ {backgroundColor:"rgb(231, 184, 157)"}} className="table_in"><input type="number" step="0.01" min="0" max="1000" id="qOff4" required className="inlineText qOff" value={this.state.m4} onChange={this.change_m4.bind(this)} placeholder="四月"/></td>
+                    <td style={ {backgroundColor:"rgb(231, 184, 157)"}} className="table_in"><input type="number" step="0.01" min="0" max="1000" id="qOff5" required className="inlineText qOff" value={this.state.m5} onChange={this.change_m5.bind(this)} placeholder="五月"/></td>
+                    <td style={ {backgroundColor:"rgb(231, 184, 157)"}} className="table_in"><input type="number" step="0.01" min="0" max="1000" id="qOff6" required className="inlineText qOff" value={this.state.m6} onChange={this.change_m6.bind(this)} placeholder="六月"/></td>
                 </tr> 
 				<tr> 
-                    <td className="table_in">Q3</td> 
-                    <td className="table_in"><input type="number" step="0.01" min="0" max="1000" required className="inlineText mOff" value={this.state.q3} onChange={this.change_q3.bind(this)} placeholder="Q3"/></td>
-                    <td className="table_in"><input type="number" step="0.01" min="0" max="1000" id="qOff7" required className="inlineText qOff" value={this.state.m7} onChange={this.change_m7.bind(this)} placeholder="七月"/></td>
-                    <td className="table_in"><input type="number" step="0.01" min="0" max="1000" id="qOff8" required className="inlineText qOff" value={this.state.m8} onChange={this.change_m8.bind(this)} placeholder="八月"/></td>
-                    <td className="table_in"><input type="number" step="0.01" min="0" max="1000" id="qOff9" required className="inlineText qOff" value={this.state.m9} onChange={this.change_m9.bind(this)} placeholder="九月"/></td>
+                    <td style={ {backgroundColor:"#e1c4ee"}} className="table_in">Q3</td> 
+                    <td style={ {backgroundColor:"rgb(245, 244, 179)"}} className="table_in"><input type="number" step="0.01" min="0" max="1000" required className="inlineText mOff" value={this.state.q3} onChange={this.change_q3.bind(this)} placeholder="Q3"/></td>
+                    <td style={ {backgroundColor:"rgb(231, 184, 157)"}} className="table_in"><input type="number" step="0.01" min="0" max="1000" id="qOff7" required className="inlineText qOff" value={this.state.m7} onChange={this.change_m7.bind(this)} placeholder="七月"/></td>
+                    <td style={ {backgroundColor:"rgb(231, 184, 157)"}} className="table_in"><input type="number" step="0.01" min="0" max="1000" id="qOff8" required className="inlineText qOff" value={this.state.m8} onChange={this.change_m8.bind(this)} placeholder="八月"/></td>
+                    <td style={ {backgroundColor:"rgb(231, 184, 157)"}} className="table_in"><input type="number" step="0.01" min="0" max="1000" id="qOff9" required className="inlineText qOff" value={this.state.m9} onChange={this.change_m9.bind(this)} placeholder="九月"/></td>
                 </tr> 
 				<tr> 
-                    <td className="table_in">Q4</td> 
-                    <td className="table_in"><input type="number" step="0.01" min="0" max="1000" required className="inlineText mOff" value={this.state.q4} onChange={this.change_q4.bind(this)} placeholder="Q4"/></td>
-                    <td className="table_in"><input type="number" step="0.01" min="0" max="1000" id="qOff10" required className="inlineText qOff" value={this.state.m10} onChange={this.change_m10.bind(this)} placeholder="十月"/></td>
-                    <td className="table_in"><input type="number" step="0.01" min="0" max="1000" id="qOff11" required className="inlineText qOff" value={this.state.m11} onChange={this.change_m11.bind(this)} placeholder="十一月"/></td>
-                    <td className="table_in"><input type="number" step="0.01" min="0" max="1000" id="qOff12" required className="inlineText qOff" value={this.state.m12} onChange={this.change_m12.bind(this)} placeholder="十二月"/></td>
+                    <td style={ {backgroundColor:"#e1c4ee"}} className="table_in">Q4</td> 
+                    <td style={ {backgroundColor:"rgb(245, 244, 179)"}} className="table_in"><input type="number" step="0.01" min="0" max="1000" required className="inlineText mOff" value={this.state.q4} onChange={this.change_q4.bind(this)} placeholder="Q4"/></td>
+                    <td style={ {backgroundColor:"rgb(231, 184, 157)"}} className="table_in"><input type="number" step="0.01" min="0" max="1000" id="qOff10" required className="inlineText qOff" value={this.state.m10} onChange={this.change_m10.bind(this)} placeholder="十月"/></td>
+                    <td style={ {backgroundColor:"rgb(231, 184, 157)"}} className="table_in"><input type="number" step="0.01" min="0" max="1000" id="qOff11" required className="inlineText qOff" value={this.state.m11} onChange={this.change_m11.bind(this)} placeholder="十一月"/></td>
+                    <td style={ {backgroundColor:"rgb(231, 184, 157)"}} className="table_in"><input type="number" step="0.01" min="0" max="1000" id="qOff12" required className="inlineText qOff" value={this.state.m12} onChange={this.change_m12.bind(this)} placeholder="十二月"/></td>
                 </tr> 
 				<tr> 
                     <td className="table_in">目標價</td>
@@ -1185,7 +1203,7 @@ class CreaterSelector extends React.Component{
             data: submitFT,
             url: "/GUI_creater",
             type: "POST",
-            success: function(datas, retD=this){
+            success: function(datas){
                 const Toast = Swal.mixin({
                     toast: true,
                     position: 'top-end',
@@ -1199,10 +1217,12 @@ class CreaterSelector extends React.Component{
                     width: '230px',
                     background: "#ffffffdd",
                 });
-                // ReactDOM.render(<NewDatasUpdate/>, document.getElementById("creater_updating"));
+                updating_render_constructor(datas, this.state.year);
             }
         });
         this.setState(this.defaultState);
+        // this.render();
+
 	}
     MainEpsChangingCounting(e){
         // if (this.state.q1!=null&&this.state.q1!=NaN&&this.state.q2!=null&&this.state.q2!=NaN&&this.state.q3!=null&&this.state.q3!=NaN&&this.state.q4!=null&&this.state.q4!=NaN){
@@ -1262,7 +1282,7 @@ function Creater(){
 <!--=============================================================A EDITOR================================================================================================-->
 <!--=============================================================A EDITOR================================================================================================-->
 <!--=============================================================A EDITOR================================================================================================-->
-<script>
+<script src="">
 "use strict";
 
 var final_put = [];
@@ -3282,15 +3302,20 @@ function Creater() {
 
 {%endblock%}
 
-{%block main%}  
+{%block main%}
+<div class="add_data" id="add_data_btn">
+	<img src="/plus.png"/>
+</div>
 <div class="toTop" id="gotop">
     <img src="/toTP2.png" style="width: 35px; height: 35px; user-select: none;" ondragstart="return false" oncontextmenu="return false" onselect="return false" oncopy="return false" oncut="return false">
 </div>
-<div id="creater">
-	<button onclick="aaa()">d</button>
+<div id="creater_osd">
+	<div id="creater_background">
+		<div id="creater">
+		</div>
+	</div>
 </div>
 <div id="creater_updating">
-
 </div>
 <div id="container">
 
