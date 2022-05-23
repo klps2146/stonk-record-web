@@ -3,4 +3,3 @@ gunicorn
 pymongo[srv]
 cryptocode
 Crypto
-base64
