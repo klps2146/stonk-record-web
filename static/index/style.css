@@ -1,23 +1,11 @@
 .nav{
-    background-color: rgb(233, 233, 233);
+    background-color: rgb(255, 255, 255);
     height: 90%;
-    width: 130px;
+    width: 80px;
     position: fixed;
     text-align: center;
-    margin-top: 8px;
-}
-
-.nava{
-    background-color: rgba(255, 255, 255, 0);
-    height: 90%;
-    width: 130px;
-    text-align: center;
-    margin-top: 8px;
-    flex: none;
-}
-
-.onmouse_c4{
-    background-color: #1d3a61;
+    margin-top: 1px;
+    border-right: 1px #fafafa solid;
 }
 
 .boxer{
@@ -27,12 +15,13 @@
 }
 
 .indc_outer_box{
-    background-color: rgb(207, 247, 238);
+    background-color: rgb(242, 242, 242);
     background-image: none;
     flex: auto;
-    margin: 8px;
     height: auto;
-
+    margin-left: 79.5px;
+    /* background-image: url("/index/inxP.jpg");
+    background-repeat: no-repeat; */
 }
 
 .pot{

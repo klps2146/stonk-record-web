@@ -1,6 +1,16 @@
 from flask import Flask, redirect, session, render_template, request, url_for, abort, make_response, jsonify, make_response
 import pymongo, time, os
 import cryptocode
+
+# RSA + AES encrypt
+from Crypto.Random import get_random_bytes
+from Crypto.Protocol.KDF import PBKDF2
+from Crypto.Cipher import AES, PKCS1_OAEP
+from Crypto.Util.Padding import unpad, pad
+from Crypto.PublicKey import RSA
+from Crypto.Hash import SHA256
+from base64 import b64decode
+
 # from flask_bcrypt import Bcrypt
 
 client = pymongo.MongoClient("mongodb+srv://root:root123@realmcluster.rbqar.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
@@ -14,6 +24,13 @@ app.config["SESSION_COOKIE_NAME"]="dnjnf2y%24"
 sect="hujhnjvsk76879679oyHUKJBDGUYVH786876%R^$#%$#$^&YTGHDt78%D^(&Tygvukj"
 # app.permanent_session_lifetime=datetime.timedelta(seconds=1*60)
 # session.permanent=True
+
+def RSA_encrypt():
+    pass
+
+def RSA_decrypt():
+    pass
+
 def clearfnc():
     session.pop("account")
     res=redirect("/login")
@@ -30,7 +47,7 @@ def state_check_bool():
         return False
     else:
         if cryptocode.decrypt(request.cookies.get("user"), sect)==False:
-            return redirect("/signout")
+            return False
         else:
             return True
 
@@ -53,9 +70,14 @@ def acce_required():
         datas["click"]="window.location.href='/login'"
         datas["state"]="0"
     else:
-        datas["user"]=cryptocode.decrypt(request.cookies.get("user"), sect) 
-        datas["click"]="logout()"
-        datas["state"]="1"
+        if cryptocode.decrypt(request.cookies.get("user"), sect)==False:
+            datas["user"]="登入"
+            datas["click"]="window.location.href='/login'"
+            datas["state"]="0"
+        else:
+            datas["user"]=cryptocode.decrypt(request.cookies.get("user"), sect) 
+            datas["click"]="personal_panel()"
+            datas["state"]="1"
     return datas
 
 @app.before_request
@@ -114,7 +136,7 @@ def deletf():
 def upd():
     pass
 
-@app.route("/") # main
+@app.route("/") # index
 def indexdd():
     return render_template("index.html", userdata=acce_required())
 
@@ -502,7 +524,7 @@ def revise():
                 })
     return render_template("redirecting.html")
 
-@app.route("/simp") # 簡化
+@app.route("/simp") # 簡化 尚未啟用
 def simplify():
     # collection=db[f"users_{session['account']}"]
     sp=cryptocode.decrypt(request.cookies.get("user"), sect) 
@@ -917,3 +939,82 @@ def GUI_add():
                 })
     else:
         return redirect("/")
+
+@app.route("/user/profile")
+def userProfile():
+    if state_check_bool():
+        return render_template("userProfile.html", userdata=acce_required())
+    else:
+        return redirect("/login")
+
+@app.route("/user/account")
+def userAccount():
+    if state_check_bool():
+        res=make_response(render_template("userAccount.html", userdata=acce_required()))
+        res.set_cookie("_uid" ,"-----BEGIN PUBLIC KEY-----MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAmCSszfK1ffK+FrH3yQQw8zz7r8G3T9vTAZ6hqNXxaZuQuY9CeQxeiTxQFYKLsipXMpZ1b+6As9u+Tpn4m9deFpipb6w0jw4C5l8BBXTBKsdJBFkooBFiEfgX5P6nscwWUTKDRl/R5KeKtCzYmDTh9Hqhe6xGVIqOy1edaDknmo8W2d+vbIcAg6kzsjnH2lZO5TkFjsSD9L6TGQE/vuzXtVwAUDMFbe8WRecPSZzakT85YcZxklhOazmhdKSBbBL0InSE0WiAQuIG2h+U3Z3DbUJ1wT7G7w4uiXQ9Kfx1XXxCHjOH62mTCsKMYvYrKy2mEmj2p//MQRtclW7OpYNDFwIDAQAB-----END PUBLIC KEY-----", path="/user/account")
+        return res
+    else:
+        return redirect("/login")
+
+@app.route("/user/setting")
+def userSetting():
+    if state_check_bool():
+        return render_template("userSetting.html", userdata=acce_required())
+    else:
+        return redirect("/login")
+
+@app.route("/user")
+def userHandler():
+
+    return render_template("user.html", userdata=acce_required())
+
+@app.route("/feedback")
+def feedback():
+    return render_template("feedback.html", userdata=acce_required())
+
+@app.route("/source")
+def source():
+    return render_template("source.html", userdata=acce_required())
+
+@app.route("/pwd_change", methods=["POST"])
+def pwdc(): # 使用RSA (+AES)
+    if state_check_bool():
+        old=request.form.get("old")
+        new=request.form.get("new")
+        sp=cryptocode.decrypt(request.cookies.get("user"), sect) 
+        collection=db[f"user"]
+        datas=collection.find_one({
+            "account": sp,
+        })
+        encodedKey=open("private.pem", "rb").read()
+        key=RSA.importKey(encodedKey)
+        cipher=PKCS1_OAEP.new(key, hashAlgo=SHA256)
+        new=cipher.decrypt(b64decode(new)).decode('UTF-8')
+        old=cipher.decrypt(b64decode(old)).decode('UTF-8')
+        if (old==datas["password"]):
+            if (old==new):
+                return jsonify("same")
+            else:
+                collection.update_one({
+                    "account":sp,
+                    "password": old,
+                },{
+                    "$set":{
+                        "password": new,
+                    }
+                })
+                return jsonify("0")
+        else:
+            return jsonify("wrong_pwd")
+    else:
+        return jsonify("Refuse- X002234")
+
+@app.route("/resignin")
+def resignin():
+    res=redirect("/login")
+    res.set_cookie("user", "", httponly=True)
+    return res
+
+
+
+

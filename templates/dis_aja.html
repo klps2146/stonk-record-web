@@ -2,8 +2,11 @@
 
 {%block title%}資料一覽{%endblock%}
 
-{%block login%}
-<button class="login_btn onmouse_c5" onclick="{{userdata.click}}">{{userdata.user}}</button>
+{%block loginClick%}
+{{userdata.click}}
+{%endblock%}
+{%block loginUser%}
+{{userdata.user}}
 {%endblock%}
 
 {%block spr%}
@@ -411,8 +414,8 @@ function contect(){
     let Today=new Date();
     let yearNow=Today.getFullYear();
     let fd=new FormData()
-    for (let x=0; x<{{times}}; x++){
-	fd.set("tmc", x);
+    for (let i=0; i<{{times}}; i++){
+	fd.set("tmc", i);
 	// contect_one(fd);
 	$.ajax({
 		type: "POST",
@@ -795,10 +798,13 @@ function updating_render_constructor(main_datas_input, year){
     ReactDOM.render(<NewDatasUpdate datas={main_datas_input} years={year}/>, document.getElementById("creater_updating"));
 }
 
+
+
+
 class Top extends React.Component{
     render(){
 		return <tr>
-				<th onClick={this.clickHandler.bind(this)} className="cpname" colspan="4">{this.props.company} ({this.props.date})</th>
+				<th className="cpname" colspan="4">{this.props.company} ({this.props.date})</th>
 				<th className="function_form">
 				<div className="flexBoxer">
 					<input className="updateing_each" type="submit" value="更新"/>
@@ -807,11 +813,148 @@ class Top extends React.Component{
 				</th>
 			</tr>;
     }
-    clickHandler(e){
-
-    }
 	removeHandler(e){
 
+	}
+}
+
+class Title extends React.Component{
+	render(){
+		return <tr className={"static d1"}>
+				<td className="title">season</td>
+				<td className="title">EPS</td>
+				<td className="title">配息</td>
+				<td className="title">配息率</td>
+				<td className="title">殖利率</td>
+			</tr>;
+	}
+}
+
+class Content extends React.Component{
+	constructor(props){
+		super(props);
+		this.state={
+			dividend: this.props.divi,
+		}
+	}
+	render(){
+		return <tr className={"d1"}>
+			<td style={ {backgroundColor:"#C182DF"}} onClick={this.yearClickHandler.bind(this)}>{this.props.year_}</td>
+			<td style={ {backgroundColor:"#e1c4ee"}}>{this.props.EPS_year}</td>
+			<td style={ {backgroundColor:"#e1c4ee"}}><input onChange={this.dividendTextChangingHandler.bind(this)} type="text" value={this.state.dividend} className={"inlineText"}/></td>
+			<td style={ {backgroundColor:"#e1c4ee"}}>{this.props.divR}</td>
+			<td style={ {backgroundColor:"#e1c4ee"}}>{this.props.yield}</td>
+		</tr>;
+	}
+	dividendTextChangingHandler(e){
+		
+	}
+	yearClickHandler(e){
+		
+	}
+}
+
+class DetailQ extends React.Component{
+	constructor(props){
+		super(props);
+		this.state={
+			q:this.props.q,
+		}
+	}
+	render(){
+		return <tr> 
+				<td style={ {backgroundColor:"#DAB9E9"}}>Q{this.props.mon}</td>
+				<td style={ {backgroundColor:"#f5f4b3"}}><input onChange={this.qOnchangeHandler.bind(this)} type="text" value={this.state.q} className={"inlineText"}/></td>
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>;
+	}
+	qOnchangeHandler(e){
+		this.setState({q:e.currentTarget.value});
+	}
+}
+
+class DetailM extends React.Component{
+	constructor(props){
+		super(props);
+		this.state={
+			a:this.props.a,
+			b:this.props.b,
+			c:this.props.c,
+		}
+	}
+	render(){
+		return <tr> 
+				<td style={ {backgroundColor:"#DAB9E9"}}>Q{this.props.mon}</td>
+				<td style={ {backgroundColor:"#f5f4b3"}}></td>
+				<td style={ {backgroundColor:"#e7b89d"}}><input onChange={this.aOnchangeHandler.bind(this)} type="text" value={this.state.a} className={"inlineText"}/></td>
+				<td style={ {backgroundColor:"#e7b89d"}}><input onChange={this.bOnchangeHandler.bind(this)} type="text" value={this.state.b} className={"inlineText"}/></td>
+				<td style={ {backgroundColor:"#e7b89d"}}><input onChange={this.cOnchangeHandler.bind(this)} type="text" value={this.state.c} className={"inlineText"}/></td>
+			</tr>
+	}
+	aOnchangeHandler(e){
+		this.setState({a:e.currentTarget.value});
+	}
+	bOnchangeHandler(e){
+		this.setState({b:e.currentTarget.value});
+	}
+	cOnchangeHandler(e){
+		this.setState({c:e.currentTarget.value});
+	}
+}
+
+class AnalyzeNoIn extends React.Component{
+	render(){
+		return <tr>
+				<td className="table_in">{this.props.blank1}</td>
+				<td className="table_in">{this.props.blank2}</td>
+				<td className="hide table_in">{this.props.blank3}</td>
+				<td className="table_in">{this.props.blank4}</td>
+				<td className="table_in">{this.props.blank5}</td>
+			</tr>
+	}
+}
+
+class AnalyzeShareIn extends React.Component{
+	constructor(props){
+		super(props);
+		this.state={
+			share:this.props.blank2,
+		}
+	}
+	render(){
+		return <tr>
+				<td className="table_in">{this.props.blank1}</td>
+				<td className="table_in"><input onChange={this.onChangeHandler.bind(this)} type="text" value={this.state.share} className={"inlineText"}/></td>
+				<td className={"hide table_in"}>{this.props.blank3}</td>
+				<td className="table_in">{this.props.blank4}</td>
+				<td className="table_in">{this.props.blank5}</td>
+			</tr>;
+	}
+	onChangeHandler(e){
+		this.setState({share:e.currentTarget.value});
+	}
+}
+
+class AnalyzeAimIn extends React.Component{
+	constructor(props){
+		super(props);
+		this.state={
+			aim:this.props.blank5,
+		}
+	}
+	render(){
+		return <tr>
+				<td className="table_in">{this.props.blank1}</td>
+				<td className="table_in">{this.props.blank2}</td>
+				<td className="hide table_in">{this.props.blank3}</td>
+				<td className="table_in">{this.props.blank4}</td>
+				<td className="table_in"><input onChange={this.onChangeHandler.bind(this)} type="text" value={this.state.aim} className={"inlineText"}/></td>
+			</tr>;
+	}
+	onChangeHandler(e){
+		this.setState({aim:e.currentTarget.value});
 	}
 }
 
@@ -820,17 +963,69 @@ class NewDatasUpdate extends React.Component{
         super(props);
         this.processingData=this.props.datas;
         this.state={
-            
+            aim: null,
+			share: null,
         };
     }
     render(){
-        for (let i=0; i<this.processingData.length; i++){
-			let cells=[];
-			data=this.processingData[i];
-			data_year=data[parseInt(this.props.years)];
-			cells.push(<Top company={data["company"]} date={data["date"]}/>);
+		var Today=new Date();
+    	let date=Today.getFullYear();
+		let cells=[];
+		let data=this.processingData;
+		let years=(Object.keys(data));
+		cells.push(<Top company={data["company"]} date={data["date"]}/>);
+		cells.push(<Title/>);
+		var shareAim="";
+		var shareDiff="";
+		var yieldDiff="";
+		let yieldNow="";
+		for (let i=0; i<years.length; i++){
+			if (years[i]!="aim"&&years[i]!="share"&&years[i]!="date"&&years[i]!="company"){
+				let data_year=data[years[i]];
+				cells.push(<Content year_={years[i]} EPS_year={data_year["EPS_year"]} divi={data_year["dividend"]} divR={data_year["dividend_rate"]} yield={data_year["yield"]}/>);
+				if (data_year["EPS_Q1"]==""){
+					cells.push(<DetailM mon="1" a={data_year["EPS_m_1"]} b={data_year["EPS_m_2"]} c={data_year["EPS_m_3"]}/>);
+					cells.push(<DetailM mon="2" a={data_year["EPS_m_4"]} b={data_year["EPS_m_5"]} c={data_year["EPS_m_6"]}/>);
+					cells.push(<DetailM mon="3" a={data_year["EPS_m_7"]} b={data_year["EPS_m_8"]} c={data_year["EPS_m_9"]}/>);
+					cells.push(<DetailM mon="4" a={data_year["EPS_m_10"]} b={data_year["EPS_m_11"]} c={data_year["EPS_m_12"]}/>);
+				}
+				else if (data_year["EPS_m_1"]==""){
+					cells.push(<DetailQ mon="1" q={data_year["EPS_Q1"]}/>);
+					cells.push(<DetailQ mon="2" q={data_year["EPS_Q2"]}/>);
+					cells.push(<DetailQ mon="3" q={data_year["EPS_Q3"]}/>);
+					cells.push(<DetailQ mon="4" q={data_year["EPS_Q4"]}/>);
+				}
+				try {
+				yieldNow=data[date]["yield"];
+				}
+				catch(e){
+					yieldNow="資料未更新";
+				}
+				if (yieldNow!="資料未更新"){
+					shareAim=Math.round(parseFloat(data_year["dividend"])/parseFloat(data["aim"])*100)/100;
+					shareDiff=Math.round((shareAim-parseFloat(data["share"]))*100)/100;
+					yieldDiff=Math.round(shareDiff/parseFloat(data["share"])*100)/100;
+				}
+			}
 		}
+		cells.push(<AnalyzeAimIn blank1="目標價" blank2={shareAim} blank5={data["aim"]}/>);
+		cells.push(<AnalyzeNoIn blank1="利差" blank2={shareDiff} blank5={yieldDiff}/>);
+		cells.push(<AnalyzeNoIn blank1="買進價" />);
+		cells.push(<AnalyzeShareIn blank1="目標價" blank2={data["share"]} blank4="目前殖利率" blank5={yieldNow}/>);
+		cells.push(<AnalyzeNoIn blank1="便宜價"/>);
+		return <div>
+				<form>
+					<table style={ {margin:"0"}}>{cells}</table>
+				</form>
+			</div>;
     }
+}
+
+var upadting_cluster=[];
+class ClusterOutput extends React.Component{
+	render(){
+
+	}
 }
 
 class CreaterSelector extends React.Component{
@@ -930,7 +1125,7 @@ class CreaterSelector extends React.Component{
                     <td className="table_in">{this.state.eps_aim}</td>
                     <td className="table_in"></td>
                     <td className="table_in"></td>
-                    <td className="table_in"><input type="number" className="inlineText" value={this.state.aim} onChange={this.changeAimHandler.bind(this)} placeholder="目標殖利率"/></td>
+                    <td className="table_in"><input type="number" step="0.01" className="inlineText" value={this.state.aim} onChange={this.changeAimHandler.bind(this)} placeholder="目標殖利率"/></td>
                 </tr>
 				<tr>
                     <td className="table_in">利差</td>
@@ -1203,7 +1398,7 @@ class CreaterSelector extends React.Component{
             data: submitFT,
             url: "/GUI_creater",
             type: "POST",
-            success: function(datas){
+            success: (datas)=>{
                 const Toast = Swal.mixin({
                     toast: true,
                     position: 'top-end',
@@ -1217,7 +1412,7 @@ class CreaterSelector extends React.Component{
                     width: '230px',
                     background: "#ffffffdd",
                 });
-                updating_render_constructor(datas, this.state.year);
+                updating_render_constructor(datas);
             }
         });
         this.setState(this.defaultState);
@@ -1282,7 +1477,7 @@ function Creater(){
 <!--=============================================================A EDITOR================================================================================================-->
 <!--=============================================================A EDITOR================================================================================================-->
 <!--=============================================================A EDITOR================================================================================================-->
-<script src="">
+<!-- <script src="">
 "use strict";
 
 var final_put = [];
@@ -3298,7 +3493,7 @@ class CreaterSelector extends React.Component {
 function Creater() {
   ReactDOM.render( /*#__PURE__*/React.createElement(CreaterSelector, null), document.getElementById("creater"));
 }
-</script>
+</script> -->
 
 {%endblock%}
 

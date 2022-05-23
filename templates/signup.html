@@ -2,8 +2,11 @@
 
 {%block title%}AFNCO-註冊{%endblock%}
 
-{%block login%}
-<button class="login_btn onmouse_c5" onclick="window.location.href='/login'">登入</button>
+{%block loginClick%}
+{{userdata.click}}
+{%endblock%}
+{%block loginUser%}
+{{userdata.user}}
 {%endblock%}
 
 {%block main%}

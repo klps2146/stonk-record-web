@@ -1,0 +1,242 @@
+{%extends "base.html"%}
+
+{%block title%}使用者帳戶{%endblock%}
+
+{%block loginClick%}
+{{userdata.click}}
+{%endblock%}
+{%block loginUser%}
+{{userdata.user}}
+{%endblock%}
+
+{%block spr%}
+{%endblock%}
+
+{%block head%}
+<script src="{{url_for('static', filename='account/account_main.js')}}"></script>
+<link rel="stylesheet" href="{{url_for('static', filename='account/account_style.css')}}">
+<script type="text/babel">
+
+$(document).ready(function(){
+    $("#reset_pwd_btn").click(function(){
+        ReactDOM.render(<PwdChange/>, document.getElementById("password_input"));
+    });
+})
+
+// React
+class PwdChangeOriginal extends React.Component{
+    constructor(props){
+        super(props);
+    }
+    render(){
+        return <div className="data password_input" id="password_input">
+            <span id="password_input" className="pdi">
+                ••••••••••••
+            </span>
+            <span className="reset_password">
+                <button className="reset_pwd_btn" id="reset_pwd_btn" onClick={this.clickHandler.bind(this)}>
+                    更改
+                </button>
+            </span>
+        </div>
+    }
+    clickHandler(e){
+        ReactDOM.render(<PwdChange/>, document.getElementById("password_input"));
+    }
+}
+
+class PwdChange extends React.Component{
+    constructor(props){
+        super(props);
+        this.state={
+            old: null,
+            new: null,
+            problem_def: "",
+        };
+    }
+    send(){
+        let datas=new FormData();
+        let ce=(document.cookie).slice(6, -1);
+        let publicKey=forge.pki.publicKeyFromPem((ce));
+        let secretMessage=this.state.old;
+        let encrypted=publicKey.encrypt(secretMessage, "RSA-OAEP", {
+                md: forge.md.sha256.create(),
+                mgf1: forge.mgf1.create()
+            });
+        let base64_old=forge.util.encode64(encrypted);
+        secretMessage=this.state.new;
+        encrypted=publicKey.encrypt(secretMessage, "RSA-OAEP", {
+                md: forge.md.sha256.create(),
+                mgf1: forge.mgf1.create()
+            });
+        let base64_new=forge.util.encode64(encrypted);
+        datas.append("old", base64_old);
+        datas.append("new", base64_new);
+        $.ajax({
+            type: "POST",
+            url: "/pwd_change",
+            data: datas,
+            contentType: false,
+            processData: false,
+            dataType: "json",
+            success: function(res){
+                this.inputProblemHandler(res);
+            }.bind(this),
+            error: function(wrg){
+                this.setState({problem_def: "Unexpected Error "+wrg});
+            }.bind(this)
+        })
+    }
+    render(){
+        return <form>
+            <div className="PCH_a">
+                <div className="pwd_check PCH_a">
+                    <div className="Pin pwd_old">
+                        <div className="subtitle">
+                            <h6>舊密碼</h6>
+                        </div>
+                        <input type="password" className="pds" id="oldPWD" onChange={this.oldCHandler.bind(this)} value={this.state.old}></input>
+                    </div>
+                    <div className="Pin pwd_new">
+                        <div className="subtitle">
+                            <h6>新密碼</h6>
+                        </div>
+                        <input type="password" className="pds" id="newPWD" onChange={this.newCHandler.bind(this)} value={this.state.new}></input>
+                    </div>
+                </div>
+
+                <div className="problems" id="problems">
+                    {this.state.problem_def}
+                </div>
+
+                <div className="sub PCH_a">
+                    <div className="button_clus">
+                        <div className="btn cancel" id="pwd_cancel" onClick={this.cancel.bind(this)}>
+                            取消
+                        </div>
+                        <div className="btn submit" id="pwd_update" onClick={this.submit.bind(this)}>
+                            更新
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>;
+    }
+    oldCHandler(e){
+        this.setState({old: e.currentTarget.value});
+    }
+    newCHandler(e){
+        this.setState({new: e.currentTarget.value});
+    }
+    cancel(e){
+        ReactDOM.render(<PwdChangeOriginal/>, document.getElementById("password_input"));   
+    }
+    submit(e){
+        this.inputCheck();
+        if (this.state.new.length>=8&&this.state.old.length>=8){
+            this.send();
+        }
+    }
+    inputCheck(){
+        if (this.state.new.length<8||this.state.old.length<8){
+            this.inputProblemHandler("short");
+            return false;
+        }
+    }
+    inputProblemHandler(info){
+        console.log(info);
+        switch(info){
+            case "same": // 密碼無更改
+                this.setState({problem_def: "不可使用相同的密碼"});
+                break;
+            case "short":
+                this.setState({problem_def: "長度過短"});
+                break;
+            case "wrong_pwd":
+                this.setState({problem_def: "密碼錯誤"});
+                break;
+            case "0":
+                this.setState({problem_def: ""});
+                window.location.href="/resignin";
+                break;
+            default:
+                this.setState({problem_def: "Unsigned Input"});
+        }
+    }
+}
+
+</script>
+{%endblock%}
+
+{%block main%}
+<div class="ct">
+<div class="box">
+    <div class="b1" style="margin-top: 20px;">
+        <div class="title">
+            Profile
+        </div>
+        <div class="profile ins_box" id="profile">
+            
+        </div>
+    </div>
+
+    <div class="b1">
+        <div class="title">
+            Account
+        </div>
+        <div class="account ins_box" id="account">
+            <div class="inner account_name">
+                <div class="wd account_title">
+                    <h4>帳號名稱</h4>
+                </div>
+                <div class="data account_input">
+                    <span id="account_input">
+                        {{userdata.user}}
+                    </span>
+                </div>
+            </div>
+
+            <div class="inner email_name">
+                <div class="wd email_title">
+                    <h4>電子信箱</h4>
+                </div>
+                <div class="data email_input">
+                    <span id="email_input">
+                        待更新(2022/5/20)
+                    </span>
+                </div>
+            </div>
+
+            <div class="inner password_name">
+                <div class="wd password_title">
+                    <h4>密碼</h4>
+                </div>
+                <div class="data password_input" id="password_input">
+                    <span id="password_input" class="pdi">
+                        ••••••••••••
+                    </span>
+                    <span class="reset_password">
+                        <button class="reset_pwd_btn" id="reset_pwd_btn">
+                            更改
+                        </button>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="b1" style="margin-top: 20px;">
+        <div class="title">
+            Theme
+        </div>
+        <div class="profile ins_box" id="profile">
+            <div>
+                <span>背景</span>
+            </div>
+        </div>
+    </div>
+
+</div>
+</div>
+
+{%endblock%}

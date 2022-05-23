@@ -32,3 +32,8 @@
         display: none;
     }
 }
+@media (max-width:570px){
+    #creater_osd{
+        top: 40px;
+    }
+}

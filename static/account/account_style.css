@@ -1,0 +1,188 @@
+body{
+    background-color: #fdfdfd;
+}
+
+
+.ct{
+    display: flex;
+    justify-content: center;
+}
+
+.box{
+    width: auto;
+    height: auto;
+}
+
+.input_box{
+
+}
+
+/* 帳號更改  開始 */
+
+.wd{
+    margin-bottom: 4px;
+}
+
+.data{
+    margin-left: 3px;
+}
+
+.inner{
+    width: 100%;
+    height: 80px;
+    margin-bottom: 10px;
+    
+}
+
+.ins_box{
+    width: 550px;
+    height: auto;
+    border: 1.7px solid #aeaeae;
+    border-radius: 9.5px;
+    background-color: #ffffff;
+    padding: 18px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.b1{
+    margin: 30px;
+    margin-left: 0px;
+    margin-right: 0px;
+    height: auto;
+}
+
+.title{
+    color: #4e4e4e;
+    padding-left: 5px;
+    margin-bottom: 3px;
+    font-size: 32px;
+    font-family: 'IBM Plex Sans',sans-serif;
+}
+
+.account_title{
+    padding: 1px;
+}
+
+h4{
+    margin: 0px;
+    color: #676565;
+}
+
+.account_input{
+
+}
+
+.pdi{
+    margin-right: 5px;
+}
+
+.reset_pwd_btn{
+    border: #676565 solid 0px;
+    border-radius: 4px;
+    height: 32px;
+    width: 56px;
+    background-color: #efefef;
+    font-weight: 530;
+    font-size: 14px;
+    color: #444;
+    font-weight: 420;
+    font-size: 14.4px;
+}
+
+.password_name{
+    height: auto;
+}
+
+/* React */
+
+
+.PCH_a{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.Pin{
+    width: 45%;
+}
+
+.Pin>input{
+    width: 96%;
+    height: 30px;
+    padding: 2px;
+    border-radius: 4px;
+    border: #676565 solid 0.6px;
+    font-size: 17px;
+}
+
+h6{
+    margin: 0;
+    color: #979797;
+    padding-left: 3px;
+}
+
+.pwd_old{
+    margin-right: 44px;
+}
+
+.subtitle{
+
+}
+
+.pwd_check{
+    margin-bottom: 4px;
+}
+
+
+
+.sub{
+    margin-top: 7px;
+    justify-content: flex-end;
+}
+
+.button_clus{
+    display: flex;
+}
+
+.cancel, .submit{
+    margin-right: 16px;
+    height: 32px;
+    width: 60px;
+    line-height: 32px;
+    text-align: center;
+    border-radius: 4px;
+    font-weight: 530;
+}
+
+.cancel{
+    background-color: #dadada;
+    color: #333;
+}
+
+.submit{
+    background-color: #1b1b1b;
+    color: #ffffff;
+}
+
+.problems{
+    color: #fa4c4c;
+    width: 100%;
+    padding: 5px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+/* 帳號更改  結束 */
+
+/* move */
+
+@media (max-width: 615px){
+    .ins_box{
+        width: 355px;
+    }
+    .pwd_old{
+        margin-right: 22px;
+    }
+}

@@ -2,8 +2,11 @@
 
 {%block title%}AFNCO-首頁{%endblock%}
 
-{%block login%}
-<button class="login_btn onmouse_c5" onclick="{{userdata.click}}">{{userdata.user}}</button>
+{%block loginClick%}
+{{userdata.click}}
+{%endblock%}
+{%block loginUser%}
+{{userdata.user}}
 {%endblock%}
 
 {%block main%}
@@ -24,14 +27,13 @@
     <div class="nav">
         <div class="pot">
         <h3><strong>導覽</strong></h3>
-            <div class="nav_in">供測試帳號密碼</div>
-            <div class="nav_in">更新資訊</div>
+            <div class="nav_in">密碼</div>
+            <div class="nav_in">更資訊</div>
             <div class="nav_in" onclick="window.location.href='/little_game_1_had'">遊戲</div>
         </div>
     <div class="game" id="game_part">
     </div>
     </div>
-    <div class="nava"></div>
     <div class="indc_outer_box">
         <div class="inner_word_al">
             <h2>供測試帳號密碼</h2>

@@ -12,4 +12,20 @@
     .tf{
         height: 40px;
     }
+    .top_place_eat{
+        height: 40px;
+    }
+    .tit{
+        margin: 0;
+        height: 41px;
+    }
+    .icoM{
+        width: 41px;
+        height: 41px;
+    }
+}
+@media(min-width: 570px){
+    .click_pop{
+        display: none;
+    }
 }
