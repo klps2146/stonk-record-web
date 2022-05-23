@@ -3,3 +3,4 @@ gunicorn
 pymongo[srv]
 cryptocode
 Crypto
+Cryptodome

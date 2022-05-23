@@ -3,12 +3,12 @@ import pymongo, time, os
 import cryptocode
 
 # RSA + AES encrypt
-from Crypto.Random import get_random_bytes
-from Crypto.Protocol.KDF import PBKDF2
-from Crypto.Cipher import AES, PKCS1_OAEP
-from Crypto.Util.Padding import unpad, pad
-from Crypto.PublicKey import RSA
-from Crypto.Hash import SHA256
+from Cryptodome.Random import get_random_bytes
+from Cryptodome.Protocol.KDF import PBKDF2
+from Cryptodome.Cipher import AES, PKCS1_OAEP
+from Cryptodome.Util.Padding import unpad, pad
+from Cryptodome.PublicKey import RSA
+from Cryptodome.Hash import SHA256
 from base64 import b64decode
 
 # from flask_bcrypt import Bcrypt
