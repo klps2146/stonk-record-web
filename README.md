@@ -1,4 +1,4 @@
-# stonk-record-web
+# 用來記錄股票相關資料的簡易網站
 Design a website start from scratch using python Flask.
 
 ## 聲明：
@@ -7,9 +7,9 @@ Design a website start from scratch using python Flask.
 * 因不保證網站安全，請勿在其中留下個人資料。
 
 ## 環境
-* 使用語言： Python v3.10.0, JavaScript, HTML, CSS, 
-* 框架： Python Flask v2.1.2, JavaScript React v17, 
-* 插件(函式庫)： jQuery v3.5.1, sweetalert2 v11, 
+* 使用語言： Python v3.10.0, JavaScript, HTML, CSS
+* 框架： Python Flask v2.1.2, JavaScript React v17 
+* 插件(函式庫)： jQuery v3.5.1, sweetalert2 v11
 
 ```js
 <script crossorigin src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
