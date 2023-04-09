@@ -11,12 +11,12 @@ Design a website start from scratch using python Flask.
 * 框架： Python Flask v2.1.2, JavaScript React v17, 
 * 插件(函式庫)： jQuery v3.5.1, sweetalert2 v11, 
 
-'''
+```
 <script crossorigin src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
 <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-'''
+```
 
 
 ## 註解
