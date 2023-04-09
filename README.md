@@ -8,14 +8,10 @@ Design a website start from scratch using python Flask.
 
 因不保證網站安全，請勿在其中留下個人資料。
 
-
-
-使用MongoDB資料庫(線上)
-
-Python版本: 3.10.5 64-bit
-
-網站框架所用module: Python Flask 2.1.2
-
+## 環境
+*使用語言： Python 3.10.0, JavaScript, HTML, CSS, 
+*框架： Python Flask 2.1.2, JavaScript React 18.2.0, 
+*插劍： jQuery 3.5.1, 
 
 
 Rrocfile, requiremens.txt, runtime.tet 是為上傳至Heroku所需檔案(Heroku 已無法使用)
