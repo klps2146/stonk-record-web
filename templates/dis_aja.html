@@ -11,7 +11,7 @@
 
 {%block spr%}
 <button onclick="click_change_tmg()" id="cfn">展開</button>
-<button onclick="window.location.href='/dis'">舊版</button>
+<!-- <button onclick="window.location.href='/dis'">舊版</button> -->
 {%endblock%}
 
 {%block head%}
@@ -60,7 +60,7 @@ function contect_one(datas){ // 更新後資料處理及輸出
             rmv.append("remove_compnay_name", datas["company"])
             Swal.fire({
                 title: '刪除<span style="color:red">所有</span>資料',
-                text: "「所也資料」將無法復原",
+                text: "「所有資料」將無法復原",
                 icon: 'question',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
@@ -969,7 +969,7 @@ class NewDatasUpdate extends React.Component{
     }
     render(){
 		var Today=new Date();
-    	let date=Today.getFullYear();
+    let date=Today.getFullYear();
 		let cells=[];
 		let data=this.processingData;
 		let years=(Object.keys(data));

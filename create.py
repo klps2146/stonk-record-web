@@ -5,10 +5,10 @@ key = RSA.generate(2048)
 
 # RSA 私鑰
 privateKey = key.export_key()
-with open("private.pem", "wb") as f:
+with open("private_delet_account.pem", "wb") as f:
     f.write(privateKey)
 
 # RSA 公鑰
 publicKey = key.publickey().export_key()
-with open("public.pem", "wb") as f:
+with open("public_delet_account.pem", "wb") as f:
     f.write(publicKey)

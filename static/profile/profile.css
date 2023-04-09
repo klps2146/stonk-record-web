@@ -13,9 +13,35 @@ body{
     height: auto;
 }
 
-.input_box{
+/* special */
 
+.delet_btn{
+    border: #676565 solid 0px;
+    border-radius: 4px;
+    height: 32px;
+    width: 56px;
+    background-color: #fb2e2e;
+    font-weight: 530;
+    font-size: 14px;
+    color: rgb(237, 237, 237);
+    font-weight: 420;
+    font-size: 14.4px;
 }
+
+.delet_btn_container{
+    width: auto;
+    height: 100%;
+    justify-content: flex-end;
+    margin-right: 3px;
+    display: flex;
+}
+
+.cet{
+    font-size: 16px;
+    line-height: 16px;
+}
+
+/* end special */
 
 /* 帳號更改  開始 */
 
@@ -69,10 +95,6 @@ h4{
     color: #676565;
 }
 
-.account_input{
-
-}
-
 .pdi{
     margin-right: 5px;
 }
@@ -103,92 +125,10 @@ h4{
     font-size: 17px;
 }
 
-/* React */
-
-
-.PCH_a{
-    height: 100%;
-    width: 100%;
-    display: flex;
-    flex-wrap: wrap;
-}
-
-.Pin{
-    width: 45%;
-}
-
-.Pin>input{
-    width: 96%;
-    height: 30px;
-    padding: 2px;
-    border-radius: 4px;
-    border: #676565 solid 0.6px;
-    font-size: 17px;
-}
-
-h6{
-    margin: 0;
-    color: #979797;
-    padding-left: 3px;
-}
-
-.pwd_old{
-    margin-right: 44px;
-}
-
-.subtitle{
-
-}
-
-.pwd_check{
-    margin-bottom: 4px;
-}
-
-
-
-.sub{
-    margin-top: 7px;
-    justify-content: flex-end;
-}
-
-.button_clus{
-    display: flex;
-}
-
-.cancel, .submit{
-    margin-right: 16px;
-    height: 32px;
-    width: 60px;
-    line-height: 32px;
-    text-align: center;
-    border-radius: 4px;
-    font-weight: 530;
-}
-
-.cancel{
-    background-color: #dadada;
-    color: #333;
-}
-
-.submit{
-    background-color: #1b1b1b;
-    color: #ffffff;
-}
-
-.problems{
-    color: #fa4c4c;
-    width: 100%;
-    padding: 5px;
-    font-size: 13px;
-    font-weight: 500;
-}
-
-/* 帳號更改  結束 */
-
-/* 背景 */
-
 .bct{
     margin-left: 2px;
+    display: flex;
+    align-items: center;
 }
 
 .select{

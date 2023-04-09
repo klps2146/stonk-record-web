@@ -25,12 +25,6 @@ sect="hujhnjvsk76879679oyHUKJBDGUYVH786876%R^$#%$#$^&YTGHDt78%D^(&Tygvukj"
 # app.permanent_session_lifetime=datetime.timedelta(seconds=1*60)
 # session.permanent=True
 
-def RSA_encrypt():
-    pass
-
-def RSA_decrypt():
-    pass
-
 def clearfnc():
     session.pop("account")
     res=redirect("/login")
@@ -75,7 +69,10 @@ def acce_required():
             datas["click"]="window.location.href='/login'"
             datas["state"]="0"
         else:
-            datas["user"]=cryptocode.decrypt(request.cookies.get("user"), sect) 
+            datas["user"]=cryptocode.decrypt(request.cookies.get("user"), sect)
+            uid_account=collection_pwd.find({"account": cryptocode.decrypt(request.cookies.get("user"), sect)})
+            for i in uid_account:
+                datas["user_name"]=i["name"]
             datas["click"]="personal_panel()"
             datas["state"]="1"
     return datas
@@ -1015,6 +1012,11 @@ def resignin():
     res.set_cookie("user", "", httponly=True)
     return res
 
-
-
+@app.route("/delet_account", methods=["POST"])
+def del_acc():
+    state=request.form.get("dpcheck")
+    if state=="del_for_ttt_hpcks":
+        pwd_check=request.form.get("ppas")
+    elif state=="key_reuest":
+        return jsonify("-----BEGIN PUBLIC KEY-----MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA7RFeApDzBlncff7DAGHRrGYUkXqRIKlm0I39BHY/X1f8sHEaIutbpxfKzjjp0heowSfOfRuxnTUD7Qfhvp+GFMmbW4xwmJ1zcvwqeAbzq8N6QQojnvwWFxidCsXbMYcCPCSEKQWlW9sCDgOIUt2l8fP+9OfdXj56+qoo/nODZZwh1zYCQ2SEE16bem3d9JtBWcX6Z+VRV0F58Fb6bXAmcanlN0cUOFbg+3l4k+frbhBY9ufNWFl6FK4A54ZVsPQ70/NUU6rRay7KAZ7arjYEd3irL1TcUValrYeQhDyh4y+B6PMlm1VB7Pf78fTm7Vaw1WQvnBIsVmSH/nXITDDYNQIDAQAB-----END PUBLIC KEY-----")
 

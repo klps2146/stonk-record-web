@@ -18,6 +18,7 @@
 <script type="text/babel">
 
 $(document).ready(function(){
+    ReactDOM.render(<UserName/>, document.getElementById("user_name_input"));
     $("#reset_pwd_btn").click(function(){
         ReactDOM.render(<PwdChange/>, document.getElementById("password_input"));
     });
@@ -165,6 +166,23 @@ class PwdChange extends React.Component{
     }
 }
 
+class UserName extends React.Component{
+    constructor(props){
+        super(props);
+        this.state={
+            text:"{{userdata.user_name}}",
+        }
+    }
+    render(){
+        return <div>
+                <input type="text" className="pds acname" placeholder="使用者名稱" value={this.state.text} onChange={this.onChangeHandler.bind(this)}></input>
+            </div>
+    }
+    onChangeHandler(e){
+        this.setState({text: e.currentTarget.value});
+    }
+}
+
 </script>
 {%endblock%}
 
@@ -173,18 +191,9 @@ class PwdChange extends React.Component{
 <div class="box">
     <div class="b1" style="margin-top: 20px;">
         <div class="title">
-            Profile
+            個人資料
         </div>
         <div class="profile ins_box" id="profile">
-            
-        </div>
-    </div>
-
-    <div class="b1">
-        <div class="title">
-            Account
-        </div>
-        <div class="account ins_box" id="account">
             <div class="inner account_name">
                 <div class="wd account_title">
                     <h4>帳號名稱</h4>
@@ -196,6 +205,25 @@ class PwdChange extends React.Component{
                 </div>
             </div>
 
+            <div class="inner account_name">
+                <div class="wd account_title">
+                    <h4>使用者名稱</h4>
+                </div>
+                <div class="data account_input">
+                    <span id="user_name_input">
+                        
+                    </span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="b1">
+        <div class="title">
+            帳號
+        </div>
+        <div class="account ins_box" id="account">
             <div class="inner email_name">
                 <div class="wd email_title">
                     <h4>電子信箱</h4>
@@ -227,11 +255,16 @@ class PwdChange extends React.Component{
 
     <div class="b1" style="margin-top: 20px;">
         <div class="title">
-            Theme
+            個人化
         </div>
         <div class="profile ins_box" id="profile">
-            <div>
-                <span>背景</span>
+            <div class="bct">
+                <h4>背景</h4>
+            </div>
+            <div class="select">
+                <select class="selector">
+                    <option>亮色</option>
+                </select>
             </div>
         </div>
     </div>
