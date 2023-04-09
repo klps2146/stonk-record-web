@@ -1,7 +1,7 @@
 # stonk-record-web
 Design a website start from scratch using python Flask.
 
-
+聲明：
 全部檔案皆是用來學習
 
 網站所有內容，皆為作者自行摸索，若有不正確處或錯誤作法，敬請指教。
